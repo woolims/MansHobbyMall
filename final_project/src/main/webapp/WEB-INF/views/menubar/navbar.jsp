@@ -48,16 +48,14 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         <form>
           <input type="email" placeholder="이메일" required />
           <input type="password" placeholder="비밀번호" required />
-          <div class="remember-me">
-            <input type="checkbox" id="remember" />
-            <label for="remember">로그인상태유지</label>
-          </div>
           <button type="submit" class="login-btn">로그인</button>
           <div class="links">
-            <a href="" data-toggle="modal" data-targer="#registerModal"
-              >회원가입</a
-            >
-            <input type="button" id="openRegisterModal" value="회원가입" />
+            <input
+              type="button"
+              class="register-btn"
+              id="openRegisterModal"
+              value="회원가입"
+            />
             <a href="#">아이디 · 비밀번호 찾기</a>
           </div>
           <div class="divider">또는</div>
@@ -80,10 +78,19 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         <span class="close">&times;</span>
         <h2>회원가입</h2>
         <form>
-          <input type="email" placeholder="이메일" required />
-          <input type="password" placeholder="비밀번호" required />
-          <div class="remember-me"></div>
-          <button type="submit" class="login-btn">로그인</button>
+          <input type="email" name="email" placeholder="이메일" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="비밀번호"
+            required
+          />
+          <input type="text" name="nickName" placeholder="닉네임" required />
+          <input type="text" name="name" placeholder="이름" required />
+          <input type="text" name="phone" placeholder="전화번호" required />
+          <input type="text" name="addr" placeholder="주소" required />
+          <input type="text" name="addr" placeholder="상세주소" required />
+          <button type="submit" class="login-btn">회원가입</button>
 
           <div class="divider">또는</div>
           <button type="button" class="social-btn naver-btn">
