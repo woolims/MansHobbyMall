@@ -11,6 +11,9 @@ prefix="c" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     <title>Sports</title>
   </head>
   <body>
-    여기는 스포츠페이지야
+    <%@ include file="../menubar/navbar.jsp"%> 여기는 스포츠페이지야
+
+    <!-- 푸터 -->
+    <%@ include file="../menubar/footer.jsp"%>
   </body>
 </html>

@@ -9,8 +9,23 @@ prefix="c" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8" />
     <title>Game</title>
+    <style>
+      #box {
+        border: 1px solid black;
+        margin: auto;
+        height: 2000px;
+        width: 1500px;
+      }
+    </style>
   </head>
   <body>
-    여기는 게임페이지야
+    <%@ include file="../menubar/navbar.jsp"%>
+
+    <div id="box">
+      <h3>category-game</h3>
+    </div>
+
+    <!-- 푸터 -->
+    <%@ include file="../menubar/footer.jsp"%>
   </body>
 </html>
