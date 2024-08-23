@@ -5,9 +5,9 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8" />
-    <title>Insert title here</title>
+    <title>MansHobby</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link
       rel="stylesheet"
       href="${ pageContext.request.contextPath }/resources/css/navbar.css"
@@ -36,7 +36,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         </li>
         <li><a href="#">메뉴 2</a></li>
         <li><a href="#">메뉴 3</a></li>
-        <li><input type="button" id="openModal" value="로그인" /></li>
+        <li><input type="button" id="openLoginModal" value="로그인" /></li>
       </ul>
     </nav>
 
@@ -54,7 +54,10 @@ uri="http://java.sun.com/jsp/jstl/core"%>
           </div>
           <button type="submit" class="login-btn">로그인</button>
           <div class="links">
-            <a href="#">회원가입</a>
+            <a href="" data-toggle="modal" data-targer="#registerModal"
+              >회원가입</a
+            >
+            <input type="button" id="openRegisterModal" value="회원가입" />
             <a href="#">아이디 · 비밀번호 찾기</a>
           </div>
           <div class="divider">또는</div>
@@ -71,27 +74,72 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       </div>
     </div>
 
-    <!-- 로그인 모달 기능 -->
+    <!-- 회원가입 모달 -->
+    <div id="registerModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>회원가입</h2>
+        <form>
+          <input type="email" placeholder="이메일" required />
+          <input type="password" placeholder="비밀번호" required />
+          <div class="remember-me"></div>
+          <button type="submit" class="login-btn">로그인</button>
+
+          <div class="divider">또는</div>
+          <button type="button" class="social-btn naver-btn">
+            네이버로 시작하기
+          </button>
+          <button type="button" class="social-btn kakao-btn">
+            카카오로 시작하기
+          </button>
+          <button type="button" class="social-btn google-btn">
+            Google로 시작하기
+          </button>
+        </form>
+      </div>
+    </div>
+
     <script>
-      const modal = document.getElementById("loginModal");
-      const openModalBtn = document.getElementById("openModal");
-      const closeModalBtn = document.getElementsByClassName("close")[0];
+      // 로그인 모달 기능
+      const loginModal = document.getElementById("loginModal");
+      const openLoginModalBtn = document.getElementById("openLoginModal");
+      const closeLoginModalBtn = document.getElementsByClassName("close")[0];
+
+      const registerModal = document.getElementById("registerModal");
+      const openRegisterModalBtn = document.getElementById("openRegisterModal");
+      const closeRegisterModalBtn = document.getElementsByClassName("close")[1];
 
       // 모달 열기
-      openModalBtn.onclick = function () {
-        modal.style.display = "flex";
+      openLoginModalBtn.onclick = function () {
+        loginModal.style.display = "flex";
       };
 
       // 모달 닫기
-      closeModalBtn.onclick = function () {
-        modal.style.display = "none";
+      closeLoginModalBtn.onclick = function () {
+        loginModal.style.display = "none";
       };
 
       // 모달 외부 클릭 시 닫기
       window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
+        if (event.target == loginModal) {
+          loginModal.style.display = "none";
         }
+        if (event.target == registerModal) {
+          registerModal.style.display = "none";
+        }
+      };
+
+      //   회원가입 모달 기능
+
+      // 모달 열기
+      openRegisterModalBtn.onclick = function () {
+        loginModal.style.display = "none";
+        registerModal.style.display = "flex";
+      };
+
+      // 모달 닫기
+      closeRegisterModalBtn.onclick = function () {
+        registerModal.style.display = "none";
       };
     </script>
   </body>
