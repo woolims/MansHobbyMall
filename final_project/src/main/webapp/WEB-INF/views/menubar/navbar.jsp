@@ -19,24 +19,19 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       <div class="logo">Logo</div>
       <ul class="menu">
         <li>
-          <a href="game.do">Gaming</a>
-          <ul class="dropdown">
-            <li><a href="#">게임 메뉴 1</a></li>
-            <li><a href="#">게임 메뉴 2</a></li>
-            <li><a href="#">게임 메뉴 3</a></li>
-          </ul>
+          <a href="${ pageContext.request.contextPath }/game.do">Gaming</a>
         </li>
         <li>
           <a href="${ pageContext.request.contextPath }/sports.do">Sports</a>
-          <ul class="dropdown">
-            <li><a href="#">스포츠 메뉴 1</a></li>
-            <li><a href="#">스포츠 메뉴 2</a></li>
-            <li><a href="#">스포츠 메뉴 3</a></li>
-          </ul>
         </li>
-        <li><a href="#">메뉴 2</a></li>
-        <li><a href="#">메뉴 3</a></li>
+        <li>
+          <a href="${ pageContext.request.contextPath }/mypage.do">MyPage</a>
+        </li>
+        <li>
+          <a href="${ pageContext.request.contextPath }/inquiry.do">고객센터</a>
+        </li>
         <li><input type="button" id="openModal" value="로그인" /></li>
+        <li><input type="button" id="openModal" value="회원가입" /></li>
       </ul>
     </nav>
 
