@@ -1,19 +1,24 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/core"
-prefix="c" %> <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+      <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <meta charset="UTF-8" />
-    <title>Sports</title>
-  </head>
-  <body>
-    <%@ include file="../menubar/navbar.jsp"%> 여기는 스포츠페이지야
+        <!DOCTYPE html>
+        <html>
 
-    <!-- 푸터 -->
-    <%@ include file="../menubar/footer.jsp"%>
-  </body>
-</html>
+        <head>
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+          <meta charset="UTF-8" />
+          <title>Sports</title>
+        </head>
+
+        <body>
+          <%@ include file="../menubar/navbar.jsp" %>
+
+            <p> 여기는 스포츠페이지야
+            </p>
+            <!-- 푸터 -->
+            <%@ include file="../menubar/footer.jsp" %>
+        </body>
+
+        </html>

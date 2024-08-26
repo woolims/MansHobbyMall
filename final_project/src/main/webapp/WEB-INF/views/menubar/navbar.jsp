@@ -19,6 +19,9 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       <div class="logo">Logo</div>
       <ul class="menu">
         <li>
+          <a href="${ pageContext.request.contextPath }/home.do">home</a>
+        </li>
+        <li>
           <a href="${ pageContext.request.contextPath }/game.do">Gaming</a>
         </li>
         <li>

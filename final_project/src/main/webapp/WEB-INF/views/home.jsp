@@ -25,16 +25,16 @@
             <div class="image-container">
                 <div class="image-box" style="background-image: url(../../resources/images/img.png);">
                     <div class="overlay">
-                        <h2>타이틀 1</h2>
-                        <p>여기에 설명 문구가 들어갑니다.</p>
-                        <a href="#" class="cta-btn">자세히 보기</a>
+                        <h2>Gaming</h2>
+                        <p>게임 카테고리로 이동합니다.</p>
+                        <a href="${ pageContext.request.contextPath }/game.do" class="cta-btn">자세히 보기</a>
                     </div>
                 </div>
                 <div class="image-box" style="background-image: url(../../resources/images/도커.png);">
                     <div class="overlay">
-                        <h2>타이틀 2</h2>
-                        <p>여기에 설명 문구가 들어갑니다.</p>
-                        <a href="#" class="cta-btn">자세히 보기</a>
+                        <h2>sports</h2>
+                        <p>스포츠 카테고리로 이동합니다.</p>
+                        <a href="${ pageContext.request.contextPath }/sports.do" class="cta-btn">자세히 보기</a>
                     </div>
                 </div>
             </div>
