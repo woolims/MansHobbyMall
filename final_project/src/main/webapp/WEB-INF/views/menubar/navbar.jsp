@@ -16,7 +16,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   <body>
     <!-- 네비게이션 바 -->
     <nav class="navbar">
-      <div class="logo">Logo</div>
+      <div class="logo"><a href="home.do">Logo</a></div>
       <ul class="menu">
         <li>
           <a href="game.do">Gaming</a>

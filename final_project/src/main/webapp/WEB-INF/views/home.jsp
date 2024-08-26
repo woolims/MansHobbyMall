@@ -41,6 +41,7 @@
         </section>
     </header>
 
+    <div style="text-align: center;"><c:forEach var="vo" items="${ list }">${vo.getName()}</c:forEach></div>
 
     <!-- 서비스 카드 섹션 -->
     <section class="services">
