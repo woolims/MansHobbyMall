@@ -1,4 +1,4 @@
-package com.puter.final_project.dao.Shop;
+package com.puter.final_project.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
