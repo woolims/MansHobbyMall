@@ -40,4 +40,10 @@ public class ShopController {
 
         return "shopPage/inquiry";
     }
+
+    @RequestMapping("/product_insert.do")
+    public String product_insert() {
+
+        return "shopPage/productInsert";
+    }
 }
