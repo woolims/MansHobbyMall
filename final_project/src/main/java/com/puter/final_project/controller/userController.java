@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.UserVo;
@@ -41,25 +40,18 @@ public class UserController {
         return "home";
     }
     @RequestMapping("login.do")
-	public String login(String id, String password, RedirectAttributes ra) {
+	public String login(String id, String password) {
 		
 		UserVo user = userMapper.selectOneFromId(id);
 		
 		//아이디가 없는(틀린)경우
 		if(user==null) {
-			
-			ra.addFlashAttribute("reason", "fail_id");
-			
-			return "redirect:home.do";
+			return "redirect:../home.do?reason=fail_id";
 		}
 		
 		//비밀번호가 틀린경우
 		if(user.getPassword().equals(password)==false) {
-			
-			ra.addFlashAttribute("reason", "fail_id");
-			ra.addFlashAttribute("id", id);
-			
-			return "redirect:../home.do";
+			return "redirect:../home.do?reason=fail_pwd";
 		}
 		
 		//로그인처리: 현재 로그인된 객체(user)정보를 session저장

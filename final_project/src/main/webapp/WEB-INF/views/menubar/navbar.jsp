@@ -12,6 +12,40 @@ uri="http://java.sun.com/jsp/jstl/core"%>
       rel="stylesheet"
       href="${ pageContext.request.contextPath }/resources/css/navbar.css"
     />
+    <script type="text/javascript">
+      //javascript 초기화
+      //window.onload = function(){};
+      
+      //jQuery 초기화
+      $(document).ready(function(){
+        
+        //showMessage();
+        setTimeout(showMessage,100);//0.1초후에 메시지 띄워라
+        
+      });
+      
+      function showMessage(){
+        // /member/login_form.do?reason=fail_id => "true"
+        if("${ param.reason == 'fail_id'}" == "true"){
+          loginModal.style.display = "flex";
+          alert("아이디가 틀립니다.");
+        }		
+        
+        // /member/login_form.do?reason=fail_pwd => "true"
+        if("${ param.reason == 'fail_pwd'}" == "true"){
+          loginModal.style.display = "flex";
+          alert("비밀번호가 틀립니다.");
+        }	
+        
+        // /member/login_form.do?reason=session_timeout
+        if("${ param.reason == 'session_timeout'}" == "true"){
+          loginModal.style.display = "flex";
+          alert("로그아웃되었습니다.\n로그인하세요.");
+        }	
+        
+      }
+    
+    </script>
   <script>
       function send(f){
         
@@ -38,37 +72,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         
       }//end:send()
     </script>
-    <script type="text/javascript">
-      //javascript 초기화
-      //window.onload = function(){};
-      
-      //jQuery 초기화
-      $(document).ready(function(){
-        
-        //showMessage();
-        setTimeout(showMessage,100);//0.1초후에 메시지 띄워라
-        
-      });
-      
-      function showMessage(){
-        // /member/login_form.do?reason=fail_id => "true"
-        if("${ param.reason == 'fail_id'}" == "true"){
-          alert("아이디가 틀립니다!!");
-        }		
-        
-        // /member/login_form.do?reason=fail_pwd => "true"
-        if("${ param.reason == 'fail_pwd'}" == "true"){
-          alert("비밀번호가 틀립니다!!");
-        }	
-        
-        // /member/login_form.do?reason=session_timeout
-        if("${ param.reason == 'session_timeout'}" == "true"){
-          alert("로그아웃되었습니다\n로그인후 사진을 등록하세요!!");
-        }	
-        
-      }
-    
-    </script>
+
   </head>
   <body>
     <!-- 네비게이션 바 -->
@@ -100,7 +104,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         </c:if>
         <!-- 로그인이 된 경우 -->
         <c:if test="${ not empty user }">
-          <li><b>${ user.nickName }</b>님<input type="button" value="로그아웃" onclick="location.href='../user/logout.do'"></li>
+          <li id="userStatus"><b>${ user.nickName }님</b></li>
+          <li><a onclick="location.href='../user/logout.do'">로그아웃</a></li>
         </c:if>
       </ul>
     </nav>
