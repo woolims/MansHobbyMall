@@ -1,5 +1,17 @@
 package com.puter.final_project.dao;
 
-public class UserMapper {
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.puter.final_project.vo.UserVo;
+
+@Mapper
+public interface UserMapper {
+
+    List<UserVo> selectList();
+
+    // id 에 해당되는 1건의 정보 얻어온다
+	public UserVo selectOneFromId(String id);
 
 }
