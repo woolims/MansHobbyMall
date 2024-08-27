@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.githrd.demo_mybatis.dao.SawonDao">
-<!-- 경로와 이름을 통일시킨다 -->
+<mapper namespace="com.githrd.demo_mybatis.dao.ShopDao">
+    <!-- 경로와 이름을 통일시킨다 -->
 
     <!-- <select id="selectList" resultType="sawon">
         select * from sawon
