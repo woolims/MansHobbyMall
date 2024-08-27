@@ -11,4 +11,7 @@ public interface UserMapper {
 
     List<UserVo> selectList();
 
+    // id 에 해당되는 1건의 정보 얻어온다
+	public UserVo selectOneFromId(String id);
+
 }

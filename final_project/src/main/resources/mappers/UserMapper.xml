@@ -10,5 +10,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select * from user order by userIdx
     </select>
 
+    <!-- 상세 조회 id -->
+    <select id="selectOneFromId" parameterType="String" resultType="user">
+		select * from user where id=#{ id }
+    </select>
 
 </mapper>
