@@ -76,6 +76,9 @@
               <div>
                 <%@ include file="../menubar/footer.jsp" %>
               </div>
+
+              <!-- 결제 -->
+              <%@ include file="../menubar/payment.jsp" %>
             </div>
 
         </body>
