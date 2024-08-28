@@ -6,11 +6,38 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
   <head>
     <meta charset="UTF-8" />
+    <title>MansHobby</title>
     <link
       rel="stylesheet"
       href="${ pageContext.request.contextPath }/resources/css/payment.css"
     />
-    <title>MansHobby</title>
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+    <script type="text/javascript">
+
+        var IMP = window.IMP;
+        IMP.init("imp33361271");
+
+        var merchant_uid = "O" + new Date().getTime(); // 고유한 주문번호 생성
+
+        function requestPay() {
+		
+
+        // 로그인이 안되었으면
+        if("${ empty user }" == "true") {
+            if(confirm("로그인 후 충전이 가능합니다.\n로그인 하시겠습니까?") == true) {
+            // 로그인 모달창을 띄웁니다.
+            loginModal.style.display = "flex";
+            }
+            return;
+        }
+        
+    }//end:requestPay()
+
+    </script>
   </head>
   <body>
     <!-- 상품 페이지 내용 -->
@@ -73,7 +100,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
         <div class="purchase-actions">
           <button class="btn npay-btn">N Pay 구매하기</button>
           <button class="btn simple-buy-btn">간편구매</button>
-          <button class="btn buy-btn">구매하기</button>
+          <button class="btn buy-btn" onclick="requestPay()">구매하기</button>
         </div>
       </div>
 
