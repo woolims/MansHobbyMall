@@ -13,18 +13,15 @@
           <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           <meta charset="UTF-8" />
-          <title>Sports</title>
+          <title>Game</title>
           <style>
             #top {
+              border: 1px solid black;
               margin: auto;
               height: 150px;
               width: 80%;
-              margin-top: 102.2px;
-            }
+              margin-top: 92px;
 
-            #top img {
-              width: 100%;
-              height: 100%;
             }
 
             #main {
@@ -59,7 +56,7 @@
           <!-- 메뉴바 -->
           <%@ include file="../menubar/navbar.jsp" %>
             <div id="top">
-              <img src="${ pageContext.request.contextPath }/resources/images/스포츠메인페이지.jpg" alt="스포츠메인페이지">
+              상단 이미지 넣기
             </div>
             <div id="main">
               <div id="mcategory">
