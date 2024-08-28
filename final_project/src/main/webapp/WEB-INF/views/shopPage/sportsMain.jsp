@@ -7,18 +7,80 @@
         <html>
 
         <head>
+          <!-- Bootstrap 3.x-->
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           <meta charset="UTF-8" />
-          <title>Sports</title>
+          <title>Game</title>
+          <style>
+            #top {
+              border: 1px solid black;
+              margin: auto;
+              height: 150px;
+              width: 80%;
+              margin-top: 92px;
+
+            }
+
+            #main {
+              margin: auto;
+              width: 73%;
+              height: 100px;
+              align-items: center;
+            }
+
+            #mcategory {
+              margin: auto;
+              height: auto;
+              width: 100%;
+              margin-top: 30px;
+              text-align: center;
+            }
+
+            #mcategory-btn {
+              width: 100px;
+              height: 50px;
+              margin-left: 30px;
+              margin-right: 30px;
+            }
+
+            #dcategory {
+              margin-bottom: 50px;
+            }
+          </style>
         </head>
 
         <body>
+          <!-- 메뉴바 -->
           <%@ include file="../menubar/navbar.jsp" %>
+            <div id="top">
+              상단 이미지 넣기
+            </div>
+            <div id="main">
+              <div id="mcategory">
+                <hr>
+                <input type="button" id="mcategory-btn" class="btn btn-default" value="baseBall">
+                <input type="button" id="mcategory-btn" class="btn btn-default" value="footBall">
+                <input type="button" id="mcategory-btn" class="btn btn-default" value="basketBall">
+                <input type="button" id="mcategory-btn" class="btn btn-default" value="??????">
+                <hr>
+              </div>
+              <div id="dcategory">
+                <c:forEach var="i" begin="1" end="20" step="1">
+                  <div
+                    style="border: 1px solid red; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px;">
+                    이미지
+                    <span>제목 ${i}</span>
+                    <span>가격 ${i*300}</span>
+                  </div>
+                </c:forEach>
+              </div>
+              <!-- 푸터 -->
+              <%@ include file="../menubar/footer.jsp" %>
+            </div>
 
-            <p> 여기는 스포츠페이지야
-            </p>
-            <!-- 푸터 -->
-            <%@ include file="../menubar/footer.jsp" %>
         </body>
 
         </html>
