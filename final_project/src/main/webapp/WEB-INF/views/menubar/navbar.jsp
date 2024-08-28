@@ -49,7 +49,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
   <script>
       function send(f){
         
-        let id   = f.id.value.trim();
+        let id        = f.id.value.trim();
         let password  = f.password.value.trim();
         
         if(id==''){
