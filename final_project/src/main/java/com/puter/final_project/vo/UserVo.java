@@ -16,7 +16,6 @@ public class UserVo {
     String name;
     String phone;
     String addr;
-    String subAddr;
     String adminAt;
     long point;
     String createAt;

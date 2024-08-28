@@ -86,15 +86,4 @@ public class UserController {
 		return json;
 	}//end:check_id()
 
-	@RequestMapping("insert.do")
-	public String insert(String re_id, String re_password, UserVo vo){
-
-		vo.setId(re_id);
-		vo.setPassword(re_password);
-
-		int res = userMapper.insert(vo);
-
-		return "redirect:../home.do";
-	}
-
 }

@@ -20,8 +20,13 @@
               margin: auto;
               height: 150px;
               width: 80%;
-              margin-top: 92px;
+              margin-top: 102.2px;
+            }
 
+            #top img {
+              width: 100%;
+              height: 100%;
+              filter: brightness(175%) saturate(120%);
             }
 
             #main {
@@ -45,6 +50,10 @@
               margin-left: 30px;
               margin-right: 30px;
             }
+
+            #dcategory {
+              margin-bottom: 50px;
+            }
           </style>
         </head>
 
@@ -52,7 +61,7 @@
           <!-- 메뉴바 -->
           <%@ include file="../menubar/navbar.jsp" %>
             <div id="top">
-              상단 이미지 넣기
+              <img src="${ pageContext.request.contextPath }/resources/images/게임메인페이지.png" alt="게임메인페이지">
             </div>
             <div id="main">
               <div id="mcategory">
@@ -65,7 +74,8 @@
               </div>
               <div id="dcategory">
                 <c:forEach var="i" begin="1" end="20" step="1">
-                  <div style="border: 1px solid red; width: 160px; height: 200px; display: inline-block;">
+                  <div
+                    style="border: 1px solid red; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px;">
                     이미지
                     <span>제목 ${i}</span>
                     <span>가격 ${i*300}</span>
@@ -73,12 +83,7 @@
                 </c:forEach>
               </div>
               <!-- 푸터 -->
-              <div>
-                <%@ include file="../menubar/footer.jsp" %>
-              </div>
-
-              <!-- 결제 -->
-              <%@ include file="../menubar/payment.jsp" %>
+              <%@ include file="../menubar/footer.jsp" %>
             </div>
 
         </body>
