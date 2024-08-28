@@ -20,8 +20,13 @@
               margin: auto;
               height: 150px;
               width: 80%;
-              margin-top: 92px;
+              margin-top: 102.2px;
+            }
 
+            #top img {
+              width: 100%;
+              height: 100%;
+              filter: brightness(175%) saturate(120%);
             }
 
             #main {
@@ -45,6 +50,10 @@
               margin-left: 30px;
               margin-right: 30px;
             }
+
+            #dcategory {
+              margin-bottom: 50px;
+            }
           </style>
         </head>
 
@@ -52,7 +61,7 @@
           <!-- 메뉴바 -->
           <%@ include file="../menubar/navbar.jsp" %>
             <div id="top">
-              상단 이미지 넣기
+              <img src="${ pageContext.request.contextPath }/resources/images/게임메인페이지.png" alt="게임메인페이지">
             </div>
             <div id="main">
               <div id="mcategory">
