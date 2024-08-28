@@ -5,31 +5,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.puter.final_project.dao.UserMapper">
 
-  <!-- 전체조회 -->
-  <select id="selectList" resultType="user">
+    <!-- 전체조회 -->
+    <select id="selectList" resultType="user">
        select * from user order by userIdx
-  </select>
+    </select>
 
-  <!-- 상세 조회 id -->
-  <select id="selectOneFromId" parameterType="String" resultType="user">
+    <!-- 상세 조회 id -->
+    <select id="selectOneFromId" parameterType="String" resultType="user">
 		select * from user where id=#{ id }
-  </select>
+    </select>
 
-  <!-- 사용자 추가 -->
-  <insert id="insert" parameterType="user">
-      insert into user values(
-        null,
-        default,
-        #{id},
-        #{password},
-        #{nickName}, 
-        #{name},
-        #{phone},
-        #{addr},
-        #{subAddr},
-        default,
-        0,
-        default
-      )
-  </insert>
 </mapper>
