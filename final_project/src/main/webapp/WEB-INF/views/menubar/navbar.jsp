@@ -68,6 +68,129 @@
           f.submit();
 
         }//end:send()
+
+        function check_id() {
+
+          //회원가입 버튼은 비활성화
+          // <input id="btn_register" type="button" ...  disabled="disabled">
+          $("#btn_register").prop("disabled", true);
+
+
+          //           document.getElementById("mem_id").value
+          let re_id = $("#re_id").val();
+
+          if (re_id.length == 0) {
+
+            $("#id_msg").html("");
+            return;
+          }
+
+
+          if (re_id.length < 3) {
+
+            $("#id_msg").html("id는 3자리 이상 입력하세요").css("color", "red");
+            return;
+          }
+
+          //서버에 현재 입력된 ID를 체크요청(jQuery Ajax이용)
+          $.ajax({
+            url: "user/check_id.do",     //MemberCheckIdAction
+            data: { "id": re_id }, //parameter   => check_id.do?mem_id=one
+            dataType: "json",
+            success: function (res_data) {
+              // res_data = {"result": true}  or {"result": false}
+              if (res_data.result) {
+
+                $("#id_msg").html("사용가능한 아이디 입니다").css("color", "blue");
+
+                //가입버튼 활성화
+                $("#btn_register").prop("disabled", false);
+
+              } else {
+
+                $("#id_msg").html("이미 사용중인 아이디 입니다").css("color", "red");
+
+              }
+            },
+            error: function (err) {
+              alert(err.responseText);
+            }
+          });
+        }//end:check_id()
+
+        function find_addr() {
+
+          var themeObj = {
+            bgColor: "#B51D1D" //바탕 배경색
+          };
+
+          new daum.Postcode({
+            theme: themeObj,
+            oncomplete: function (data) {
+              // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+              // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+              $("#addr").val(data.zonecode); //우편번호 넣기
+              $("#subAddr").val(data.address);     //주소넣기
+
+            }
+          }).open();
+        }//end:find_addr()
+
+        function registerUser(f) {
+          let re_id = f.re_id.value.trim();
+          let re_password = f.re_password.value.trim();
+          let nickName = f.nickName.value.trim();
+          let name = f.name.value.trim();
+          let phone = f.phone.value.trim();
+          let addr = f.addr.value.trim();
+          let subAddr = f.subAddr.value.trim();
+
+          if (re_id == '') {
+            alert("아이디를 입력하세요.");
+            f.re_id.value = "";
+            f.re_id.focus();
+            return;
+          }
+
+          if (re_password == '') {
+            alert("비밀번호를 입력하세요.");
+            f.re_password.value = "";
+            f.re_password.focus();
+            return;
+          }
+
+          if (nickName == '') {
+            alert("닉네임을 입력하세요.");
+            f.nickName.value = "";
+            f.nickName.focus();
+            return;
+          }
+
+          if (name == '') {
+            alert("이름을 입력하세요.");
+            f.name.value = "";
+            f.name.focus();
+            return;
+          }
+
+          if (phone == '') {
+            alert("전화번호를 입력하세요.");
+            f.phone.value = "";
+            f.phone.focus();
+            return;
+          }
+
+          if (addr == '') {
+            alert("주소를 입력하세요.");
+            f.addr.value = "";
+            f.addr.focus();
+            return;
+          }
+
+          f.action = "user/insert.do";
+          f.submit();
+        }//end:registerUser()
+
       </script>
 
     </head>
@@ -143,14 +266,17 @@
           <span class="close">&times;</span>
           <h2>회원가입</h2>
           <form>
-            <input type="text" id="re_id" name="re_id" placeholder="아이디" required />
+            <input type="text" id="re_id" name="re_id" placeholder="아이디" onkeyup="check_id();" required /><span
+              id="id_msg"></span>
             <input type="password" id="re_password" name="re_password" placeholder="비밀번호" required />
             <input type="text" id="nickName" name="nickName" placeholder="닉네임" required />
             <input type="text" id="name" name="name" placeholder="이름" required />
             <input type="text" id="phone" name="phone" placeholder="전화번호(ex.010-1234-1234)" required />
-            <input type="text" name="addr" placeholder="주소" required />
-            <input type="text" name="addr" placeholder="상세주소" required />
-            <button type="submit" class="login-btn">회원가입</button>
+            <input type="text" id="addr" name="addr" placeholder="주소" required />
+            <input type="text" id="subAddr" name="subAddr" placeholder="상세주소" required />
+            <input type="button" id="btn_register" class="login-btn" value="회원가입" disabled="disabled"
+              onclick="registerUser(this.form);" />
+            <!-- <input type="button" class="login-btn" value="회원가입" onclick="registerUser(this.form);" /> -->
 
             <div class="divider">또는</div>
             <button type="button" class="social-btn naver-btn">
