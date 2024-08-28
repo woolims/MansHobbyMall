@@ -31,10 +31,10 @@ CREATE TABLE Grade (
 
 -- Grade 테이블에 샘플 데이터 삽입
 INSERT INTO Grade (gradeName, authority, discount)
-VALUES (‘Bronze’, 1, 5), 
-       (‘Silver’, 2, 10),
-       (‘Gold’, 3, 15), 
-       (‘Platinum’, 4, 20);
+VALUES ('Bronze', 1, 5), 
+       ('Silver', 2, 10),
+       ('Gold', 3, 15), 
+       ('Platinum', 4, 20);
 -- 등급 데이터 삭제
 DELETE FROM Grade WHERE gradeName = 'Bronze';
 DELETE FROM Grade;
@@ -54,18 +54,18 @@ CREATE TABLE User (
     createAt DATETIME NOT NULL
 );
 
--- User 테이블에 샘플 데이터 삽입
-INSERT INTO User (gIdx, id, password, nickName, name, phone, addr, adminAt, point, createAt)
-VALUES 
-(1, ‘test’, ‘test’, ‘테스트‘, ‘테스트’, ‘010-1234-5678’, ‘Address 1’, ‘N’, 1, NOW()),
-(4, ‘admin’, ‘admin’, ‘관리자‘, ‘관리자’, ‘010-1111-1111’, ‘서울시 관악구’, ‘Y’, 1000000, NOW());
--- 유저 데이터 삭제
-DELETE FROM User WHERE gIdx = 1;
-DELETE FROM User;
-
 -- User 테이블과 Grade 테이블의 외래 키
 ALTER TABLE User
 ADD CONSTRAINT FK_Grade_TO_User FOREIGN KEY (gIdx) REFERENCES Grade (gIdx);
+
+-- User 테이블에 샘플 데이터 삽입
+INSERT INTO User (gIdx, id, password, nickName, name, phone, addr, adminAt, point, createAt)
+VALUES 
+(2, 'test', 'test', '테스트', '테스트', '010-1111-2222', 'Address 1', 'N', 100, NOW()),
+(4, 'admin', 'admin', '관리자', '관리자', '010-1111-1111', '서울시 관악구', 'Y', 100000, NOW());
+-- 유저 데이터 삭제
+DELETE FROM User WHERE gIdx = 1;
+DELETE FROM User;
 
 -- Email 테이블
 CREATE TABLE Email (
