@@ -65,7 +65,7 @@
               </div>
               <div id="dcategory">
                 <c:forEach var="i" begin="1" end="20" step="1">
-                  <div style="border: 1px solid red; width: 150px; height: 200px; display: inline-block;">
+                  <div style="border: 1px solid red; width: 160px; height: 200px; display: inline-block;">
                     이미지
                     <span>제목 ${i}</span>
                     <span>가격 ${i*300}</span>
