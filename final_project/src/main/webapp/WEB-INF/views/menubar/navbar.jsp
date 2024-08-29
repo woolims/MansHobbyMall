@@ -185,18 +185,6 @@
           loginModal.style.display = "none";
         };
 
-        // 모달 외부 클릭 시 닫기
-        window.onclick = function (event) {
-          if (event.target == loginModal) {
-            loginModal.style.display = "none";
-          }
-          if (event.target == registerModal) {
-            registerModal.style.display = "none";
-          }
-        };
-
-        //   회원가입 모달 기능
-
         // 모달 열기
         openRegisterModalBtn.onclick = function () {
           loginModal.style.display = "none";
