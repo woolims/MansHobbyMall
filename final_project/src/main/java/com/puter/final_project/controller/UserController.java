@@ -40,7 +40,7 @@ public class UserController {
         return "home";
     }
     @RequestMapping("login.do")
-	public String login(String id, String password) {
+	public String login(String id, String password, String url) {
 		
 		UserVo user = userMapper.selectOneFromId(id);
 		
@@ -57,6 +57,7 @@ public class UserController {
 		//로그인처리: 현재 로그인된 객체(user)정보를 session저장
 		session.setAttribute("user", user);
 		
+		if(url != null) return "redirect:" + url;
 		return "redirect:../home.do";
 	}
 
