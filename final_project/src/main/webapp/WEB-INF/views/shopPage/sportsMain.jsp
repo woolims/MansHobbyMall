@@ -79,6 +79,12 @@
                     <span>가격 ${i*300}</span>
                   </div>
                 </c:forEach>
+
+                <!-- Page Menu -->
+                <div style="text-align: center; margin-top: 20px; font-size: 15px;">
+                  ${ pageMenu }
+                </div>
+
               </div>
               <!-- 푸터 -->
               <%@ include file="../menubar/footer.jsp" %>

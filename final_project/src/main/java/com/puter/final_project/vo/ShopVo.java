@@ -8,4 +8,7 @@ import lombok.Data;
 @Alias("shop")
 public class ShopVo {
 
+    // 상품
+    int pIdx;
+
 }
