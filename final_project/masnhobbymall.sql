@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS Email;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Grade;
 
+
 -- Grade 테이블
 CREATE TABLE Grade (
     gIdx int PRIMARY KEY AUTO_INCREMENT,
@@ -28,16 +29,6 @@ CREATE TABLE Grade (
     authority int NOT NULL,
     discount int NOT NULL
 );
-
--- Grade 테이블에 샘플 데이터 삽입
-INSERT INTO Grade (gradeName, authority, discount)
-VALUES ('Bronze', 1, 5), 
-       ('Silver', 2, 10),
-       ('Gold', 3, 15), 
-       ('Platinum', 4, 20);
--- 등급 데이터 삭제
-DELETE FROM Grade WHERE gradeName = 'Bronze';
-DELETE FROM Grade;
 
 -- User 테이블
 CREATE TABLE User (
@@ -48,24 +39,15 @@ CREATE TABLE User (
     nickName varchar(50) NOT NULL,
     name varchar(50) NOT NULL,
     phone varchar(50) NOT NULL,
-    addr varchar(200) NOT NULL,
+    addr varchar(70) NOT NULL,
+    subAddr varchar(45),
     adminAt char(1) NOT NULL DEFAULT 'N',
     point bigint NOT NULL DEFAULT 0,
-    createAt DATETIME NOT NULL
+    createAt DATETIME NOT NULL default now()
 );
-
 -- User 테이블과 Grade 테이블의 외래 키
 ALTER TABLE User
 ADD CONSTRAINT FK_Grade_TO_User FOREIGN KEY (gIdx) REFERENCES Grade (gIdx);
-
--- User 테이블에 샘플 데이터 삽입
-INSERT INTO User (gIdx, id, password, nickName, name, phone, addr, adminAt, point, createAt)
-VALUES 
-(2, 'test', 'test', '테스트', '테스트', '010-1111-2222', 'Address 1', 'N', 100, NOW()),
-(4, 'admin', 'admin', '관리자', '관리자', '010-1111-1111', '서울시 관악구', 'Y', 100000, NOW());
--- 유저 데이터 삭제
-DELETE FROM User WHERE gIdx = 1;
-DELETE FROM User;
 
 -- Email 테이블
 CREATE TABLE Email (
@@ -298,3 +280,11 @@ CREATE TABLE Chat_logs (
     responseText LONGTEXT NOT NULL,
     endTime DATETIME NOT NULL
 );
+
+-- Grade 테이블에 샘플 데이터 삽입
+INSERT INTO Grade (gradeName, authority, discount)
+VALUES (‘Bronze’, 1, 5),
+       (‘Silver’, 2, 10),
+       (‘Gold’, 3, 15),
+       (‘Platinum’, 4, 20);
+-- 등급 데이터 삭제
