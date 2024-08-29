@@ -8,6 +8,11 @@
       <meta charset="UTF-8" />
       <title>MansHobby</title>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <!-- Bootstrap 3.x -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
       <link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/navbar.css" />
       <script type="text/javascript">
         //javascript 초기화
@@ -94,8 +99,15 @@
                 <li><a href="#">스포츠 메뉴 3</a></li>
               </ul>
             </li>
-            <li><a href="#">메뉴 2</a></li>
-            <li><a href="#">메뉴 3</a></li>
+            <li><a href="#">고객문의</a></li>
+            <c:if test="${ not empty user }">
+              <c:if test="${ user.getName() ne '관리자'}">
+                <li><a href="mypage.do">마이페이지</a></li>
+              </c:if>
+              <c:if test="${ user.getName() eq '관리자'}">
+                <li><a href="#">관리페이지</a></li>
+              </c:if>
+            </c:if>
             <!-- 로그인이 안 된 경우 -->
             <c:if test="${ empty user }">
               <li><input type="button" id="openLoginModal" value="로그인" />

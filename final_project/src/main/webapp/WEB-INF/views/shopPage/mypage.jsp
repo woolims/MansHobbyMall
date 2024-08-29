@@ -9,8 +9,8 @@
     </head>
 
     <body>
-
-        여긴 마이페이지야
+        <%@ include file="../menubar/navbar.jsp" %>
+            여긴 마이페이지야
 
 
     </body>
