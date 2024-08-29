@@ -9,8 +9,9 @@
     </head>
 
     <body>
-
-        여긴 문의창구야
+        <%@ include file="../menubar/navbar.jsp" %>
+        <br><br><br><br><br>
+        <h1>고객문의창</h1>
 
     </body>
 
