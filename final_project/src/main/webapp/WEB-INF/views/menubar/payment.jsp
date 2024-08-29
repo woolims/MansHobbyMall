@@ -28,6 +28,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 if (confirm("로그인 후 충전이 가능합니다.\n로그인 하시겠습니까?") == true) {
                     // 로그인 모달창을 띄웁니다.
                     loginModal.style.display = "flex";
+                    $("#url").val(location.href);
                 }
                 return;
             }
@@ -36,8 +37,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 pg: "uplus",
                 pay_method: 'uplus',
                 merchant_uid: merchant_uid,
-                name: '포인트충전',
-                amount: 1000000,
+                name: '상품명',
+                amount: 100,
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
@@ -66,8 +67,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 pg: "tosspay",
                 pay_method: 'tosspay',
                 merchant_uid: merchant_uid,
-                name: '포인트충전',
-                amount: 1000000,
+                name: '상품명',
+                amount: 100,
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
@@ -96,8 +97,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 pg: "kakaopay",
                 pay_method: 'kakaopay',
                 merchant_uid: merchant_uid,
-                name: '포인트충전',
-                amount: 1000000,
+                name: '상품명',
+                amount: 100,
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',

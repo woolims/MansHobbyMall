@@ -251,6 +251,7 @@
           <span class="close">&times;</span>
           <h2>로그인</h2>
           <form>
+            <input type="hidden" name="url" id="url"/>
             <input type="text" name="id" id="id" placeholder="아이디" required />
             <input type="password" name="password" id="password" placeholder="비밀번호" required />
             <input type="button" class="login-btn" value="로그인" onclick="send(this.form);" />
