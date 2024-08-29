@@ -222,7 +222,7 @@
                 <li><a href="#">스포츠 메뉴 3</a></li>
               </ul>
             </li>
-            <li><a href="#">고객문의</a></li>
+            <li><a href="inquiry.do">고객문의</a></li>
             <c:if test="${ not empty user }">
               <c:if test="${ user.getName() ne '관리자'}">
                 <li><a href="mypage.do">마이페이지</a></li>
