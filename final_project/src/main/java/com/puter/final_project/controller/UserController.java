@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.UserVo;
@@ -40,23 +42,27 @@ public class UserController {
         return "home";
     }
     @RequestMapping("login.do")
-	public String login(String id, String password, String url) {
+	public String login(String id, String password, String url, RedirectAttributes ra) {
 		
 		UserVo user = userMapper.selectOneFromId(id);
 		
 		//아이디가 없는(틀린)경우
 		if(user==null) {
-			return "redirect:../home.do?reason=fail_id";
+			ra.addAttribute("reason", "fail_id");
+			return "redirect:" + url;
 		}
 		
 		//비밀번호가 틀린경우
 		if(user.getPassword().equals(password)==false) {
-			return "redirect:../home.do?reason=fail_pwd";
+			ra.addAttribute("reason", "fail_password");
+			return "redirect:" + url;
 		}
 		
 		//로그인처리: 현재 로그인된 객체(user)정보를 session저장
 		session.setAttribute("user", user);
 		
+		System.out.println(url);
+
 		if(url != null) return "redirect:" + url;
 		return "redirect:../home.do";
 	}
