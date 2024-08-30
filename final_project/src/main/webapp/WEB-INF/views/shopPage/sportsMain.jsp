@@ -62,16 +62,24 @@
               <img src="${ pageContext.request.contextPath }/resources/images/스포츠메인페이지.jpg" alt="스포츠메인페이지">
             </div>
             <div id="main">
-              <div id="mcategory">
+              <div>
+
+              </div>
+
+              <div id="dcategory">
                 <hr>
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="baseBall">
-                <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="footBall">
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="basketBall">
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="??????">
+                <c:forEach var="shop" items="${dCategoryNameList}">
+                  <input type="button" id="dcategory-btn" class="btn btn-default" value="${}">
+                  <!-- 이 위에 수정해야해~~~~~~~~~~~~~~~~~~~~~~~~~~~ 소카테고리 띄우기! -->
+                  <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
+                </c:forEach>
+                <hr>
+                <br><br><br>
+                <hr>
+                <input type="button" id="dcategory-btn" class=" btn">
                 <hr>
               </div>
-              <div id="dcategory">
+              <div id="product">
                 <c:forEach var="shop" items="${list}">
                   <div
                     style="border: 1px solid black; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px; text-align: center;">

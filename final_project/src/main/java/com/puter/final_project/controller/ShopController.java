@@ -1,6 +1,5 @@
 package com.puter.final_project.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,13 @@ public class ShopController {
     // 스포츠카테고리 전체조회
     @RequestMapping("/sports.do")
     public String sports(@RequestParam(name = "page", defaultValue = "1") int nowPage, Model model,
-            @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo) {
+            @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo,
+            @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo) {
+
+        if (mcategoryNo != 1) {
+            List<ShopVo> dCategoryNameList = shop_mapper.selectDCategoryName(categoryNo, mcategoryNo);
+            model.addAttribute("dCategoryName", dCategoryNameList);
+        }
 
         // 게시물의 범위 계산(start/end)
         int start = (nowPage - 1) * MyCommon.Shop.BLOCK_LIST + 1;
@@ -64,6 +69,7 @@ public class ShopController {
                 MyCommon.Shop.BLOCK_PAGE); // 한화면에 보여질 페이지수
 
         // 결과적으로 request binding
+
         model.addAttribute("list", list);
         model.addAttribute("pageMenu", pageMenu);
 

@@ -306,11 +306,6 @@ VALUES ('Bronze', 1, 5),
        ('Silver', 2, 10),
        ('Gold', 3, 15),
        ('Platinum', 4, 20);
--- User 테이블에 샘플 데이터 삽입
-INSERT INTO User (gIdx, id, password, nickName, name, phone, addr, adminAt, point, createAt)
-VALUES
-(2, 'test', 'test', '테스트', '테스트', '010-1111-2222', 'Address 1', 'N', 100, NOW()),
-(4, 'admin', 'admin', '관리자', '관리자', '010-1111-1111', '서울시 관악구', 'Y', 100000, NOW());
 
 
 -- 대 카테고리 데이터 추가
