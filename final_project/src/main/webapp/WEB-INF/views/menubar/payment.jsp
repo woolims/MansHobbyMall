@@ -28,7 +28,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 if (confirm("로그인 후 충전이 가능합니다.\n로그인 하시겠습니까?") == true) {
                     // 로그인 모달창을 띄웁니다.
                     loginModal.style.display = "flex";
-                    $("#url").val(location.href);
+
                 }
                 return;
             }
@@ -59,7 +59,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 if (confirm("로그인 후 충전이 가능합니다.\n로그인 하시겠습니까?") == true) {
                     // 로그인 모달창을 띄웁니다.
                     loginModal.style.display = "flex";
-                    $("#url").val(location.href);
+
                 }
                 return;
             }
@@ -90,7 +90,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 if (confirm("로그인 후 충전이 가능합니다.\n로그인 하시겠습니까?") == true) {
                     // 로그인 모달창을 띄웁니다.
                     loginModal.style.display = "flex";
-                    $("#url").val(location.href);
+
                 }
                 return;
             }
