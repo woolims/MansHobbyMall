@@ -67,7 +67,7 @@
             f.password.focus();
             return;
           }
-
+          $("#url").val(location.href);
 
           f.action = "user/login.do";
           f.submit();

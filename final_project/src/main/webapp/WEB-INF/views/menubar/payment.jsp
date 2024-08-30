@@ -169,7 +169,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 
                 <!-- 가격 표시 -->
                 <div class="price">
-                    <p>판매가: <span id="price">1,000,000원</span></p>
+                    <p>판매가: <span id="price">100원</span></p>
                 </div>
 
                 <!-- 구매 버튼 -->
