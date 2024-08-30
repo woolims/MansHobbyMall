@@ -65,20 +65,25 @@
               <div id="mcategory">
                 <hr>
                 <input type="button" id="mcategory-btn" class="btn btn-default" value="baseBall">
+                <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
                 <input type="button" id="mcategory-btn" class="btn btn-default" value="footBall">
                 <input type="button" id="mcategory-btn" class="btn btn-default" value="basketBall">
                 <input type="button" id="mcategory-btn" class="btn btn-default" value="??????">
                 <hr>
               </div>
               <div id="dcategory">
-                <c:forEach var="i" begin="1" end="20" step="1">
+                <c:forEach var="shop" items="${list}">
                   <div
-                    style="border: 1px solid red; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px;">
-                    이미지
-                    <span>제목 ${i}</span>
-                    <span>가격 ${i*300}</span>
+                    style="border: 1px solid black; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px; text-align: center;">
+                    <div> ${shop.getPName()} </div>
                   </div>
                 </c:forEach>
+
+                <!-- Page Menu -->
+                <div style="text-align: center; margin-top: 20px; font-size: 15px;">
+                  ${ pageMenu }
+                </div>
+
               </div>
               <!-- 푸터 -->
               <%@ include file="../menubar/footer.jsp" %>

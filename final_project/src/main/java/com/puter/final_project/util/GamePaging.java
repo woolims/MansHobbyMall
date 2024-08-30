@@ -6,7 +6,7 @@ package com.puter.final_project.util;
         blockList:한페이지당 게시물수
         blockPage:한화면에 나타낼 페이지 목록수
  */
-public class Paging {
+public class GamePaging {
 	public static String getPaging(String pageURL, int nowPage, int rowTotal, int blockList, int blockPage) {
 
 		int totalPage/* 전체페이지수 */,
@@ -51,7 +51,7 @@ public class Paging {
 		// --------------------------------------------------------------------------------------------
 		if (isPrevPage) {
 
-			sb.append(String.format("<li><a href='list.do?page=%d'>◀</a></li>", startPage - 1));
+			sb.append(String.format("<li><a href='game.do?page=%d'>◀</a></li>", startPage - 1));
 		} else
 			sb.append("<li><a href='#'>◀</a></li>");
 
@@ -63,14 +63,14 @@ public class Paging {
 			if (i == nowPage) { // 현재 있는 페이지
 				sb.append(String.format("<li class='active'><a href='#'>%d</a></li>", i));
 			} else {// 현재 페이지가 아니면
-				sb.append(String.format("<li><a href='list.do?page=%d'>%d</a></li>", i, i));
+				sb.append(String.format("<li><a href='game.do?page=%d'>%d</a></li>", i, i));
 			}
 		} // end for
 
 		// -----그룹페이지처리 다음
 		// ----------------------------------------------------------------------------------------------
 		if (isNextPage) {
-			sb.append(String.format("<li><a href='list.do?page=%d'>▶</a></li>", endPage + 1));
+			sb.append(String.format("<li><a href='game.do?page=%d'>▶</a></li>", endPage + 1));
 		} else
 			sb.append("<li><a href='#'>▶</a></li>");
 

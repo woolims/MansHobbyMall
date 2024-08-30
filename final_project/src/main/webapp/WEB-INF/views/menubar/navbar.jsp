@@ -207,7 +207,7 @@
         <div class="col-sm-10" style="display: inline-block; margin-top: 10px;">
           <ul class="menu" style="text-align: right !important;">
             <li>
-              <a href="game.do">Gaming</a>
+              <a href="${ pageContext.request.contextPath }/game.do?categoryNo=1">Gaming</a>
               <ul class="dropdown">
                 <li><a href="#">게임 메뉴 1</a></li>
                 <li><a href="#">게임 메뉴 2</a></li>
@@ -215,7 +215,7 @@
               </ul>
             </li>
             <li>
-              <a href="${ pageContext.request.contextPath }/sports.do">Sports</a>
+              <a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2">Sports</a>
               <ul class="dropdown">
                 <li><a href="#">스포츠 메뉴 1</a></li>
                 <li><a href="#">스포츠 메뉴 2</a></li>

@@ -2,12 +2,47 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.puter.final_project.dao.ShopMapper">
     <!-- 경로와 이름을 통일시킨다 -->
 
-    <!-- <select id="selectList" resultType="sawon">
-        select * from sawon
+    <!-- 게임카테고리 전체조회 -->
+    <select id="selectListGame" resultType="shop" parameterType="int">
+        select * from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
+    </select>
+
+    <!-- 스포츠카테고리 전체조회 -->
+    <select id="selectListSports" resultType="shop" parameterType="int">
+        select * from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
+    </select>
+
+    <!-- Paging별 카테고리 조회 -->
+    <select id="selectPageList" parameterType="Map" resultType="shop">
+        select * from
+        (
+            select
+                rank() over(order by pIdx desc) as no,
+                s.*
+            from
+                (select * from shop_list_view) s
+        ) ss
+        where no between #{ start } and #{ end }
+    </select>
+
+    <select id="selectRowTotalGame" resultType="int" parameterType="int">
+        select ifnull(count(*),0) from shop_list_view where categoryNo = #{categoryNo}
+    </select>
+
+    <select id="selectRowTotalSports" resultType="int" parameterType="int">
+        select ifnull(count(*),0) from shop_list_view where categoryNo = #{categoryNo}
+    </select>
+    <!-- 여기까지 Paging별 카테고리 조회 -->
+
+    <!-- 메인카테고리 번호만 조회 -->
+    <!-- <select id="selectCategoryNo" resultType="int">
+        select categoryNo from shop_list_view
     </select> -->
+
 
 </mapper>
 
