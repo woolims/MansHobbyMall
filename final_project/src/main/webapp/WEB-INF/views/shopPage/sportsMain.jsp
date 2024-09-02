@@ -3,6 +3,7 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
       <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
+
         <!DOCTYPE html>
         <html>
 
@@ -53,6 +54,13 @@
               margin-bottom: 50px;
             }
           </style>
+          <script>
+
+            function mcategoryNo() {
+
+            }
+
+          </script>
         </head>
 
         <body>
@@ -62,23 +70,23 @@
               <img src="${ pageContext.request.contextPath }/resources/images/스포츠메인페이지.jpg" alt="스포츠메인페이지">
             </div>
             <div id="main">
-              <div>
-
-              </div>
-
-              <div id="dcategory">
-                <hr>
-                <c:forEach var="shop" items="${dCategoryNameList}">
-                  <input type="button" id="dcategory-btn" class="btn btn-default" value="${}">
-                  <!-- 이 위에 수정해야해~~~~~~~~~~~~~~~~~~~~~~~~~~~ 소카테고리 띄우기! -->
+              <hr>
+              <div id="mcategory">
+                <c:forEach var="shop" items="${mCategoryNameList}">
+                  <input type="button" id="mcategory-btn" class="btn btn-default" value="${shop.mcategoryName}"
+                    onclick="mcategoryNo();">
                   <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
                 </c:forEach>
-                <hr>
-                <br><br><br>
-                <hr>
-                <input type="button" id="dcategory-btn" class=" btn">
-                <hr>
               </div>
+              <hr>
+              <div id="dcategory">
+                <c:forEach var="shop" items="${dCategoryNameList}">
+                  <input type="button" id="dcategory-btn" class="btn btn-default" value="${shop.dcategoryName}">
+                  <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
+                </c:forEach>
+              </div>
+              <hr>
+
               <div id="product">
                 <c:forEach var="shop" items="${list}">
                   <div

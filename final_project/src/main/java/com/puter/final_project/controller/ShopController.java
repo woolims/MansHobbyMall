@@ -43,10 +43,13 @@ public class ShopController {
             @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo,
             @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo) {
 
-        if (mcategoryNo != 1) {
-            List<ShopVo> dCategoryNameList = shop_mapper.selectDCategoryName(categoryNo, mcategoryNo);
-            model.addAttribute("dCategoryName", dCategoryNameList);
-        }
+        ShopVo shop = new ShopVo();
+        shop.setCategoryNo(categoryNo);
+        shop.setMcategoryNo(mcategoryNo);
+
+        System.out.println(mcategoryNo);
+        System.out.println(categoryNo);
+        List<ShopVo> mCategoryNameList = shop_mapper.selectMCategoryNameList(categoryNo);
 
         // 게시물의 범위 계산(start/end)
         int start = (nowPage - 1) * MyCommon.Shop.BLOCK_LIST + 1;
@@ -69,10 +72,17 @@ public class ShopController {
                 MyCommon.Shop.BLOCK_PAGE); // 한화면에 보여질 페이지수
 
         // 결과적으로 request binding
+        if (mcategoryNo != 1) {
+            List<ShopVo> dCategoryNameList = shop_mapper.selectDCategoryNameList(shop);
+            model.addAttribute("dCategoryNameList", dCategoryNameList);
+            System.out.println(shop);
+            System.out.println(dCategoryNameList);
 
+        }
+        model.addAttribute("mCategoryNameList", mCategoryNameList);
         model.addAttribute("list", list);
         model.addAttribute("pageMenu", pageMenu);
-
+        System.out.println(mCategoryNameList);
         return "shopPage/sportsMain";
     }
 
