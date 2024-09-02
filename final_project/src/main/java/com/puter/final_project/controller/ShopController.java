@@ -88,7 +88,7 @@ public class ShopController {
     @RequestMapping("/inquiry.do")
     public String inquiry() {
 
-        return "shopPage/inquiry";
+        return "shopPage/inquiry/inquiry";
     }
 
     @RequestMapping("/product_insert.do")
