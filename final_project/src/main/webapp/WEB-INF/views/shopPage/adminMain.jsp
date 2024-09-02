@@ -58,6 +58,7 @@
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script>
         $(document).ready(function () {
             $("header ul li").click(function () {
@@ -69,12 +70,13 @@
                         $("#content").html(data);
                     },
                     error: function () {
-                        alert("오류가 발생했습니다.");
+                        alert("오류가 발생했습니다. 페이지를 불러올 수 없습니다.");
                     }
                 });
             });
         });
     </script>
+
 </head>
 
 <body>
@@ -94,7 +96,7 @@
         <div id="content" class="col-sm-12">
             <!-- 기본적으로 로드할 초기 컨텐츠 -->
             <h2>관리자 페이지에 오신 것을 환영합니다.</h2>
-            <p>왼쪽 메뉴에서 관리할 항목을 선택하세요.</p>
+            <p>위 메뉴에서 관리할 항목을 선택하세요.</p>
         </div>
     </div>
 
