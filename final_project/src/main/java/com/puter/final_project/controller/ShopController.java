@@ -15,6 +15,7 @@ import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.util.MyCommon;
 import com.puter.final_project.util.SportsPaging;
 import com.puter.final_project.vo.ShopVo;
+import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

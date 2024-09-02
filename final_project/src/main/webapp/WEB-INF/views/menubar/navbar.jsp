@@ -260,7 +260,7 @@
                 <li><a href="mypage.do">마이페이지</a></li>
               </c:if>
               <c:if test="${ user.getName() eq '관리자'}">
-                <li><a href="#">관리페이지</a></li>
+                <li><a href="${pageContext.request.contextPath}/user/admin.do">관리페이지</a></li>
               </c:if>
             </c:if>
             <!-- 로그인이 안 된 경우 -->
