@@ -8,6 +8,7 @@
         <html>
 
         <head>
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           <!-- Bootstrap 3.x-->
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -56,10 +57,12 @@
           </style>
           <script>
 
-            function mcategoryNo() {
+            function mcategoryNoParam() {
+              let categoryNo_param = '${shop.categoryNo}';
+              let mcategoryName_param = '${shop.mcategoryName}';
 
+              location.href = "/sports.do?categoryName=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param;
             }
-
           </script>
         </head>
 
@@ -72,20 +75,22 @@
             <div id="main">
               <hr>
               <div id="mcategory">
-                <c:forEach var="shop" items="${mCategoryNameList}">
-                  <input type="button" id="mcategory-btn" class="btn btn-default" value="${shop.mcategoryName}"
-                    onclick="mcategoryNo();">
-                  <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
+                <c:forEach var="shop_m" items="${mCategoryNameList}">
+                  <input type="button" id="${shop_m.mcategoryNo}" class="btn btn-default" value="${shop.mcategoryName}"
+                    onclick="mcategoryNoParam();">
                 </c:forEach>
               </div>
               <hr>
-              <div id="dcategory">
-                <c:forEach var="shop" items="${dCategoryNameList}">
-                  <input type="button" id="dcategory-btn" class="btn btn-default" value="${shop.dcategoryName}">
-                  <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
-                </c:forEach>
-              </div>
-              <hr>
+              <c:if test="${mcategoryNo ne 1 }">
+                <div id="dcategory" style="margin: auto;">
+                  <c:forEach var="shop" items="${dCategoryName}">
+                    <input type="button" id="dcategory-btn" class="btn btn-default" value="${shop.dcategoryName}"
+                      style="text-align: center;">
+                    <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
+                  </c:forEach>
+                </div>
+                <hr>
+              </c:if>
 
               <div id="product">
                 <c:forEach var="shop" items="${list}">

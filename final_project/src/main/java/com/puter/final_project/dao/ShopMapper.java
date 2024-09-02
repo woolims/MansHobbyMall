@@ -27,8 +27,12 @@ public interface ShopMapper {
 
     int selectRowTotalSports();
 
-    List<ShopVo> selectDCategoryNameList(ShopVo shop);
-
     List<ShopVo> selectMCategoryNameList(int categoryNo);
+
+    List<ShopVo> selectMCategoryNoList(int categoryNo);
+
+    int selectMCategoryNo(ShopVo shop);
+
+    List<ShopVo> selectdCategoryNameList(int mCategoryNo);
 
 }

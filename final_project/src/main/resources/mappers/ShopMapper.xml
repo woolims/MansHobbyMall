@@ -42,16 +42,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- <select id="selectCategoryNo" resultType="int">
         select categoryNo from shop_list_view
     </select> -->
-    <!-- dcategoryNo 조회 -->
+    <!-- dcategoryName 조회 -->
     <select id="selectDCategoryNameList" resultType="shop" parameterType="shop">
-        select dcategoryName from shop_list_view where categoryNo = #{categoryNo} and mcategoryNo = #{mcategoryNo} Group by dcategoryName
+        select dcategoryName from shop_list_view where categoryNo = #{categoryNo} and mcategoryName = #{mcategoryName} Group by dcategoryName
     </select>
-
+    <!--mcategoryName 조회 -->
     <select id="selectMCategoryNameList" resultType="shop" parameterType="int">
         select mcategoryName from shop_list_view where categoryNo = #{categoryNo} Group by mcategoryName
     </select>
+    <!-- mcategoryName을 이용해 mcategoryNo 조회 -->
+    <select id="selectMCategoryNo" resultType="int" parameterType="shop">
+        select mcategoryNo from shop_list_view where categoryNo = #{categoryNo} and mcategoryName=#{mcategoryName} Group by mcategoryNo
+    </select>
 
-
+    <select id="selectdCategoryNameList" resultType="shop" parameterType="int">
+        select dcategoryName from shop_list_view where mcategoryNo = #{mCategoryNo} Group by dcategoryName
+    </select>
 </mapper>
 
 

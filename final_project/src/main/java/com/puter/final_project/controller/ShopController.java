@@ -41,14 +41,21 @@ public class ShopController {
     @RequestMapping("/sports.do")
     public String sports(@RequestParam(name = "page", defaultValue = "1") int nowPage, Model model,
             @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo,
-            @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo) {
+            @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo,
+            @RequestParam(name = "mcategoryName", defaultValue = "없음") String mcategoryName) {
 
         ShopVo shop = new ShopVo();
+
         shop.setCategoryNo(categoryNo);
         shop.setMcategoryNo(mcategoryNo);
+        if (!mcategoryName.equals("없음")) {
+            shop.setMcategoryName(mcategoryName);
+            int mCategoryNo = shop_mapper.selectMCategoryNo(shop);
+            List<ShopVo> dCategoryName = shop_mapper.selectdCategoryNameList(mCategoryNo);
+            model.addAttribute("dCategoryName", dCategoryName);
+            System.out.println(dCategoryName);
+        }
 
-        System.out.println(mcategoryNo);
-        System.out.println(categoryNo);
         List<ShopVo> mCategoryNameList = shop_mapper.selectMCategoryNameList(categoryNo);
 
         // 게시물의 범위 계산(start/end)
@@ -72,17 +79,11 @@ public class ShopController {
                 MyCommon.Shop.BLOCK_PAGE); // 한화면에 보여질 페이지수
 
         // 결과적으로 request binding
-        if (mcategoryNo != 1) {
-            List<ShopVo> dCategoryNameList = shop_mapper.selectDCategoryNameList(shop);
-            model.addAttribute("dCategoryNameList", dCategoryNameList);
-            System.out.println(shop);
-            System.out.println(dCategoryNameList);
 
-        }
+        model.addAttribute("shop", shop);
         model.addAttribute("mCategoryNameList", mCategoryNameList);
         model.addAttribute("list", list);
         model.addAttribute("pageMenu", pageMenu);
-        System.out.println(mCategoryNameList);
         return "shopPage/sportsMain";
     }
 
