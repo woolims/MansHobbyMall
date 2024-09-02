@@ -27,22 +27,53 @@
         });
 
         function showMessage() {
-          // /member/login_form.do?reason=fail_id => "true"
-          if ("${ param.reason == 'fail_id'}" == "true") {
-            loginModal.style.display = "flex";
-            alert("아이디가 틀립니다.");
-          }
+          $(document).ready(function () {
+            setTimeout(showMessage, 100); // 0.1초 후에 메시지 띄워라
+          });
 
-          // /member/login_form.do?reason=fail_pwd => "true"
-          if ("${ param.reason == 'fail_pwd'}" == "true") {
-            loginModal.style.display = "flex";
-            alert("비밀번호가 틀립니다.");
-          }
+          function showMessage() {
+            // 현재 URL 가져오기
+            let url = new URL(window.location.href);
+            
+            // URLSearchParams 객체 생성
+            let params = new URLSearchParams(url.search);
 
-          // /member/login_form.do?reason=session_timeout
-          if ("${ param.reason == 'session_timeout'}" == "true") {
-            loginModal.style.display = "flex";
-            alert("로그아웃되었습니다.\n로그인하세요.");
+            // 'reason' 파라미터의 값 확인
+            if (params.get('reason') === 'fail_id') {
+              loginModal.style.display = 'flex';
+              alert('아이디가 틀립니다.');
+
+              // 'reason' 파라미터 삭제
+              params.delete('reason');
+
+              // URL 업데이트
+              url.search = params.toString();
+              window.history.replaceState({}, '', url.toString()); // 페이지를 새로 로드하지 않고 URL 업데이트
+            }
+
+            if (params.get('reason') === 'fail_pwd') {
+              loginModal.style.display = 'flex';
+              alert('비밀번호가 틀립니다.');
+
+              // 'reason' 파라미터 삭제
+              params.delete('reason');
+
+              // URL 업데이트
+              url.search = params.toString();
+              window.history.replaceState({}, '', url.toString());
+            }
+
+            if (params.get('reason') === 'session_timeout') {
+              loginModal.style.display = 'flex';
+              alert('로그아웃되었습니다.\n로그인하세요.');
+
+              // 'reason' 파라미터 삭제
+              params.delete('reason');
+
+              // URL 업데이트
+              url.search = params.toString();
+              window.history.replaceState({}, '', url.toString());
+            }
           }
 
         }
@@ -67,6 +98,7 @@
             f.password.focus();
             return;
           }
+
           $("#url").val(location.href);
 
           f.action = "user/login.do";
