@@ -76,12 +76,12 @@
               <hr>
               <div id="mcategory">
                 <c:forEach var="shop_m" items="${mCategoryNameList}">
-                  <input type="button" id="${shop_m.mcategoryNo}" class="btn btn-default" value="${shop.mcategoryName}"
-                    onclick="mcategoryNoParam();">
+                  <input type="button" id="${shop_m.mcategoryName}" class="btn btn-default"
+                    value="${shop_m.mcategoryName}" onclick="mcategoryNoParam();">
                 </c:forEach>
               </div>
               <hr>
-              <c:if test="${mcategoryNo ne 1 }">
+              <c:if test="${mcategoryName ne '없음' and not empty mcategoryName}">
                 <div id="dcategory" style="margin: auto;">
                   <c:forEach var="shop" items="${dCategoryName}">
                     <input type="button" id="dcategory-btn" class="btn btn-default" value="${shop.dcategoryName}"
