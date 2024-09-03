@@ -26,14 +26,14 @@ public class InquiryController {
     @Autowired
     InquiryMapper inquiryMapper;
 
-    @RequestMapping("list.do")
+    @RequestMapping("inquiry.do")
     public String list(Model model) {
 
         List<InquiryVo> list = inquiryMapper.selectList();
 
         model.addAttribute("list", list);
 
-        return "home";
+        return "inquiry/inquiry";
     }
 
 }

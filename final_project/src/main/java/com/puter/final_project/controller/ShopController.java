@@ -91,13 +91,6 @@ public class ShopController {
         return "shopPage/mypage";
     }
 
-    // 고객센터 이동
-    @RequestMapping("/inquiry.do")
-    public String inquiry() {
-
-        return "shopPage/inquiry/inquiry";
-    }
-
     @RequestMapping("/product_insert.do")
     public String product_insert() {
 
