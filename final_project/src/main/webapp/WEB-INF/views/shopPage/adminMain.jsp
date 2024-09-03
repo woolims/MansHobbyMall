@@ -55,27 +55,27 @@
             margin-bottom: 50px;
             padding: 20px;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <script>
-        $(document).ready(function () {
-            $("header ul li").click(function () {
-                var page = $(this).data("page");
-                $.ajax({
-                    url: page,
-                    method: 'GET',
-                    success: function (data) {
-                        $("#content").html(data);
-                    },
-                    error: function () {
-                        alert("오류가 발생했습니다. 페이지를 불러올 수 없습니다.");
-                    }
-                });
-            });
-        });
-    </script>
 
 </head>
 
@@ -99,6 +99,8 @@
             <p>위 메뉴에서 관리할 항목을 선택하세요.</p>
         </div>
     </div>
+
+    
 
     <!-- 푸터 -->
     <%@ include file="../menubar/footer.jsp" %>
