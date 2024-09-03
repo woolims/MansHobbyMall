@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 스포츠카테고리 전체조회 -->
     <select id="selectListSports" resultType="shop" parameterType="int">
-        select * from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
+        select * from shop_list_view where categoryNo = #{categoryNo}order by pIdx desc
     </select>
 
     <!-- Paging별 카테고리 조회 -->
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 rank() over(order by pIdx desc) as no,
                 s.*
             from
-                (select * from shop_list_view) s
+                (select * from shop_list_view where categoryNo=#{categoryNo} and mcategoryName=#{mcategoryName} ) s
         ) ss
         where no between #{ start } and #{ end }
     </select>

@@ -64,6 +64,8 @@ public class ShopController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("start", start);
         map.put("end", end);
+        map.put("categoryNo", categoryNo);
+        map.put("mcategoryName", mcategoryName);
 
         List<ShopVo> list = shop_mapper.selectPageList(map);
 

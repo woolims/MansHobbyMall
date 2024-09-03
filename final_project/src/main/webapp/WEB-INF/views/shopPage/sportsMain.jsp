@@ -81,8 +81,8 @@
                 </c:forEach>
               </div>
               <hr>
-              <c:if test="${mcategoryName ne '없음'}">
-                <div id="dcategory" style="margin: auto;">
+              <c:if test="${mcategoryName eq mcategoryName.param}">
+                <div id="dcategory" style="text-align: center;">
                   <c:forEach var="shop" items="${dCategoryName}">
                     <input type="button" id="dcategory-btn" class="btn btn-default" value="${shop.dcategoryName}"
                       style="text-align: center;">
