@@ -58,8 +58,8 @@
     </section>
 
     <!-- 사용자 정보 표시 -->
-    <h1>Welcome, ${user.attributes.name}</h1> <!-- 'nickName' 대신 'name' 사용 -->
-    <p>Your email: ${user.attributes.email}</p>
+    <h1>Welcome, ${name}</h1> <!-- 'nickName' 대신 'name' 사용 -->
+    <p>Your email: ${email}</p>
 
     <!-- 푸터 -->
     <%@ include file="menubar/footer.jsp" %>
