@@ -1,5 +1,14 @@
 package com.puter.final_project.dao;
 
-public class ProductMapper {
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.puter.final_project.vo.ProductVo;
+
+@Mapper
+public interface ProductMapper {
+
+    List<ProductVo> selectList();
 
 }

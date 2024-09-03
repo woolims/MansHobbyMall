@@ -33,7 +33,7 @@ public class InquiryController {
 
         model.addAttribute("list", list);
 
-        return "inquiry/inquiry";
+        return "inquiry.do";
     }
 
 }

@@ -11,6 +11,4 @@ public interface InquiryMapper {
 
     List<InquiryVo> selectList();
 
-    
-
 }

@@ -15,6 +15,5 @@ public class InquiryVo {
     String inContent;
     String inDate;
     String inPP;
-    String inAc;
 
 }

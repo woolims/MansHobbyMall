@@ -5,11 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.puter.final_project.dao.InquiryMapper">
 
-  <!-- 전체조회 -->
-  <select id="selectList" resultType="inquiry">
-       select * from inquiry order by inIdx
-  </select>
-
     <!-- 전체조회 -->
     <select id="selectList" resultType="inquiry">
        select * from inquiry order by inIdx
