@@ -25,7 +25,7 @@
                     <div class="col-md-6 text-right" style="margin-top: 20px;">
                         <c:if test="${ not empty user }">
                             <button type="button" class="btn btn-primary"
-                                onclick="location.href='qna_write_form.do'">게시글 등록</button>
+                                onclick="location.href='inquiryWriteForm.do'">게시글 등록</button>
                         </c:if>
                     </div>
                 </div>
@@ -76,10 +76,6 @@
                                     <c:otherwise>답변 미완료</c:otherwise>
                                 </c:choose>
                             </td>
-                            <!-- <td>"${ vo.inIdx }"</td>
-                            <td>"${ vo.userIdx }"</td>
-                            <td>"${ vo.inType }"</td>
-                            <td>"${ vo.inDate }"</td> -->
                         </tr>
                     </c:forEach>
                 </c:if>
