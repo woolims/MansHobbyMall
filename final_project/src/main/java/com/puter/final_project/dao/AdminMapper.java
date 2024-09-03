@@ -11,8 +11,10 @@ public interface AdminMapper {
 
     List<UserVo> selectList();
 
-    public int user_update(int userIdx);
+    public int userUpdate(int userIdx);
 
-    public int user_delete(int userIdx);
+    public int userDelete(int userIdx);
+
+    List<UserVo> selectListUserView();
 
 }

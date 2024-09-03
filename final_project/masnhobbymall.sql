@@ -447,3 +447,24 @@ VIEW `shop_list_view` AS
         JOIN `category` `c` ON ((`p`.`categoryNo` = `c`.`categoryNo`)))
         JOIN `mcategory` `m` ON ((`p`.`mcategoryNo` = `m`.`mcategoryNo`)))
         JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)))
+
+
+        CREATE OR REPLACE VIEW UserStatusView AS
+        SELECT DISTINCT
+            u.userIdx,
+            u.gIdx,
+            u.id,
+            u.password,
+            u.nickName,
+            u.name,
+            u.phone,
+            u.addr,
+            u.subAddr,
+            u.adminAt,
+            u.point,
+            u.createAt,
+            e.emailIdx,
+            e.email,
+            e.esite
+        FROM email e
+        INNER JOIN User u ON e.userIdx = u.userIdx;

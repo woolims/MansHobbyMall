@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- 유저 수정 -->
-    <update id="user_update" parameterType="user">
+    <update id="userUpdate" parameterType="user">
         update User 
             set id = #{id},
             password = #{password},
@@ -26,9 +26,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <!-- 유저 삭제 -->
-    <delete id="user_delete" parameterType="int">
+    <delete id="userDelete" parameterType="int">
         delete from User where userIdx = #{userIdx};
     </delete>
+
+    <!-- 회원 뷰 전체 조회 -->
+    <select id="selectListUserView" parameterType="Map" resultType="user">
+		select * from UserStatusView where adminAt = 'N'
+    </select>
+
+
 
 
 </mapper>
