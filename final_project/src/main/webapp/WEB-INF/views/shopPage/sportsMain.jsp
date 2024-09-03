@@ -90,7 +90,7 @@
                 </c:forEach>
               </div>
               <hr>
-              <c:if test="${mcategoryName eq emptyMcategoryName}">
+              <c:if test="${mcategoryName != 'emptyMcategoryName'}">
                 <div id="dcategory" style="text-align: center;">
                   <c:forEach var="shop" items="${dCategoryName}">
                     <input type="button" id="${shop.dcategoryNo}" class="btn btn-default" value="${shop.dcategoryName}"

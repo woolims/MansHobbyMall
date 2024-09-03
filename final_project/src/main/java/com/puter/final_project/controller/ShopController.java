@@ -67,9 +67,12 @@ public class ShopController {
             model.addAttribute("productList", productList);
 
         }
-
+        if (mcategoryName.equals("emptyMcategoryName")) {
+            model.addAttribute("mcategoryName", mcategoryName);
+        }
         model.addAttribute("shop", shop);
         model.addAttribute("mCategoryNameList", mCategoryNameList);
+        System.out.println(mcategoryName);
         return "shopPage/sportsMain";
     }
 
