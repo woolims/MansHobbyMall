@@ -50,6 +50,7 @@ public class HomeController {
             }
             else {
                 //회원가입으로 넘기기
+                model.addAttribute("showSignUpModal", true);
             }
 
         }

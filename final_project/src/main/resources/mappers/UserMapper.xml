@@ -37,4 +37,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         default
       )
   </insert>
+
+    <!-- 이메일 추가 -->
+  <insert id="emailInsert" parameterType="user">
+      insert into user values(
+        null,
+        #{userIdx},
+        #{email},
+        #{esite}
+      )
+  </insert>
 </mapper>

@@ -18,6 +18,17 @@
         //javascript 초기화
         //window.onload = function(){};
 
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        window.onload = function() {
+            var showSignUpModal = ${showSignUpModal};
+            if (showSignUpModal) {
+                document.getElementById('registerEmailModal').style.display = 'flex';
+            }
+        };
+
         //jQuery 초기화
         $(document).ready(function () {
 
@@ -101,7 +112,7 @@
 
           $("#url").val(location.href);
 
-          f.action = "user/login.do";
+          f.action = "${pageContext.request.contextPath}/user/login.do";
           f.submit();
 
         }//end:send()
@@ -131,7 +142,7 @@
 
           //서버에 현재 입력된 ID를 체크요청(jQuery Ajax이용)
           $.ajax({
-            url: "user/check_id.do",     //MemberCheckIdAction
+            url: "${pageContext.request.contextPath}/user/check_id.do",     //MemberCheckIdAction
             data: { "id": re_id }, //parameter   => check_id.do?mem_id=one
             dataType: "json",
             success: function (res_data) {
@@ -154,6 +165,55 @@
             }
           });
         }//end:check_id()
+
+        function check_id_email() {
+
+          //회원가입 버튼은 비활성화
+          // <input id="btn_register" type="button" ...  disabled="disabled">
+          $("#btn_register_email").prop("disabled", true);
+
+
+          //           document.getElementById("mem_id").value
+          let em_id = $("#em_id").val();
+
+          if (em_id.length == 0) {
+
+            $("#em_id_msg").html("");
+            return;
+          }
+
+
+          if (em_id.length < 3) {
+
+            $("#em_id_msg").html("id는 3자리 이상 입력하세요").css("color", "red");
+            return;
+          }
+
+          //서버에 현재 입력된 ID를 체크요청(jQuery Ajax이용)
+          $.ajax({
+            url: "${pageContext.request.contextPath}/user/check_id.do",     //MemberCheckIdAction
+            data: { "id": em_id }, //parameter   => check_id.do?mem_id=one
+            dataType: "json",
+            success: function (res_data) {
+              // res_data = {"result": true}  or {"result": false}
+              if (res_data.result) {
+
+                $("#em_id_msg").html("사용가능한 아이디 입니다").css("color", "blue");
+
+                //가입버튼 활성화
+                $("#btn_register_email").prop("disabled", false);
+
+              } else {
+
+                $("#em_id_msg").html("이미 사용중인 아이디 입니다").css("color", "red");
+
+              }
+            },
+            error: function (err) {
+              alert(err.responseText);
+            }
+          });
+          }//end:check_id()
 
         function find_addr() {
 
@@ -224,9 +284,64 @@
             return;
           }
 
-          f.action = "user/insert.do";
+          f.action = "${pageContext.request.contextPath}/user/insert.do";
           f.submit();
         }//end:registerUser()
+
+        function registerEmailUser(f) {
+          let em_id = f.em_id.value.trim();
+          let em_password = f.em_password.value.trim();
+          let em_nickName = f.em_nickName.value.trim();
+          let em_name = f.em_name.value.trim();
+          let em_phone = f.em_phone.value.trim();
+          let em_addr = f.em_addr.value.trim();
+          let em_subAddr = f.em_subAddr.value.trim();
+
+          if (em_id == '') {
+            alert("아이디를 입력하세요.");
+            f.em_id.value = "";
+            f.em_id.focus();
+            return;
+          }
+
+          if (em_password == '') {
+            alert("비밀번호를 입력하세요.");
+            f.em_password.value = "";
+            f.em_password.focus();
+            return;
+          }
+
+          if (em_nickName == '') {
+            alert("닉네임을 입력하세요.");
+            f.em_nickName.value = "";
+            f.em_nickName.focus();
+            return;
+          }
+
+          if (em_name == '') {
+            alert("이름을 입력하세요.");
+            f.em_name.value = "";
+            f.em_name.focus();
+            return;
+          }
+
+          if (em_phone == '') {
+            alert("전화번호를 입력하세요.");
+            f.em_phone.value = "";
+            f.em_phone.focus();
+            return;
+          }
+
+          if (em_addr == '') {
+            alert("주소를 입력하세요.");
+            f.em_addr.value = "";
+            f.em_addr.focus();
+            return;
+          }
+
+          f.action = "${pageContext.request.contextPath}/user/emailInsert.do";
+          f.submit();
+        }//end:registerEmailUser()
 
       </script>
 
@@ -235,7 +350,7 @@
     <body>
       <!-- 네비게이션 바 -->
       <nav class="navbar">
-        <div class="logo col-sm-2" style="display: inline-block;"><a href="home.do">Logo</a></div>
+        <div class="logo col-sm-2" style="display: inline-block;"><a href="${pageContext.request.contextPath}/home.do">Logo</a></div>
         <div class="col-sm-10" style="display: inline-block; margin-top: 10px;">
           <ul class="menu" style="text-align: right !important;">
             <li>
@@ -254,7 +369,7 @@
                 <li><a href="#">스포츠 메뉴 3</a></li>
               </ul>
             </li>
-            <li><a href="inquiry/inquiry.do">고객문의</a></li>
+            <li><a href="${pageContext.request.contextPath}/inquiry/inquiry.do">고객문의</a></li>
             <c:if test="${ not empty user }">
               <c:if test="${ user.getName() ne '관리자'}">
                 <li><a href="mypage.do">마이페이지</a></li>
@@ -271,7 +386,7 @@
             <!-- 로그인이 된 경우 -->
             <c:if test="${ not empty user }">
               <li id="userStatus"><b>${ user.nickName }님</b></li>
-              <li><a onclick="location.href='../user/logout.do'">로그아웃</a></li>
+              <li><a onclick="location.href='${pageContext.request.contextPath}/user/logout.do'">로그아웃</a></li>
             </c:if>
           </ul>
         </div>
@@ -334,6 +449,30 @@
           </form>
         </div>
       </div>
+      <!-- 이메일 회원가입 모달 -->
+      <div id="registerEmailModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>회원가입</h2>
+          <form>
+            <input type="text" id="em_id" name="em_id" placeholder="아이디" onkeyup="check_id_email();" required /><span
+              id="em_id_msg"></span>
+            <input type="password" id="em_password" name="em_password" placeholder="비밀번호" required />
+            <input type="text" id="em_nickName" name="em_nickName" placeholder="닉네임" required />
+            <input type="text" id="em_name" name="em_name" placeholder="이름" required />
+            <input type="text" id="em_phone" name="em_phone" placeholder="전화번호(ex.010-1234-1234)" required />
+            <input type="text" id="em_addr" name="em_addr" placeholder="주소" required />
+            <input type="text" id="em_subAddr" name="em_subAddr" placeholder="상세주소" required />
+            <input type="hidden" id="email" name="email" value="${email}"/>
+            <input type="hidden" id="esite" name="esite" value="${esite}"/>
+
+            <a href="#">회원가입한 이력이 있나요?</a><br>
+
+            <input type="button" id="btn_register_email" class="login-btn" value="회원가입" disabled="disabled"
+              onclick="registerEmailUser(this.form);" />
+          </form>
+        </div>
+      </div>
       <script>
         // 로그인 모달 기능
         const loginModal = document.getElementById("loginModal");
@@ -343,6 +482,10 @@
         const registerModal = document.getElementById("registerModal");
         const openRegisterModalBtn = document.getElementById("openRegisterModal");
         const closeRegisterModalBtn = document.getElementsByClassName("close")[1];
+
+        const registerEmailModal = document.getElementById("registerEmailModal");
+        const openRegisterEmailModalBtn = document.getElementById("openRegisterEmailModal");
+        const closeRegisterEmailModalBtn = document.getElementsByClassName("close")[0];
 
         // 모달 열기
         openLoginModalBtn.onclick = function () {
@@ -363,6 +506,18 @@
         // 모달 닫기
         closeRegisterModalBtn.onclick = function () {
           registerModal.style.display = "none";
+        };
+
+        // 모달 열기
+          openRegisterEmailModalBtn.onclick = function () {
+          loginModal.style.display = "none";
+          registerModal.style.display = "none";
+          registerEmailModal.style.display = "flex";
+        };
+
+        // 모달 닫기
+        closeRegisterModalBtn.onclick = function () {
+          registerEmailModal.style.display = "none";
         };
       </script>
     </body>

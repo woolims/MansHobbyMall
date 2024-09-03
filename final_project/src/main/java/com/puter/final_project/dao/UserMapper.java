@@ -20,4 +20,7 @@ public interface UserMapper {
     // 사용자 추가
     public int insert(UserVo vo);
 
+    // 이메일 추가
+    public int emailInsert(UserVo vo);
+
 }

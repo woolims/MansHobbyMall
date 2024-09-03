@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.UserVo;
@@ -41,22 +42,26 @@ public class UserController {
 	}
 
 	@RequestMapping("login.do")
-	public String login(String id, String password) {
+	public String login(String id, String password, String url, RedirectAttributes ra) {
 
 		UserVo user = userMapper.selectOneFromId(id);
 
 		// 아이디가 없는(틀린)경우
 		if (user == null) {
-			return "redirect:../home.do?reason=fail_id";
+			ra.addAttribute("reason", "fail_id");
+			return "redirect:" + url;
 		}
 
 		// 비밀번호가 틀린경우
 		if (user.getPassword().equals(password) == false) {
-			return "redirect:../home.do?reason=fail_pwd";
+			ra.addAttribute("reason", "fail_password");
+			return "redirect:" + url;
 		}
 
 		// 로그인처리: 현재 로그인된 객체(user)정보를 session저장
 		session.setAttribute("user", user);
+
+		if(url != null) return "redirect:" + url;
 
 		return "redirect:../home.do";
 	}
@@ -94,6 +99,25 @@ public class UserController {
 		vo.setPassword(re_password);
 
 		int res = userMapper.insert(vo);
+
+		return "redirect:../home.do";
+	}
+
+	@RequestMapping("emailInsert.do")
+	public String eminsert(String em_id, String em_password, String em_nickName, String em_name, String em_phone, String em_addr, String em_subAddr, UserVo vo) {
+
+		vo.setId(em_id);
+		vo.setPassword(em_password);
+		vo.setPassword(em_nickName);
+		vo.setPassword(em_name);
+		vo.setPassword(em_phone);
+		vo.setPassword(em_addr);
+		vo.setPassword(em_subAddr);
+
+		int res = userMapper.insert(vo);
+
+		UserVo user = userMapper.selectOneFromId(em_id);
+		res = userMapper.emailInsert(vo);
 
 		return "redirect:../home.do";
 	}
