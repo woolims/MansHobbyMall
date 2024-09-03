@@ -20,4 +20,9 @@ public class UserVo {
     String adminAt;
     long point;
     String createAt;
+
+    int emailIdx;
+    String email;
+    String esite;
+
 }
