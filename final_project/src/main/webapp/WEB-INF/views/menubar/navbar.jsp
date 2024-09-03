@@ -298,9 +298,7 @@
             <button type="button" class="social-btn kakao-btn">
               카카오로 시작하기
             </button>
-            <button type="button" class="social-btn google-btn">
-              Google로 시작하기
-            </button>
+            <a href="/oauth2/authorization/google" class="social-btn google-btn">Google로 시작하기</a>
           </form>
         </div>
       </div>
