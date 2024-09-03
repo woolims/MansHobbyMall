@@ -3,10 +3,12 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
       <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
+
         <!DOCTYPE html>
         <html>
 
         <head>
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           <!-- Bootstrap 3.x-->
           <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -53,6 +55,24 @@
               margin-bottom: 50px;
             }
           </style>
+          <script>
+
+            function mCategoryNoParam(id) {
+              let categoryNo_param = '${shop.categoryNo}';
+              let mcategoryName_param = id.value;
+
+              location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param;
+            }
+
+            function dCategoryNoParam(id) {
+              let categoryNo_param = '${shop.categoryNo}';
+              let mcategoryName_param = '${shop.mcategoryName}';
+              let dcategoryName_param = id.value;
+
+              location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param + "&dcategoryName=" + dcategoryName_param;
+            }
+
+          </script>
         </head>
 
         <body>
@@ -62,28 +82,32 @@
               <img src="${ pageContext.request.contextPath }/resources/images/스포츠메인페이지.jpg" alt="스포츠메인페이지">
             </div>
             <div id="main">
+              <hr>
               <div id="mcategory">
-                <hr>
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="baseBall">
-                <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="footBall">
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="basketBall">
-                <input type="button" id="mcategory-btn" class="btn btn-default" value="??????">
-                <hr>
+                <c:forEach var="shop_m" items="${mCategoryNameList}">
+                  <input type="button" id="${shop_m.mcategoryName}" class="btn btn-default"
+                    value="${shop_m.mcategoryName}" onclick="mCategoryNoParam(this);">
+                </c:forEach>
               </div>
-              <div id="dcategory">
-                <c:forEach var="shop" items="${list}">
+              <hr>
+              <c:if test="${mcategoryName != 'emptyMcategoryName'}">
+                <div id="dcategory" style="text-align: center;">
+                  <c:forEach var="shop" items="${dCategoryName}">
+                    <input type="button" id="${shop.dcategoryNo}" class="btn btn-default" value="${shop.dcategoryName}"
+                      style="text-align: center;" onclick="dCategoryNoParam(this);">
+                    <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
+                  </c:forEach>
+                </div>
+                <hr>
+              </c:if>
+
+              <div id="product">
+                <c:forEach var="shop" items="${productList}">
                   <div
                     style="border: 1px solid black; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px; text-align: center;">
-                    <div> ${shop.getPName()} </div>
+                    <div style="text-align: center;"> ${shop.getPName()} </div>
                   </div>
                 </c:forEach>
-
-                <!-- Page Menu -->
-                <div style="text-align: center; margin-top: 20px; font-size: 15px;">
-                  ${ pageMenu }
-                </div>
-
               </div>
               <!-- 푸터 -->
               <%@ include file="../menubar/footer.jsp" %>

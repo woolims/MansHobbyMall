@@ -13,35 +13,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 스포츠카테고리 전체조회 -->
     <select id="selectListSports" resultType="shop" parameterType="int">
-        select * from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
+        select pName from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
     </select>
-
-    <!-- Paging별 카테고리 조회 -->
-    <select id="selectPageList" parameterType="Map" resultType="shop">
-        select * from
-        (
-            select
-                rank() over(order by pIdx desc) as no,
-                s.*
-            from
-                (select * from shop_list_view) s
-        ) ss
-        where no between #{ start } and #{ end }
-    </select>
-
-    <select id="selectRowTotalGame" resultType="int" parameterType="int">
-        select ifnull(count(*),0) from shop_list_view where categoryNo = #{categoryNo}
-    </select>
-
-    <select id="selectRowTotalSports" resultType="int" parameterType="int">
-        select ifnull(count(*),0) from shop_list_view where categoryNo = #{categoryNo}
-    </select>
-    <!-- 여기까지 Paging별 카테고리 조회 -->
 
     <!-- 메인카테고리 번호만 조회 -->
     <!-- <select id="selectCategoryNo" resultType="int">
         select categoryNo from shop_list_view
     </select> -->
+    <!-- dcategoryName 조회 -->
+    <select id="selectDCategoryNameList" resultType="shop" parameterType="shop">
+        select dcategoryName from shop_list_view where categoryNo = #{categoryNo} and mcategoryName = #{mcategoryName} Group by dcategoryName
+    </select>
+    <!--mcategoryName 조회 -->
+    <select id="selectMCategoryNameList" resultType="shop" parameterType="int">
+        select mcategoryName from shop_list_view where categoryNo = #{categoryNo} Group by mcategoryName
+    </select>
+    <!-- mcategoryName을 이용해 mcategoryNo 조회 -->
+    <select id="selectMCategoryNo" resultType="int" parameterType="shop">
+        select mcategoryNo from shop_list_view where categoryNo = #{categoryNo} and mcategoryName=#{mcategoryName} Group by mcategoryNo
+    </select>
+    <!-- mcategoryNo을 이용해 dcategoryName 검색 -->
+    <select id="selectdCategoryNameList" resultType="shop" parameterType="int">
+        select dcategoryName from shop_list_view where mcategoryNo = #{mCategoryNo} Group by dcategoryName
+    </select>
+    <!-- dcategoryNo 검색 -->
+    <select id="selectDCategoryNo" resultType="int" parameterType="shop">
+        select dcategoryNo from shop_list_view where mcategoryName = #{mcategoryName} and dcategoryName = #{dcategoryName} Group by dcategoryNo
+    </select>
+
+    <!-- dcategoryNo을 이용해 product 검색 -->
+    <select id="selectProductDCategoryList" resultType="shop" parameterType="int">
+        select pName from shop_list_view where dcategoryNo = #{dCategoryNo} order by pIdx desc
+    </select>
+
+    <select id="selectProductMCategoryList" resultType="shop" parameterType="int">
+        select pName from shop_list_view where mcategoryNo = #{mCategoryNo} order by pIdx desc
+    </select>
+
 
 
 </mapper>
