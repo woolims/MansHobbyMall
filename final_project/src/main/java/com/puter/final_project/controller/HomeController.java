@@ -42,6 +42,7 @@ public class HomeController {
             // 사용자 정보를 모델에 추가
             model.addAttribute("name", oauth2User.getAttribute("name"));
             model.addAttribute("email", email);
+            model.addAttribute("esite", esite);
 
             UserVo user = userMapper.selectOneFromEmail(email, esite);
             if(user != null){

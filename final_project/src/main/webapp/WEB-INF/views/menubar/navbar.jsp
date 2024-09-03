@@ -16,7 +16,7 @@
       <link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/navbar.css" />
       <script type="text/javascript">
         //javascript 초기화
-        //window.onload = function(){};
+        //window.onload = function(){}
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
@@ -404,6 +404,7 @@
             <input type="button" class="login-btn" value="로그인" onclick="send(this.form);" />
             <div class="links">
               <input type="button" class="register-btn" id="openRegisterModal" value="회원가입" />
+              <input type="hidden" class="register-btn" id="openRegisterEmailModal" value="회원가입" />
               <a href="#">아이디 · 비밀번호 찾기</a>
             </div>
             <div class="divider">또는</div>
@@ -455,8 +456,8 @@
           <span class="close">&times;</span>
           <h2>회원가입</h2>
           <form>
-            <input type="text" id="em_id" name="em_id" placeholder="아이디" onkeyup="check_id_email();" required /><span
-              id="em_id_msg"></span>
+            <input type="text" id="em_id" name="em_id" placeholder="아이디" onkeyup="check_id_email();" required />
+            <span id="em_id_msg"></span>
             <input type="password" id="em_password" name="em_password" placeholder="비밀번호" required />
             <input type="text" id="em_nickName" name="em_nickName" placeholder="닉네임" required />
             <input type="text" id="em_name" name="em_name" placeholder="이름" required />
@@ -485,7 +486,8 @@
 
         const registerEmailModal = document.getElementById("registerEmailModal");
         const openRegisterEmailModalBtn = document.getElementById("openRegisterEmailModal");
-        const closeRegisterEmailModalBtn = document.getElementsByClassName("close")[0];
+        const closeRegisterEmailModalBtn = document.getElementsByClassName("close")[2];
+
 
         // 모달 열기
         openLoginModalBtn.onclick = function () {
@@ -516,7 +518,7 @@
         };
 
         // 모달 닫기
-        closeRegisterModalBtn.onclick = function () {
+        closeRegisterEmailModalBtn.onclick = function () {
           registerEmailModal.style.display = "none";
         };
       </script>
