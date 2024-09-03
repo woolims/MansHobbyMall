@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <%@ include file="../../menubar/navbar.jsp" %>
+    <%@ include file="../menubar/navbar.jsp" %>
     <br><br><br><br><br>
     <div class="container div-size" style="min-height: 1000px;">
         <div class="row">
@@ -67,7 +67,8 @@
                             <td style="width: 45%; text-align: left; background-color: #303030; color: #f1f1f1;">
                                 ${vo.inType}</td>
                             <td style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                <fmt:formatDate value="${vo.inDate}" pattern="yyyy-MM-dd HH:mm:ss" />
+                                <%-- <fmt:formatDate value="${vo.inDate}" pattern="yyyy-MM-dd HH:mm:ss" /> --%>
+                                ${vo.inDate}
                             </td>
                             <td style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
                                 <c:choose>
@@ -75,6 +76,10 @@
                                     <c:otherwise>답변 미완료</c:otherwise>
                                 </c:choose>
                             </td>
+                            <!-- <td>"${ vo.inIdx }"</td>
+                            <td>"${ vo.userIdx }"</td>
+                            <td>"${ vo.inType }"</td>
+                            <td>"${ vo.inDate }"</td> -->
                         </tr>
                     </c:forEach>
                 </c:if>
