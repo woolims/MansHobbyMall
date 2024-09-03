@@ -1,8 +1,6 @@
 package com.puter.final_project.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.puter.final_project.dao.ShopMapper;
-import com.puter.final_project.util.MyCommon;
-import com.puter.final_project.util.SportsPaging;
 import com.puter.final_project.vo.ShopVo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,49 +38,38 @@ public class ShopController {
     public String sports(@RequestParam(name = "page", defaultValue = "1") int nowPage, Model model,
             @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo,
             @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo,
-            @RequestParam(name = "mcategoryName", defaultValue = "없음") String mcategoryName) {
-
-        ShopVo shop = new ShopVo();
-
-        shop.setCategoryNo(categoryNo);
-        shop.setMcategoryNo(mcategoryNo);
-        if (!mcategoryName.equals("없음")) {
-            shop.setMcategoryName(mcategoryName);
-            int mCategoryNo = shop_mapper.selectMCategoryNo(shop);
-            List<ShopVo> dCategoryName = shop_mapper.selectdCategoryNameList(mCategoryNo);
-            model.addAttribute("dCategoryName", dCategoryName);
-        }
+            @RequestParam(name = "mcategoryName", defaultValue = "emptyMcategoryName") String mcategoryName,
+            @RequestParam(name = "dcategoryName", defaultValue = "emptyDcategoryName") String dcategoryNameParam) {
 
         List<ShopVo> mCategoryNameList = shop_mapper.selectMCategoryNameList(categoryNo);
 
-        // 게시물의 범위 계산(start/end)
-        int start = (nowPage - 1) * MyCommon.Shop.BLOCK_LIST + 1;
-        int end = start + MyCommon.Shop.BLOCK_LIST - 1;
+        ShopVo shop = new ShopVo();
+        shop.setCategoryNo(categoryNo);
+        shop.setMcategoryNo(mcategoryNo);
+        shop.setDcategoryName(dcategoryNameParam);
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("start", start);
-        map.put("end", end);
-        map.put("categoryNo", categoryNo);
-        map.put("mcategoryName", mcategoryName);
+        if (!mcategoryName.equals("emptyMcategoryName")) {
+            shop.setMcategoryName(mcategoryName);
+            int mCategoryNo = shop_mapper.selectMCategoryNo(shop);
+            List<ShopVo> dCategoryName = shop_mapper.selectdCategoryNameList(mCategoryNo);
+            List<ShopVo> productMCategoryList = shop_mapper.selectProductMCategoryList(mCategoryNo);
+            model.addAttribute("dCategoryName", dCategoryName);
+            model.addAttribute("productList", productMCategoryList);
+            if (!dcategoryNameParam.equals("emptyDcategoryName")) {
+                int dCategoryNo = shop_mapper.selectDCategoryNo(shop);
+                List<ShopVo> productDCategoryList = shop_mapper.selectProductDCategoryList(dCategoryNo);
+                model.addAttribute("productList", productDCategoryList);
+            }
+        }
+        if (mcategoryName.equals("emptyMcategoryName") && dcategoryNameParam.equals("emptyDcategoryName")) {
 
-        List<ShopVo> list = shop_mapper.selectPageList(map);
+            List<ShopVo> productList = shop_mapper.selectListSports(categoryNo);
+            model.addAttribute("productList", productList);
 
-        // 전체 게시물수
-        int rowTotal = shop_mapper.selectRowTotalSports(categoryNo);
-
-        // pageMenu만들기
-        String pageMenu = SportsPaging.getPaging("sports.do", // pageURL
-                nowPage, // 현재페이지
-                rowTotal, // 전체게시물수
-                MyCommon.Shop.BLOCK_LIST, // 한화면에 보여질 게시물수
-                MyCommon.Shop.BLOCK_PAGE); // 한화면에 보여질 페이지수
-
-        // 결과적으로 request binding
+        }
 
         model.addAttribute("shop", shop);
         model.addAttribute("mCategoryNameList", mCategoryNameList);
-        model.addAttribute("list", list);
-        model.addAttribute("pageMenu", pageMenu);
         return "shopPage/sportsMain";
     }
 

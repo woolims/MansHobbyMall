@@ -19,14 +19,6 @@ public interface ShopMapper {
     // 메인카테고리 번호만 조회
     int selectRowTotalSports(int categoryNo);
 
-    // 페이징처리
-
-    List<ShopVo> selectPageList(Map<String, Object> map);
-
-    int selectRowTotalGame();
-
-    int selectRowTotalSports();
-
     List<ShopVo> selectMCategoryNameList(int categoryNo);
 
     List<ShopVo> selectMCategoryNoList(int categoryNo);
@@ -34,5 +26,11 @@ public interface ShopMapper {
     int selectMCategoryNo(ShopVo shop);
 
     List<ShopVo> selectdCategoryNameList(int mCategoryNo);
+
+    int selectDCategoryNo(ShopVo shop);
+
+    List<ShopVo> selectProductMCategoryList(int mCategoryNo);
+
+    List<ShopVo> selectProductDCategoryList(int dCategoryNo);
 
 }

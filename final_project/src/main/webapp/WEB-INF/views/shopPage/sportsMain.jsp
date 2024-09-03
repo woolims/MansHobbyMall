@@ -57,12 +57,21 @@
           </style>
           <script>
 
-            function mcategoryNoParam(id) {
+            function mCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
               let mcategoryName_param = id.value;
 
-              location.href = "/sports.do?categoryName=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param;
+              location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param;
             }
+
+            function dCategoryNoParam(id) {
+              let categoryNo_param = '${shop.categoryNo}';
+              let mcategoryName_param = '${shop.mcategoryName}';
+              let dcategoryName_param = id.value;
+
+              location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param + "&dcategoryName=" + dcategoryName_param;
+            }
+
           </script>
         </head>
 
@@ -77,15 +86,15 @@
               <div id="mcategory">
                 <c:forEach var="shop_m" items="${mCategoryNameList}">
                   <input type="button" id="${shop_m.mcategoryName}" class="btn btn-default"
-                    value="${shop_m.mcategoryName}" onclick="mcategoryNoParam(this);">
+                    value="${shop_m.mcategoryName}" onclick="mCategoryNoParam(this);">
                 </c:forEach>
               </div>
               <hr>
-              <c:if test="${mcategoryName eq mcategoryName.param}">
+              <c:if test="${mcategoryName eq emptyMcategoryName}">
                 <div id="dcategory" style="text-align: center;">
                   <c:forEach var="shop" items="${dCategoryName}">
-                    <input type="button" id="dcategory-btn" class="btn btn-default" value="${shop.dcategoryName}"
-                      style="text-align: center;">
+                    <input type="button" id="${shop.dcategoryNo}" class="btn btn-default" value="${shop.dcategoryName}"
+                      style="text-align: center;" onclick="dCategoryNoParam(this);">
                     <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
                   </c:forEach>
                 </div>
@@ -93,18 +102,12 @@
               </c:if>
 
               <div id="product">
-                <c:forEach var="shop" items="${list}">
+                <c:forEach var="shop" items="${productList}">
                   <div
                     style="border: 1px solid black; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px; text-align: center;">
-                    <div> ${shop.getPName()} </div>
+                    <div style="text-align: center;"> ${shop.getPName()} </div>
                   </div>
                 </c:forEach>
-
-                <!-- Page Menu -->
-                <div style="text-align: center; margin-top: 20px; font-size: 15px;">
-                  ${ pageMenu }
-                </div>
-
               </div>
               <!-- 푸터 -->
               <%@ include file="../menubar/footer.jsp" %>
