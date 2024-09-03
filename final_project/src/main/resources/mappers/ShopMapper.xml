@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 스포츠카테고리 전체조회 -->
     <select id="selectListSports" resultType="shop" parameterType="int">
-        select pName from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
+        select * from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
     </select>
 
     <!-- 메인카테고리 번호만 조회 -->
@@ -43,11 +43,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- dcategoryNo을 이용해 product 검색 -->
     <select id="selectProductDCategoryList" resultType="shop" parameterType="int">
-        select pName from shop_list_view where dcategoryNo = #{dCategoryNo} order by pIdx desc
+        select * from shop_list_view where dcategoryNo = #{dCategoryNo} order by pIdx desc
     </select>
 
     <select id="selectProductMCategoryList" resultType="shop" parameterType="int">
-        select pName from shop_list_view where mcategoryNo = #{mCategoryNo} order by pIdx desc
+        select * from shop_list_view where mcategoryNo = #{mCategoryNo} order by pIdx desc
     </select>
 
 

@@ -34,6 +34,7 @@
               width: 73%;
               height: 100px;
               align-items: center;
+              text-align: center;
             }
 
             #mcategory {
@@ -92,20 +93,20 @@
               <hr>
               <c:if test="${mcategoryName != 'emptyMcategoryName'}">
                 <div id="dcategory" style="text-align: center;">
-                  <c:forEach var="shop" items="${dCategoryName}">
-                    <input type="button" id="${shop.dcategoryNo}" class="btn btn-default" value="${shop.dcategoryName}"
-                      style="text-align: center;" onclick="dCategoryNoParam(this);">
-                    <!-- onclick으로 함수호출해서 ajax에 mcategory 파라미터 이용해서 출력 -->
+                  <c:forEach var="shop_d" items="${dCategoryName}">
+                    <input type="button" id="${shop_d.dcategoryNo}" class="btn btn-default"
+                      value="${shop_d.dcategoryName}" style="text-align: center;" onclick="dCategoryNoParam(this);">
                   </c:forEach>
                 </div>
                 <hr>
               </c:if>
 
               <div id="product">
-                <c:forEach var="shop" items="${productList}">
+                <c:forEach var="shop_p" items="${productList}">
                   <div
-                    style="border: 1px solid black; width: 160px; height: 200px; display: inline-block;  margin-bottom: 10px; text-align: center;">
-                    <div style="text-align: center;"> ${shop.getPName()} </div>
+                    style="margin: auto; border: 1px solid black; width: 280px; height: 350px; display: inline-block;  margin-bottom: 10px; text-align: center;"
+                    onclick="location.href='${ pageContext.request.contextPath }/sports_one.do?categoryNo=${shop_p.categoryNo}&pIdx=${shop_p.getPIdx()}'">
+                    <div style="text-align: center;"> ${shop_p.getPName()} </div>
                   </div>
                 </c:forEach>
               </div>

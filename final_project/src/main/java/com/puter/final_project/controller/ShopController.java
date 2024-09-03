@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.vo.ShopVo;
-import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -66,6 +65,7 @@ public class ShopController {
 
             List<ShopVo> productList = shop_mapper.selectListSports(categoryNo);
             model.addAttribute("productList", productList);
+            System.out.println(productList);
 
         }
         if (mcategoryName.equals("emptyMcategoryName")) {
@@ -73,8 +73,15 @@ public class ShopController {
         }
         model.addAttribute("shop", shop);
         model.addAttribute("mCategoryNameList", mCategoryNameList);
-        System.out.println(mcategoryName);
+
         return "shopPage/sportsMain";
+    }
+
+    // 스포츠 상품 클릭 시 이동하는 상세페이지
+    @RequestMapping("/sports_one.do")
+    public String sports_one() {
+
+        return "shopPage/sportsOne";
     }
 
     // 게임카테고리 전체조회
