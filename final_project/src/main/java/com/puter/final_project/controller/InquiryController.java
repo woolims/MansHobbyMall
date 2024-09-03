@@ -26,14 +26,22 @@ public class InquiryController {
     @Autowired
     InquiryMapper inquiryMapper;
 
+    // 고객문의 페이지
     @RequestMapping("inquiry.do")
-    public String list(Model model) {
+    public String inquiry(Model model) {
 
         List<InquiryVo> list = inquiryMapper.selectList();
 
         model.addAttribute("list", list);
 
         return "inquiry.do";
+    }
+
+    // 게시글 등록
+    @RequestMapping("inquiryWriteForm.do")
+    public String inquiryWrite() {
+
+        return "inquiry/inquiryWriteForm";
     }
 
 }
