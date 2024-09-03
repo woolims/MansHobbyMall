@@ -57,9 +57,9 @@
           </style>
           <script>
 
-            function mcategoryNoParam() {
+            function mcategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
-              let mcategoryName_param = '${shop.mcategoryName}';
+              let mcategoryName_param = id.value;
 
               location.href = "/sports.do?categoryName=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param;
             }
@@ -77,11 +77,11 @@
               <div id="mcategory">
                 <c:forEach var="shop_m" items="${mCategoryNameList}">
                   <input type="button" id="${shop_m.mcategoryName}" class="btn btn-default"
-                    value="${shop_m.mcategoryName}" onclick="mcategoryNoParam();">
+                    value="${shop_m.mcategoryName}" onclick="mcategoryNoParam(this);">
                 </c:forEach>
               </div>
               <hr>
-              <c:if test="${mcategoryName ne '없음' and not empty mcategoryName}">
+              <c:if test="${mcategoryName ne '없음'}">
                 <div id="dcategory" style="margin: auto;">
                   <c:forEach var="shop" items="${dCategoryName}">
                     <input type="button" id="dcategory-btn" class="btn btn-default" value="${shop.dcategoryName}"

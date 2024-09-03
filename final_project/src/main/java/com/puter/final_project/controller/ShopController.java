@@ -53,7 +53,6 @@ public class ShopController {
             int mCategoryNo = shop_mapper.selectMCategoryNo(shop);
             List<ShopVo> dCategoryName = shop_mapper.selectdCategoryNameList(mCategoryNo);
             model.addAttribute("dCategoryName", dCategoryName);
-            System.out.println(dCategoryName);
         }
 
         List<ShopVo> mCategoryNameList = shop_mapper.selectMCategoryNameList(categoryNo);
