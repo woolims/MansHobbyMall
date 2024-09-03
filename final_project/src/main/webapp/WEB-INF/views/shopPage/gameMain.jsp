@@ -85,7 +85,7 @@
               <!-- 푸터 -->
               <%@ include file="../menubar/footer.jsp" %>
             </div>
-            <%@ include file="../menubar/payment.jsp" %>
+
 
         </body>
 

@@ -33,4 +33,6 @@ public interface ShopMapper {
 
     List<ShopVo> selectProductDCategoryList(int dCategoryNo);
 
+    ShopVo selectProductInfoList(int categoryNo, int pIdx);
+
 }
