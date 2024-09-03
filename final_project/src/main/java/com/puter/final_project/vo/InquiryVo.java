@@ -8,12 +8,13 @@ import lombok.Data;
 @Alias("inquiry")
 public class InquiryVo {
 
-    int     inIdx;
-    int     pIdx;
-    int     userIdx;
-    String  inType;
-    String  inContent;
-    String  inDate;
-    String  inPP;
+    int inIdx;
+    int pIdx;
+    int userIdx;
+    String inType;
+    String inContent;
+    String inDate;
+    String inPP;
+    String inAc;
 
 }
