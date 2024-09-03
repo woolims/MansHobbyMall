@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -61,7 +65,7 @@
                         <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
                             <td style="text-align: center; background-color: #303030; color: #f1f1f1;">${vo.inIdx}</td>
                             <td style="width: 45%; text-align: left; background-color: #303030; color: #f1f1f1;">
-                                ${vo.qnaTitle}</td>
+                                ${vo.inType}</td>
                             <td style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
                                 <fmt:formatDate value="${vo.inDate}" pattern="yyyy-MM-dd HH:mm:ss" />
                             </td>
