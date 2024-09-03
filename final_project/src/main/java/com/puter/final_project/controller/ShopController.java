@@ -1,5 +1,6 @@
 package com.puter.final_project.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,13 @@ public class ShopController {
 
     // 스포츠 상품 클릭 시 이동하는 상세페이지
     @RequestMapping("/sports_one.do")
-    public String sports_one() {
+    public String sports_one(int categoryNo, int pIdx, Model model) {
+
+        ShopVo shop = (ShopVo) shop_mapper.selectProductInfoList(categoryNo, pIdx);
+        shop.setCategoryNo(categoryNo);
+        shop.setPIdx(pIdx);
+
+        model.addAttribute("shop", shop);
 
         return "shopPage/sportsOne";
     }

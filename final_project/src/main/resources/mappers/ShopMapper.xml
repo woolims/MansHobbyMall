@@ -45,9 +45,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProductDCategoryList" resultType="shop" parameterType="int">
         select * from shop_list_view where dcategoryNo = #{dCategoryNo} order by pIdx desc
     </select>
-
+    <!-- 중카테고리를 이용해 상품검색 -->
     <select id="selectProductMCategoryList" resultType="shop" parameterType="int">
         select * from shop_list_view where mcategoryNo = #{mCategoryNo} order by pIdx desc
+    </select>
+    <!-- 상품 상세 페이지에 띄울 정보 -->
+    <select id="selectProductInfoList" resultType="shop" parameterType="shop">
+        select * from shop_list_view where categoryNo = #{categoryNo} and pIdx=#{pIdx}
     </select>
 
 
