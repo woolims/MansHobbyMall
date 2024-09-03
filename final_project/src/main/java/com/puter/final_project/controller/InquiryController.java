@@ -34,7 +34,7 @@ public class InquiryController {
 
         model.addAttribute("list", list);
 
-        return "inquiry.do";
+        return "inquiry/inquiry";
     }
 
     // 게시글 등록

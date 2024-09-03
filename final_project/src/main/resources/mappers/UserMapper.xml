@@ -15,6 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from user where id=#{ id }
   </select>
 
+  <!-- 상세 조회 email -->
+  <select id="selectOneFromEmail" parameterType="Map" resultType="user">
+		select * from UserStatusView where email=#{email} and esite=#{esite}
+  </select>
+
   <!-- 사용자 추가 -->
   <insert id="insert" parameterType="user">
       insert into user values(
@@ -30,6 +35,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         default,
         0,
         default
+      )
+  </insert>
+
+    <!-- 이메일 추가 -->
+  <insert id="emailInsert" parameterType="user">
+      insert into user values(
+        null,
+        #{userIdx},
+        #{email},
+        #{esite}
       )
   </insert>
 </mapper>
