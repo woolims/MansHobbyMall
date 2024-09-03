@@ -1,6 +1,5 @@
 package com.puter.final_project.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.util.MyCommon;
 import com.puter.final_project.util.SportsPaging;
 import com.puter.final_project.vo.ShopVo;
-import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -85,12 +83,12 @@ public class ShopController {
         return "shopPage/mypage";
     }
 
-    // 고객센터 이동
-    @RequestMapping("/inquiry.do")
-    public String inquiry() {
+    // // 고객센터 이동
+    // @RequestMapping("/inquiry.do")
+    // public String inquiry() {
 
-        return "shopPage/inquiry/inquiry";
-    }
+    // return "shopPage/inquiry/inquiry";
+    // }
 
     @RequestMapping("/product_insert.do")
     public String product_insert() {
