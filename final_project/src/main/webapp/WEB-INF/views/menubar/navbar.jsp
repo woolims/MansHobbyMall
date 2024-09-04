@@ -26,6 +26,7 @@
             var showSignUpModal = ${showSignUpModal};
             if (showSignUpModal) {
                 document.getElementById('registerEmailModal').style.display = 'flex';
+                showSignUpModal = false;
             }
         };
 
@@ -371,10 +372,10 @@
             </li>
             <li><a href="${pageContext.request.contextPath}/inquiry/inquiry.do">고객문의</a></li>
             <c:if test="${ not empty user }">
-              <c:if test="${ user.getName() ne '관리자'}">
+              <c:if test="${ user.getAdminAt() ne 'Y'}">
                 <li><a href="mypage.do">마이페이지</a></li>
               </c:if>
-              <c:if test="${ user.getName() eq '관리자'}">
+              <c:if test="${ user.getAdminAt() eq 'Y'}">
                 <li><a href="${pageContext.request.contextPath}/admin/admin.do">관리페이지</a></li>
               </c:if>
             </c:if>
@@ -415,10 +416,6 @@
               카카오로 시작하기
             </button>
             <a href="/oauth2/authorization/google" class="social-btn google-btn">Google로 시작하기</a>
-
-            <div class="divider">통합</div>
-            <b>회원가입한 적이 있습니까?</b>
-            <input type="button" class="login-btn" value="로그인 통합" />
           </form>
         </div>
       </div>
@@ -471,13 +468,33 @@
             <input type="hidden" id="email" name="email" value="${email}"/>
             <input type="hidden" id="esite" name="esite" value="${esite}"/>
 
-            <a href="#">회원가입한 이력이 있나요?</a><br>
-
             <input type="button" id="btn_register_email" class="login-btn" value="회원가입" disabled="disabled"
               onclick="registerEmailUser(this.form);" />
+
+            <div class="divider">통합</div>
+            <b>회원가입한 적이 있습니까?</b>
+            <input type="button" class="login-btn" id="openintegrationModal" value="로그인 통합" />
           </form>
         </div>
       </div>
+
+      <!-- 로그인 통합 모달 -->
+      <div id="integrationModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>로그인 통합</h2>
+          <form>
+            <input type="hidden" name="url" id="url"/>
+            <input type="text" name="id" id="ig_id" placeholder="아이디" required />
+            <input type="password" name="password" id="ig_password" placeholder="비밀번호" required />
+            <input type="button" class="login-btn" value="로그인 통합" onclick="integration(this.form);" />
+            <div class="links">
+              <a href="#">아이디 · 비밀번호 찾기</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <script>
         // 로그인 모달 기능
         const loginModal = document.getElementById("loginModal");
@@ -491,6 +508,10 @@
         const registerEmailModal = document.getElementById("registerEmailModal");
         const openRegisterEmailModalBtn = document.getElementById("openRegisterEmailModal");
         const closeRegisterEmailModalBtn = document.getElementsByClassName("close")[2];
+
+        const integrationModal = document.getElementById("integrationModal");
+        const openIntegrationModalBtn = document.getElementById("openIntegrationModal");
+        const closeIntegrationModalBtn = document.getElementsByClassName("close")[3];
 
 
         // 모달 열기
@@ -524,6 +545,19 @@
         // 모달 닫기
         closeRegisterEmailModalBtn.onclick = function () {
           registerEmailModal.style.display = "none";
+        };
+
+        // 모달 열기
+        openIntegrationModalBtn.onclick = function () {
+          loginModal.style.display = "none";
+          registerModal.style.display = "none";
+          registerEmailModal.style.display = "none";
+          integrationModal.style.display = "flex";
+        };
+
+        // 모달 닫기
+        closeIntegrationModalBtn.onclick = function () {
+          integrationModal.style.display = "none";
         };
       </script>
     </body>

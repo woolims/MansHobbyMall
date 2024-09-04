@@ -46,7 +46,7 @@ public class UserController {
 	}
 
 	@RequestMapping("login.do")
-	public String login(String id, String password, String url, RedirectAttributes ra) {
+	public String login(String id, String password, String url, RedirectAttributes ra, Model model) {
 
 		UserVo user = userMapper.selectOneFromId(id);
 
@@ -64,6 +64,7 @@ public class UserController {
 
 		// 로그인처리: 현재 로그인된 객체(user)정보를 session저장
 		session.setAttribute("user", user);
+		model.addAttribute("showSignUpModal", false);
 
 		if(url != null) return "redirect:" + url;
 
