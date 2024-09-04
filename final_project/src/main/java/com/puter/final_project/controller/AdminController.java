@@ -9,6 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.puter.final_project.dao.AdminMapper;
+import com.puter.final_project.dao.ProductMapper;
+import com.puter.final_project.dao.ShopMapper;
+import com.puter.final_project.vo.ProductVo;
+import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +32,12 @@ public class AdminController {
     @Autowired
     AdminMapper adminMapper;
 
+    @Autowired
+    ProductMapper productMapper;
+
+    @Autowired
+    ShopMapper shopMapper;
+
     @RequestMapping("admin.do")
     public String list(Model model) {
 
@@ -38,6 +48,8 @@ public class AdminController {
 
         // 회원 관리 불러오기
         List<UserVo> list = adminMapper.selectListUserView();
+
+        List<ShopVo> pList = shopMapper.selectAdminList();
         // // 상품 관리 불러오기
         // List<AboardVo> list2 = .selectListMySb(user.getUserNo());
         // // 주문 관리 불러오기
@@ -46,6 +58,8 @@ public class AdminController {
         // List<AboardVo> list4 = aboard_dao.selectListMySc(user.getUserNo());
 
         model.addAttribute("list", list);
+        model.addAttribute("pList", pList);
+
         // model.addAttribute("list2", list2);
         // model.addAttribute("list3", list3);
         // model.addAttribute("list4", list4);
@@ -64,13 +78,26 @@ public class AdminController {
             session.setAttribute("alertMsg", "탈퇴 실패했습니다.");
         }
 
-        return "redirect:adminmain.do";
+        return "redirect:admin.do";
+    }
+
+    @RequestMapping("pDelete.do")
+    public String pDelete(int pIdx) {
+        int res = productMapper.pDelete(pIdx);
+        return "redirect:admin.do";
     }
 
     @RequestMapping("p_insert.do")
     public String p_insert() {
 
         return "";
+
+    }
+
+    @RequestMapping("p_select.do")
+    public String p_select() {
+
+        return "redirect:admin.do";
 
     }
 

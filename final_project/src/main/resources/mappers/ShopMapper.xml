@@ -16,6 +16,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
     </select>
 
+    <!-- 관리자페이지 상품 전체조회 -->
+    <select id="selectAdminList" resultType="shop">
+        select * from shop_list_view order by pIdx desc
+    </select>
+
+
     <!-- 메인카테고리 번호만 조회 -->
     <!-- <select id="selectCategoryNo" resultType="int">
         select categoryNo from shop_list_view

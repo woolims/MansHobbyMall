@@ -56,25 +56,45 @@
                 padding: 20px;
             }
 
+            /* $$$$$$$$ */
+
             table {
+
+                text-align: center;
                 width: 100%;
                 border-collapse: collapse;
             }
 
-            table,
             th,
             td {
-                border: 1px solid black;
-            }
-
-            th,
-            td {
-                padding: 10px;
-                text-align: center;
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
             }
 
             th {
                 background-color: #f2f2f2;
+                width: 12.5%;
+                /* 예시로 전체 열 너비를 12.5%로 설정 */
+            }
+
+            td {
+                /* 필요에 따라 추가적인 스타일을 설정할 수 있습니다 */
+            }
+
+            #menu2 {
+                margin: auto;
+                width: 80%;
+            }
+
+            #menu2 td {
+
+                text-align: center;
+            }
+
+            #menu2 th {
+
+                text-align: center;
             }
         </style>
 
@@ -86,6 +106,13 @@
 
 
                 f.action = "delete.do";
+                f.submit();
+            }
+
+
+            function confirmProductDelete(f) {
+                if (confirm("정말 삭제하시겠습니까?") == false) return;
+                f.action = "pDelete.do";
                 f.submit();
             }
         </script>
@@ -135,7 +162,8 @@
                                         <td>
                                             <form>
                                                 <input type="hidden" name="userIdx" value="${vo.getUserIdx()}">
-                                                <input type="button" value="삭제하기" onclick="confirmDelete(this.form);">
+                                                <input type="button" value="삭제하기"
+                                                    onclick="confirmProductDelete(this.form);">
                                             </form>
                                         </td>
                                     </tr>
@@ -145,7 +173,7 @@
                     </c:choose>
                 </div>
 
-                <div id="menu1" class="tab-pane fade in active">
+                <div id="menu2" class="tab-pane">
                     <h2>상품 관리</h2>
 
                     <c:choose>
@@ -154,44 +182,44 @@
                             <h1>내역이 없습니다.</h1>
                         </c:when>
                         <c:otherwise>
-                            <c:forEach var="vo" items="${list}">
+                            <c:forEach var="p_vo" items="${pList}">
                                 <table>
-                                    <tr>
+                                    <tr id="p_th">
                                         <th>상품번호</th>
                                         <th>대분류</th>
                                         <th>중분류</th>
                                         <th>소분류</th>
                                         <th>상품이름</th>
-                                        <th>상품설명</th>
                                         <th>상품갯수</th>
                                         <th>상품가격</th>
                                     </tr>
                                     <tr>
-                                        <td>${vo.getId()}</td>
-                                        <td>${vo.getName()}</td>
-                                        <td>${vo.getEmail()}</td>
-                                        <td>${vo.getCreateAt()}</td>
-                                        <td>${vo.getPoint()}</td>
-                                        <td>${vo.getPoint()}</td>
-                                        <td>${vo.getPoint()}</td>
-                                        <td>${vo.getPoint()}</td>
+                                        <td>${p_vo.getPIdx()}</td>
+                                        <td>${p_vo.getCategoryName()}</td>
+                                        <td>${p_vo.getMcategoryName()}</td>
+                                        <td>${p_vo.getDcategoryName()}</td>
+                                        <td>${p_vo.getPName()}</td>
+                                        <td>${p_vo.getAmount()}</td>
+                                        <td>${p_vo.getPrice()}</td>
 
-                                        <td>
-                                            <form>
-                                                <input type="hidden" name="userIdx" value="${vo.getUserIdx()}">
-                                                <input type="button" value="삭제하기" onclick="confirmDelete(this.form);">
-                                            </form>
-                                        </td>
+                                        <input type="button" name="userIdx" value="수정하기"
+                                            onclick="pUpdate('${p_vo.getPIdx()}');">
+                                        <form>
+                                            <input type="hidden" name="pIdx" value="${p_vo.getPIdx()}">
+                                            <input type="button" value="삭제하기"
+                                                onclick="confirmProductDelete(this.form);">
+                                        </form>
                                     </tr>
                                 </table>
+                                <br>
+                                <br>
                             </c:forEach>
                         </c:otherwise>
                     </c:choose>
+
+
                 </div>
             </div>
-
-
-
             <!-- 푸터 -->
             <%@ include file="../menubar/footer.jsp" %>
     </body>

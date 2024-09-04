@@ -13,4 +13,6 @@ public interface ProductMapper {
 
     ProductVo productInsert(ProductVo product);
 
+    int pDelete(int pIdx);
+
 }
