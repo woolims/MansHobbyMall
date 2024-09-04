@@ -10,6 +10,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select * from inquiry order by inIdx
   </select>
 
+  <!-- 상세조회 -->
+    <select id="selectOne" parameterType="int" resultType="inquiry">
+       select * from inquiry where inIdx=#{inIdx}
+  </select>
+
   <!-- inquiry 작성 -->
   <insert id="inquiryInsert" parameterType="inquiry">
     insert into inquiry values(

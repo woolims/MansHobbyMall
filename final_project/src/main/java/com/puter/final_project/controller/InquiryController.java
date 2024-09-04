@@ -38,6 +38,17 @@ public class InquiryController {
         return "inquiry/inquiry";
     }
 
+    // 게시글 상세 조회
+    @RequestMapping("inquirySelect.do")
+    public String inquirySelect(int inIdx, Model model) {
+
+        InquiryVo vo = inquiryMapper.selectOne(inIdx);
+
+        model.addAttribute("vo", vo);
+
+        return "inquiry/inquirySelect";
+    }
+
     // 게시글 작성폼 이동
     @RequestMapping("inquiryWriteForm.do")
     public String inquiryWriteForm() {

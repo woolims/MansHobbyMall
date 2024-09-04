@@ -12,6 +12,48 @@
     <title>고객문의</title>
 </head>
 
+<script type="text/javascript">
+    function find() {
+        
+        let search = $("#search").val();
+        let search_text = $("#search_text").val().trim();
+
+        if (search === "all") {
+            location.href = "inquiry.do";
+            return;
+        }
+
+        if (search_text === "") {
+            alert("검색어를 입력하세요!!");
+            $("#search_text").focus();
+            return;
+        }
+
+        // JavaScript에서 직접 사용
+        location.href = "inquiry.do?search=" + search + "&search_text=" + search_text;
+    }
+
+    function changeFilter() {
+        let search = $("#search").vuserIdxal();
+        if (search === "all") {
+            location.href = "inquiry.do";
+        }
+    }
+
+    function check_user(inIdx, userIdx) {
+        // JSP에서 자바스크립트로 값을 전달하기 위해 변수로 변환
+        var currentUserIdx = "${not empty user ? user.userIdx : -1}";
+        var isAdmin = (currentUserIdx == 1);  // 관리자 확인
+
+        // 사용자가 관리자이거나 본인인지 확인
+        if ((userIdx == currentUserIdx || isAdmin) && currentUserIdx != -1) {
+            location.href = "inquirySelect.do?inIdx=" + inIdx;
+        } else {
+            alert("해당 내용은 관리자와 본인만 확인 가능합니다.");
+        }
+    }
+</script>
+
 <body>
     <%@ include file="../menubar/navbar.jsp" %>
     <br><br><br><br><br>
@@ -31,18 +73,22 @@
                 </div>
 
                 <!-- 상단 검색 창 -->
-                <!-- <div class="search-container">
-                      <form class="form-inline search-box">
+                <div class="search-container">
+                    <form class="form-inline search-box">
                         <select id="search" class="form-control" onchange="changeFilter()">
-                          <option value="all" <c:if test="${param.search == 'all'}">selected</c:if>>전체</option>
-                          <option value="userName" <c:if test="${param.search == 'userName'}">selected</c:if>>이름</option>
-                          <option value="qnaTitle" <c:if test="${param.search == 'qnaTitle'}">selected</c:if>>제목</option>
-                          <option value="name_title" <c:if test="${param.search == 'name_title'}">selected</c:if>>이름+제목</option>
+                            <option value="all" <c:if test="${param.search == 'all'}">selected</c:if>>전체</option>
+                            <option value="name" <c:if test="${param.search == 'name'}">selected</c:if>>이름
+                            </option>
+                            <option value="inType" <c:if test="${param.search == 'inType'}">selected</c:if>>제목
+                            </option>
+                            <option value="name_title" <c:if test="${param.search == 'name_title'}">selected</c:if>
+                                >이름+제목</option>
                         </select>
-                        <input id="search_text" class="form-control" placeholder="검색어 입력" value="${param.search_text != 'null' ? param.search_text : ''}">
+                        <input id="search_text" class="form-control" placeholder="검색어 입력"
+                            value="${param.search_text != 'null' ? param.search_text : ''}">
                         <button onclick="find()">검색</button>
-                      </form>
-                    </div> -->
+                    </form>
+                </div>
 
                 <table class="table table-striped" style="margin-top: 20px; table-layout: fixed;
                         ">
