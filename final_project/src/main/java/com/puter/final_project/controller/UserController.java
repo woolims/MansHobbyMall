@@ -108,15 +108,17 @@ public class UserController {
 
 		vo.setId(em_id);
 		vo.setPassword(em_password);
-		vo.setPassword(em_nickName);
-		vo.setPassword(em_name);
-		vo.setPassword(em_phone);
-		vo.setPassword(em_addr);
-		vo.setPassword(em_subAddr);
+		vo.setNickName(em_nickName);
+		vo.setName(em_name);
+		vo.setPhone(em_phone);
+		vo.setAddr(em_addr);
+		vo.setSubAddr(em_subAddr);
 
 		int res = userMapper.insert(vo);
 
 		UserVo user = userMapper.selectOneFromId(em_id);
+		vo.setUserIdx(user.getUserIdx());
+
 		res = userMapper.emailInsert(vo);
 
 		return "redirect:../home.do";

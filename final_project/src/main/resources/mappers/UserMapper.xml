@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 이메일 추가 -->
   <insert id="emailInsert" parameterType="user">
-      insert into user values(
+      insert into email values(
         null,
         #{userIdx},
         #{email},
