@@ -50,4 +50,18 @@ public class AdminController {
         return "shopPage/adminMain";
     }
 
+    @RequestMapping("delete.do")
+    public String delete(int userIdx) {
+        int res = adminMapper.userDelete(userIdx);
+
+        if (res > 0) {
+            session.removeAttribute("user");
+            session.setAttribute("alertMsg", "탈퇴되었습니다.");
+        } else {
+            session.setAttribute("alertMsg", "탈퇴 실패했습니다.");
+        }
+
+        return "redirect:adminMain.do";
+    }
+
 }

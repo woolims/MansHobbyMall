@@ -77,6 +77,16 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script>
+        function confirmDelete(f) {
+            if(confirm("정말 삭제하시겠습니까?") == false) return;
+
+
+	        f.action="delete.do";
+	        f.submit();
+        }
+    </script>
+
 </head>
 
 <body>
@@ -111,8 +121,7 @@
                                 <th>이메일</th>
                                 <th>가입일</th>
                                 <th>보유포인트</th>
-                                <th>수정</th>
-                                <th>삭제</th>
+                                <th>회원삭제</th>
                             </tr>
                             <tr>
                                 <td>${vo.getId()}</td>
@@ -120,8 +129,12 @@
                                 <td>${vo.getEmail()}</td>
                                 <td>${vo.getCreateAt()}</td>
                                 <td>${vo.getPoint()}</td>
-                                <td><button>수정</button></td>
-                                <td><button>삭제</button></td>
+                                <td>
+                                    <form>
+                                        <input type="hidden" name="userIdx" value="${vo.getUserIdx()}">
+                                        <input type="button" value="삭제하기" onclick="confirmDelete(this.form);">
+                                    </form>
+                                </td>
                             </tr>
                         </table>
                     </c:forEach>
