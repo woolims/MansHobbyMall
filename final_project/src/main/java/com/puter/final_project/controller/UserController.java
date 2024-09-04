@@ -70,35 +70,6 @@ public class UserController {
 		return "redirect:../home.do";
 	}
 
-	// 간편 로그인
-	@GetMapping("easyLogin.do")
-    public String easyLogin(Model model) {
-        // 현재 인증된 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof OAuth2User) {
-            OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-
-            String email = oauth2User.getAttribute("email");
-            String esite = "google";
-
-            // 사용자 정보를 모델에 추가
-            model.addAttribute("name", oauth2User.getAttribute("name"));
-            model.addAttribute("email", email);
-            model.addAttribute("esite", esite);
-
-            UserVo user = userMapper.selectOneFromEmail(email, esite);
-            if(user != null){
-                //로그인 처리
-                session.setAttribute("user", user);
-            }
-            else {
-                //회원가입으로 넘기기
-                model.addAttribute("showSignUpModal", true);
-            }
-
-        }
-        return "redirect:../home.do"; // home.jsp로 이동
-    }
 
 	// 로그아웃
 	@RequestMapping("logout.do")
@@ -154,6 +125,9 @@ public class UserController {
 		vo.setUserIdx(user.getUserIdx());
 
 		res = userMapper.emailInsert(vo);
+
+		user = userMapper.selectOneFromEmail(vo.getEmail(), vo.getEsite());
+		session.setAttribute("user", user);
 
 		return "redirect:../home.do";
 	}
