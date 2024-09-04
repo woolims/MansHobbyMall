@@ -29,33 +29,6 @@ public class HomeController {
     @Autowired
     private UserMapper userMapper;
 
-    @GetMapping("loginTest/home.do")
-    public String home(Model model) {
-        // 현재 인증된 사용자 정보 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof OAuth2User) {
-            OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 
-            String email = oauth2User.getAttribute("email");
-            String esite = "google";
-
-            // 사용자 정보를 모델에 추가
-            model.addAttribute("name", oauth2User.getAttribute("name"));
-            model.addAttribute("email", email);
-            model.addAttribute("esite", esite);
-
-            UserVo user = userMapper.selectOneFromEmail(email, esite);
-            if(user != null){
-                //로그인 처리
-                session.setAttribute("user", user);
-            }
-            else {
-                //회원가입으로 넘기기
-                model.addAttribute("showSignUpModal", true);
-            }
-
-        }
-        return "test"; // home.jsp로 이동
-    }
 
 }
