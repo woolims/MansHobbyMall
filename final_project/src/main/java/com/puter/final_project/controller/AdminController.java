@@ -32,6 +32,9 @@ public class AdminController {
     public String list(Model model) {
 
         UserVo user = (UserVo) session.getAttribute("user");
+        if(user == null || "N".equals(user.getAdminAt())){
+            return "redirect:../home.do";
+        }
 
         // 회원 관리 불러오기
         List<UserVo> list = adminMapper.selectListUserView();
@@ -61,7 +64,7 @@ public class AdminController {
             session.setAttribute("alertMsg", "탈퇴 실패했습니다.");
         }
 
-        return "redirect:adminMain.do";
+        return "redirect:admin.do";
     }
 
 }
