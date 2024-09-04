@@ -365,6 +365,13 @@
           f.submit();
         }
 
+        function googleLogin(f){
+          f.esite.value = "google";
+
+          f.action = "${pageContext.request.contextPath}/user/esite.do";
+          f.submit();
+        }
+
       </script>
 
     </head>
@@ -436,6 +443,8 @@
             <button type="button" class="social-btn kakao-btn">
               카카오로 시작하기
             </button>
+            <input type="button" id="google" class="social-btn google-btn" value="Google로 시작하기" onclick="googleLogin(this.form);"/>
+            <input type="hidden" name="esite" id="esite" />
             <a href="/oauth2/authorization/google" class="social-btn google-btn">Google로 시작하기</a>
           </form>
         </div>

@@ -144,6 +144,14 @@ public class UserController {
 		return "redirect:../home.do";
 	}
 
+	@RequestMapping("esite.do")
+	public String esite(String esite){
+
+		session.setAttribute("esite", esite);
+
+		return "/oauth2/authorization/google";
+	}
+
 	@RequestMapping("admin.do")
 	public String adminPage(Model model) {
 
