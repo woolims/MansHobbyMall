@@ -105,7 +105,7 @@
                 <c:forEach var="shop_p" items="${productList}">
                   <div
                     style="margin: auto; border: 1px solid black; width: 280px; height: 350px; display: inline-block;  margin-bottom: 10px; text-align: center;"
-                    onclick="location.href='${ pageContext.request.contextPath }/sports_one.do?categoryNo=${shop_p.categoryNo}&pIdx=${shop_p.getPIdx()}'">
+                    onclick="location.href='${ pageContext.request.contextPath }/product_one.do?categoryNo=${shop_p.categoryNo}&pIdx=${shop_p.getPIdx()}'">
                     <div style="text-align: center;"> ${shop_p.getPName()} </div>
                   </div>
                 </c:forEach>

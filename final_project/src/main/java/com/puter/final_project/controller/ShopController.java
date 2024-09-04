@@ -79,7 +79,7 @@ public class ShopController {
     }
 
     // 스포츠 상품 클릭 시 이동하는 상세페이지
-    @RequestMapping("/sports_one.do")
+    @RequestMapping("/product_one.do")
     public String sports_one(int categoryNo, int pIdx, Model model) {
 
         ShopVo shop = (ShopVo) shop_mapper.selectProductInfoList(categoryNo, pIdx);
@@ -88,7 +88,7 @@ public class ShopController {
 
         model.addAttribute("shop", shop);
 
-        return "shopPage/sportsOne";
+        return "shopPage/productOne";
     }
 
     // 게임카테고리 전체조회

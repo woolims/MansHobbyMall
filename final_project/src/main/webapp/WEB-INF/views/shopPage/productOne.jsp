@@ -74,7 +74,16 @@
                 </style>
                 <script>
                     function addToCart() {
-                        alert('장바구니에 추가되었습니다!');
+                        if ("${ empty user }" == "true") {
+
+                            alert("장바구니는 로그인 후 이용가능합니다");
+
+                            return;
+                        } else {
+                            alert('장바구니에 추가되었습니다!');
+                        }
+
+
                     }
                 </script>
             </head>
@@ -89,9 +98,10 @@
                             </div>
                             <div class="product-details">
                                 <h1 id="product-name">${shop.getPName()}</h1>
-                                <p id="product-description">${shop.getPEx()}</p>
                                 <p class="price" id="product-price">${shop.getPrice()} 원</p>
-                                <button class="add-to-cart" onclick="addToCart()">장바구니에 추가</button>
+                                <button class="add-to-cart" onclick="addToCart()" style="margin-bottom: 20px;">장바구니에
+                                    추가</button>
+                                <p id="product-description">${shop.getPEx()}</p>
                             </div>
                         </div>
                         <!-- 푸터 -->
