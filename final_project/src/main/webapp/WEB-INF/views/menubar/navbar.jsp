@@ -415,6 +415,10 @@
               카카오로 시작하기
             </button>
             <a href="/oauth2/authorization/google" class="social-btn google-btn">Google로 시작하기</a>
+
+            <div class="divider">통합</div>
+            <b>회원가입한 적이 있습니까?</b>
+            <input type="button" class="login-btn" value="로그인 통합" />
           </form>
         </div>
       </div>
