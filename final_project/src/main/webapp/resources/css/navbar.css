@@ -66,6 +66,7 @@ body {
   padding: 10px 0;
   display: none;
   /* 기본적으로 숨김 */
+  text-align: center;
 }
 
 .dropdown li {

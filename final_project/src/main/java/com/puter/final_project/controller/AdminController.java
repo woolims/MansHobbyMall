@@ -32,7 +32,7 @@ public class AdminController {
     public String list(Model model) {
 
         UserVo user = (UserVo) session.getAttribute("user");
-        if(user == null || "N".equals(user.getAdminAt())){
+        if (user == null || "N".equals(user.getAdminAt())) {
             return "redirect:../home.do";
         }
 
@@ -64,7 +64,14 @@ public class AdminController {
             session.setAttribute("alertMsg", "탈퇴 실패했습니다.");
         }
 
-        return "redirect:admin.do";
+        return "redirect:adminmain.do";
+    }
+
+    @RequestMapping("p_insert.do")
+    public String p_insert() {
+
+        return "";
+
     }
 
 }

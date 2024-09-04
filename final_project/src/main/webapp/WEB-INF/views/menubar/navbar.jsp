@@ -19,15 +19,15 @@
         //window.onload = function(){}
 
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+          document.getElementById(modalId).style.display = 'none';
         }
 
-        window.onload = function() {
-            var showSignUpModal = ${showSignUpModal};
-            if (showSignUpModal) {
-                document.getElementById('registerEmailModal').style.display = 'flex';
-                showSignUpModal = false;
-            }
+        window.onload = function () {
+          var showSignUpModal = ${ showSignUpModal };
+          if (showSignUpModal) {
+            document.getElementById('registerEmailModal').style.display = 'flex';
+            showSignUpModal = false;
+          }
         };
 
         //jQuery 초기화
@@ -46,7 +46,7 @@
           function showMessage() {
             // 현재 URL 가져오기
             let url = new URL(window.location.href);
-            
+
             // URLSearchParams 객체 생성
             let params = new URLSearchParams(url.search);
 
@@ -214,7 +214,7 @@
               alert(err.responseText);
             }
           });
-          }//end:check_id()
+        }//end:check_id()
 
         function find_addr() {
 
@@ -351,22 +351,26 @@
     <body>
       <!-- 네비게이션 바 -->
       <nav class="navbar">
-        <div class="logo col-sm-2" style="display: inline-block;"><a href="${pageContext.request.contextPath}/home.do">Logo</a></div>
+        <div class="logo col-sm-2" style="display: inline-block;"><a
+            href="${pageContext.request.contextPath}/home.do">Logo</a></div>
         <div class="col-sm-10" style="display: inline-block; margin-top: 10px;">
           <ul class="menu" style="text-align: right !important;">
             <li>
-              <a href="${ pageContext.request.contextPath }/game.do?categoryNo=1">Gaming</a>
+              <a href="${ pageContext.request.contextPath }/game.do?categoryNo=1">e-sports</a>
               <ul class="dropdown">
-                <li><a href="#">게임 메뉴 1</a></li>
-                <li><a href="#">게임 메뉴 2</a></li>
+                <li><a href="${ pageContext.request.contextPath }/game.do?categoryNo=1&mcategoryName=키보드">KeyBoard</a>
+                </li>
+                <li><a href="${ pageContext.request.contextPath }/game.do?categoryNo=1&mcategoryName=마우스">Mouse</a></li>
                 <li><a href="#">게임 메뉴 3</a></li>
               </ul>
             </li>
             <li>
-              <a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2">Sports</a>
+              <a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2">sports</a>
               <ul class="dropdown">
-                <li><a href="#">스포츠 메뉴 1</a></li>
-                <li><a href="#">스포츠 메뉴 2</a></li>
+                <li><a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2&mcategoryName=축구">FootBall</a>
+                </li>
+                <li><a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2&mcategoryName=야구">BaseBall</a>
+                </li>
                 <li><a href="#">스포츠 메뉴 3</a></li>
               </ul>
             </li>
@@ -399,7 +403,7 @@
           <span class="close">&times;</span>
           <h2>로그인</h2>
           <form>
-            <input type="hidden" name="url" id="url"/>
+            <input type="hidden" name="url" id="url" />
             <input type="text" name="id" id="id" placeholder="아이디" required />
             <input type="password" name="password" id="password" placeholder="비밀번호" required />
             <input type="button" class="login-btn" value="로그인" onclick="send(this.form);" />
@@ -465,8 +469,8 @@
             <input type="text" id="em_phone" name="em_phone" placeholder="전화번호(ex.010-1234-1234)" required />
             <input type="text" id="em_addr" name="em_addr" placeholder="주소" required />
             <input type="text" id="em_subAddr" name="em_subAddr" placeholder="상세주소" required />
-            <input type="hidden" id="email" name="email" value="${email}"/>
-            <input type="hidden" id="esite" name="esite" value="${esite}"/>
+            <input type="hidden" id="email" name="email" value="${email}" />
+            <input type="hidden" id="esite" name="esite" value="${esite}" />
 
             <input type="button" id="btn_register_email" class="login-btn" value="회원가입" disabled="disabled"
               onclick="registerEmailUser(this.form);" />
@@ -484,7 +488,7 @@
           <span class="close">&times;</span>
           <h2>로그인 통합</h2>
           <form>
-            <input type="hidden" name="url" id="url"/>
+            <input type="hidden" name="url" id="url" />
             <input type="text" name="id" id="ig_id" placeholder="아이디" required />
             <input type="password" name="password" id="ig_password" placeholder="비밀번호" required />
             <input type="button" class="login-btn" value="로그인 통합" onclick="integration(this.form);" />
@@ -536,7 +540,7 @@
         };
 
         // 모달 열기
-          openRegisterEmailModalBtn.onclick = function () {
+        openRegisterEmailModalBtn.onclick = function () {
           loginModal.style.display = "none";
           registerModal.style.display = "none";
           registerEmailModal.style.display = "flex";

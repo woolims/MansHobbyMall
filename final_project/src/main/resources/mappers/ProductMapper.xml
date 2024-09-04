@@ -10,5 +10,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select * from product order by pIdx 
     </select>
 
+    <insert id="productInsert" parameterType="product">
+        insert into product values( pIdx=null, categoryNo=#{categoryNo}, dcategoryNo=#{dcategoryNo}, mcategoryNo=#{mcategoryNo}, pName=#{pName}, pEx=#{pEx}, amount=#{amount}, price=#{price}
+        )
+    </insert>
+
 
 </mapper>
