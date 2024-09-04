@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.puter.final_project.dao.InquiryMapper;
 import com.puter.final_project.vo.InquiryVo;
+import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -37,11 +38,24 @@ public class InquiryController {
         return "inquiry/inquiry";
     }
 
-    // 게시글 등록
+    // 게시글 작성폼 이동
     @RequestMapping("inquiryWriteForm.do")
-    public String inquiryWrite() {
+    public String inquiryWriteForm() {
 
         return "inquiry/inquiryWriteForm";
+    }
+
+    // 게시글 작성
+    @RequestMapping("inquiryWrite.do")
+    public String inquiryWrite(InquiryVo vo) {
+
+        UserVo user = (UserVo) session.getAttribute("user");
+
+        vo.setUserIdx(user.getUserIdx());
+
+        int res = inquiryMapper.inquiryInsert(vo);
+
+        return "redirect:inquiry.do";
     }
 
 }

@@ -11,4 +11,7 @@ public interface InquiryMapper {
 
     List<InquiryVo> selectList();
 
+    // 게시글 추가
+    public int inquiryInsert(InquiryVo vo);
+
 }

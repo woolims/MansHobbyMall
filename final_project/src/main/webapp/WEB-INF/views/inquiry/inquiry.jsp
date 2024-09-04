@@ -55,32 +55,33 @@
                         </tr>
                     </thead>
                     <tbody style="background-color: white;">
-                        <c:if test="${empty user}">
+                        <c:if test="${not empty user}">
+                            <c:forEach var="vo" items="${list}">
+                                <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
+                                    <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        ${vo.inIdx}</td>
+                                    <td
+                                        style="width: 45%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        ${vo.inType}</td>
+                                    <td
+                                        style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        ${vo.inDate}
+                                    </td>
+                                    <td
+                                        style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        <c:choose>
+                                            <c:when test="${answerMap[vo.inIdx] eq true}">답변 완료</c:when>
+                                            <c:otherwise>답변 미완료</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:if>
+                    </tbody>
                 </table>
-                <h1 style="text-align: center; margin-top: 50px;">로그인 후에 이용해주세요.</h1>
-
+                <c:if test="${empty user}">
+                    <h1 style="text-align: center; margin-top: 50px;">로그인 후에 이용해주세요.</h1>
                 </c:if>
-                <c:if test="${not empty user}">
-                    <c:forEach var="vo" items="${list}">
-                        <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
-                            <td style="text-align: center; background-color: #303030; color: #f1f1f1;">${vo.inIdx}</td>
-                            <td style="width: 45%; text-align: left; background-color: #303030; color: #f1f1f1;">
-                                ${vo.inType}</td>
-                            <td style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                <%-- <fmt:formatDate value="${vo.inDate}" pattern="yyyy-MM-dd HH:mm:ss" /> --%>
-                                ${vo.inDate}
-                            </td>
-                            <td style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                <c:choose>
-                                    <c:when test="${answerMap[vo.inIdx] eq true}">답변 완료</c:when>
-                                    <c:otherwise>답변 미완료</c:otherwise>
-                                </c:choose>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:if>
-                </tbody>
-                </table>
             </div>
         </div>
         <c:if test="${not empty user}">
