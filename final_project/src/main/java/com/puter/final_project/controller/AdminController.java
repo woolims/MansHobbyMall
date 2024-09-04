@@ -58,7 +58,6 @@ public class AdminController {
         int res = adminMapper.userDelete(userIdx);
 
         if (res > 0) {
-            session.removeAttribute("user");
             session.setAttribute("alertMsg", "탈퇴되었습니다.");
         } else {
             session.setAttribute("alertMsg", "탈퇴 실패했습니다.");

@@ -99,10 +99,7 @@ public class UserController {
 	}// end:check_id()
 
 	@RequestMapping("insert.do")
-	public String insert(String re_id, String re_password, UserVo vo) {
-
-		vo.setId(re_id);
-		vo.setPassword(re_password);
+	public String insert(UserVo vo) {
 
 		int res = userMapper.insert(vo);
 
@@ -110,25 +107,39 @@ public class UserController {
 	}
 
 	@RequestMapping("emailInsert.do")
-	public String eminsert(String em_id, String em_password, String em_nickName, String em_name, String em_phone, String em_addr, String em_subAddr, UserVo vo) {
-
-		vo.setId(em_id);
-		vo.setPassword(em_password);
-		vo.setNickName(em_nickName);
-		vo.setName(em_name);
-		vo.setPhone(em_phone);
-		vo.setAddr(em_addr);
-		vo.setSubAddr(em_subAddr);
+	public String eminsert(UserVo vo) {
 
 		int res = userMapper.insert(vo);
 
-		UserVo user = userMapper.selectOneFromId(em_id);
+		UserVo user = userMapper.selectOneFromId(vo.getId());
 		vo.setUserIdx(user.getUserIdx());
 
 		res = userMapper.emailInsert(vo);
 
 		user = userMapper.selectOneFromEmail(vo.getEmail(), vo.getEsite());
 		session.setAttribute("user", user);
+
+		return "redirect:../home.do";
+	}
+
+	@RequestMapping("integration.do")
+	public String integration(UserVo vo, String url, RedirectAttributes ra){
+
+		UserVo user = userMapper.selectOneFromId(vo.getId());
+		if(user == null){
+			ra.addAttribute("reason", "fail_id");
+			return "redirect:" + url;
+		}
+		if(user.getPassword().equals(vo.getPassword()) == false){
+			ra.addAttribute("reason", "fail_password");
+			return "redirect:" + url;
+		}
+		vo.setUserIdx(user.getUserIdx());
+		int res = userMapper.emailInsert(vo);
+
+		session.setAttribute("user", user);
+
+
 
 		return "redirect:../home.do";
 	}
