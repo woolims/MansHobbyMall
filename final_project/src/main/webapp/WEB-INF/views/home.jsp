@@ -12,6 +12,23 @@
 
             <title>MansHobby</title>
 
+            <style>
+                df-messenger {
+        --df-messenger-bot-message: #f5f5f5; /* 밝은 회색, 에이전트 메시지 배경색 */
+        --df-messenger-button-titlebar-color: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4); /* 그라데이션 */
+        --df-messenger-button-titlebar-font-color: #333333; /* 흰색, 제목 표시줄 글꼴 색상 */
+      
+        --df-messenger-font-color: #333333; /* 어두운 회색, 메시지 글꼴 색상 */
+        --df-messenger-input-box-color: #ffffff; /* 매우 밝은 회색, 입력 상자 배경색 */
+        --df-messenger-input-font-color: #333333; /* 어두운 회색, 입력 상자 글꼴 색상 */
+        --df-messenger-input-placeholder-font-color: #999999; /* 중간 회색, 자리표시자 텍스트 색상 */
+        --df-messenger-minimized-chat-close-icon-color: #ffffff; /* 흰색, 닫기 아이콘 색상 */
+        --df-messenger-send-icon: #6a11cb; /* 보내기 아이콘 색상 - 그라데이션의 시작 색과 맞춤 */
+        --df-messenger-user-message: #ffffff; /* 사용자 메시지 배경색 */
+      }
+
+            </style>
+
         </head>
 
         <body>
@@ -68,7 +85,16 @@
 
                 <!-- 푸터 -->
                 <%@ include file="menubar/footer.jsp" %>
+                
 
+                    <!-- Dialogflow Messenger 추가 -->
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger
+        intent="WELCOME"
+        chat-title="MansHobby"
+        agent-id="192731cf-d2e0-464a-874f-4d8b1be135c6"
+        language-code="ko"
+    ></df-messenger>
 
         </body>
 
