@@ -394,7 +394,7 @@
             <li><a href="${pageContext.request.contextPath}/inquiry/inquiry.do">고객문의</a></li>
             <c:if test="${ not empty user }">
               <c:if test="${ user.getAdminAt() ne 'Y'}">
-                <li><a href="mypage.do">마이페이지</a></li>
+                <li><a href="${pageContext.request.contextPath}/mypage.do">마이페이지</a></li>
               </c:if>
               <c:if test="${ user.getAdminAt() eq 'Y'}">
                 <li><a href="${pageContext.request.contextPath}/admin/admin.do">관리페이지</a></li>

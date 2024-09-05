@@ -28,7 +28,7 @@
                 <br>
                 <div class="panel panel-default" style="background-color: #303030; color: #f1f1f1;">
                     <div class="panel-body" style="min-height: 500px;">
-                        <p><strong>작성자:</strong> ${ user.name }</p>
+                        <p><strong>작성자:</strong> ${ vo.name }</p>
                         <p><strong>작성일:</strong> ${ vo.inDate }</p>
                         <hr>
                         <p>${ vo.inContent }</p>

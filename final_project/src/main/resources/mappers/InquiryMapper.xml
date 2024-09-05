@@ -12,8 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 상세조회 -->
     <select id="selectOne" parameterType="int" resultType="inquiry">
-      <!-- 나중에 view로 변경해야함! -->
-       select * from inquiry where inIdx=#{inIdx}
+       select * from InquiryView where inIdx=#{inIdx}
   </select>
 
   <!-- inquiry 작성 -->

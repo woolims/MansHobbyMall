@@ -23,7 +23,4 @@ public interface UserMapper {
     // 이메일 추가
     public int emailInsert(UserVo vo);
 
-    // 유저 정보 받아오기(게시물 상세페이지)
-    public UserVo selectOneFromUserIdx(int userIdx);
-
 }
