@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
@@ -39,8 +40,17 @@ public class ShopController {
 
     // main 페이지 이동
     @RequestMapping("/home.do")
-    public String home() {
+    public String home(Model model, @RequestParam(value = "showSignUpModal", required = false) String showSignUpModal) {
 
+        String email = (String) session.getAttribute("email");
+        String esite = (String) session.getAttribute("esite");
+
+        model.addAttribute("email", email);
+        model.addAttribute("esite", esite);
+
+        if (showSignUpModal != null && showSignUpModal.equals("true")) {
+            model.addAttribute("showSignUpModal", true);
+        }
         
         return "home";
     }
@@ -48,19 +58,20 @@ public class ShopController {
 
 	// 간편 로그인
 	@GetMapping("/easyLogin.do")
-    public String easyLogin(Model model) {
+    public String easyLogin(RedirectAttributes ra) {
         // 현재 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof OAuth2User) {
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 
             String email = oauth2User.getAttribute("email");
-            String esite = "google";
+            String esite = oauth2User.getAttribute("esite");
 
-            // 사용자 정보를 모델에 추가
-            model.addAttribute("name", oauth2User.getAttribute("name"));
-            model.addAttribute("email", email);
-            model.addAttribute("esite", esite);
+            // 사용자 정보를 session에 저장
+            session.setAttribute("email", email);
+            session.setAttribute("esite", esite);
+
+            System.out.println(esite);
 
             UserVo user = userMapper.selectOneFromEmail(email, esite);
             if(user != null){
@@ -69,8 +80,8 @@ public class ShopController {
 				return "redirect:home.do";
             }
             else {
-                //회원가입으로 넘기기
-                model.addAttribute("showSignUpModal", true);
+                ra.addAttribute("showSignUpModal", "true");
+                return "redirect:home.do";
             }
 
         }

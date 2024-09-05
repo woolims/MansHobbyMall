@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service("customOAuth2UserService")
@@ -18,20 +19,43 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) {
-        // 기본 OAuth2UserService를 사용하여 사용자 정보를 로드합니다.
         OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(userRequest);
 
-        // 사용자 정보 추출
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        String name = (String) attributes.get("name");
-        String email = (String) attributes.get("email");
 
-        // 사용자 정보를 데이터베이스에 저장하거나 처리합니다.
-        // 예: 사용자 이메일을 통해 데이터베이스에서 사용자 정보를 조회하거나 새 사용자로 저장할 수 있습니다.
+        String provider = userRequest.getClientRegistration().getRegistrationId(); // Provider name
 
-        // 반환할 OAuth2User 객체 생성
+        String name = null;
+        String email = null;
+
+        // Prepare attributes map to include the extracted user information
+        Map<String, Object> customAttributes = new HashMap<>(attributes);
+        customAttributes.put("esite", provider);
+
+        if ("google".equals(provider)) {
+            name = (String) attributes.get("name");
+            email = (String) attributes.get("email");
+        } else if ("naver".equals(provider)) {
+            Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+            name = (String) response.get("name");
+            email = (String) response.get("email");
+
+            // Include the response attributes into the custom attributes
+            
+            customAttributes.put("name", name);
+            customAttributes.put("email", email);
+        }
+        System.out.println("provider: " + provider);
+
+        if (name == null) {
+            throw new IllegalArgumentException("Missing attribute 'name' in attributes");
+        }
+
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                attributes, "name");  // "name"은 사용자 이름을 식별하는 키입니다.
+            Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+            customAttributes,
+            "name" // Ensure this is the correct key for the user's name in the attributes
+        );
     }
+
 }

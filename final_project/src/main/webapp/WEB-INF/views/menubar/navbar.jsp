@@ -22,72 +22,67 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        window.onload = function() {
-            var showSignUpModal = ${showSignUpModal};
-            if (showSignUpModal) {
-                document.getElementById('registerEmailModal').style.display = 'flex';
-                showSignUpModal = false;
-            }
-        };
-
-        //jQuery 초기화
         $(document).ready(function () {
+          // 페이지가 로드된 후 URL의 쿼리 파라미터를 확인합니다.
+          var urlParams = new URLSearchParams(window.location.search);
+          var showSignUpModal = urlParams.get('showSignUpModal') === 'true';
 
-          //showMessage();
-          setTimeout(showMessage, 100);//0.1초후에 메시지 띄워라
+          // showSignUpModal이 true일 경우 회원가입 모달을 표시합니다.
+          if (showSignUpModal) {
+              $('#registerEmailModal').css('display', 'flex');
+              
+              // 쿼리 파라미터에서 showSignUpModal 제거
+              urlParams.delete('showSignUpModal');
+              window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
+          }
 
+          // showMessage 함수 호출
+          showMessage();
         });
 
         function showMessage() {
-          $(document).ready(function () {
-            setTimeout(showMessage, 100); // 0.1초 후에 메시지 띄워라
-          });
+          // 현재 URL 가져오기
+          let url = new URL(window.location.href);
+          
+          // URLSearchParams 객체 생성
+          let params = new URLSearchParams(url.search);
 
-          function showMessage() {
-            // 현재 URL 가져오기
-            let url = new URL(window.location.href);
-            
-            // URLSearchParams 객체 생성
-            let params = new URLSearchParams(url.search);
+          // 'reason' 파라미터의 값 확인
+          if (params.get('reason') === 'fail_id') {
+            loginModal.style.display = 'flex';
+            alert('아이디가 틀립니다.');
 
-            // 'reason' 파라미터의 값 확인
-            if (params.get('reason') === 'fail_id') {
-              loginModal.style.display = 'flex';
-              alert('아이디가 틀립니다.');
+            // 'reason' 파라미터 삭제
+            params.delete('reason');
 
-              // 'reason' 파라미터 삭제
-              params.delete('reason');
-
-              // URL 업데이트
-              url.search = params.toString();
-              window.history.replaceState({}, '', url.toString()); // 페이지를 새로 로드하지 않고 URL 업데이트
-            }
-
-            if (params.get('reason') === 'fail_pwd') {
-              loginModal.style.display = 'flex';
-              alert('비밀번호가 틀립니다.');
-
-              // 'reason' 파라미터 삭제
-              params.delete('reason');
-
-              // URL 업데이트
-              url.search = params.toString();
-              window.history.replaceState({}, '', url.toString());
-            }
-
-            if (params.get('reason') === 'session_timeout') {
-              loginModal.style.display = 'flex';
-              alert('로그아웃되었습니다.\n로그인하세요.');
-
-              // 'reason' 파라미터 삭제
-              params.delete('reason');
-
-              // URL 업데이트
-              url.search = params.toString();
-              window.history.replaceState({}, '', url.toString());
-            }
+            // URL 업데이트
+            url.search = params.toString();
+            window.history.replaceState({}, '', url.toString()); // 페이지를 새로 로드하지 않고 URL 업데이트
           }
 
+          if (params.get('reason') === 'fail_pwd') {
+            loginModal.style.display = 'flex';
+            alert('비밀번호가 틀립니다.');
+
+            // 'reason' 파라미터 삭제
+            params.delete('reason');
+
+            // URL 업데이트
+            url.search = params.toString();
+            window.history.replaceState({}, '', url.toString());
+          }
+
+          if (params.get('reason') === 'session_timeout') {
+            loginModal.style.display = 'flex';
+            alert('로그아웃되었습니다.\n로그인하세요.');
+
+            // 'reason' 파라미터 삭제
+            params.delete('reason');
+
+            // URL 업데이트
+            url.search = params.toString();
+            window.history.replaceState({}, '', url.toString());
+          }
         }
 
       </script>
@@ -365,13 +360,6 @@
           f.submit();
         }
 
-        function googleLogin(f){
-          f.esite.value = "google";
-
-          f.action = "${pageContext.request.contextPath}/user/esite.do";
-          f.submit();
-        }
-
       </script>
 
     </head>
@@ -437,15 +425,11 @@
               <a href="#">아이디 · 비밀번호 찾기</a>
             </div>
             <div class="divider">또는</div>
-            <button type="button" class="social-btn naver-btn">
-              네이버로 시작하기
-            </button>
+            <a href="/oauth2/authorization/naver" class="social-btn naver-btn">네이버로 시작하기</a>
             <button type="button" class="social-btn kakao-btn">
               카카오로 시작하기
             </button>
-            <input type="button" id="google" class="social-btn google-btn" value="Google로 시작하기" onclick="googleLogin(this.form);"/>
-            <input type="hidden" name="esite" id="esite" />
-            <a href="/oauth2/authorization/google" class="social-btn google-btn">Google로 시작하기</a>
+            <a href="/oauth2/authorization/google" class="social-btn google-btn">구글로 시작하기</a>
           </form>
         </div>
       </div>
@@ -467,17 +451,6 @@
             <input type="button" id="btn_register" class="login-btn" value="회원가입" disabled="disabled"
               onclick="registerUser(this.form);" />
             <!-- <input type="button" class="login-btn" value="회원가입" onclick="registerUser(this.form);" /> -->
-
-            <div class="divider">또는</div>
-            <button type="button" class="social-btn naver-btn">
-              네이버로 시작하기
-            </button>
-            <button type="button" class="social-btn kakao-btn">
-              카카오로 시작하기
-            </button>
-            <button type="button" class="social-btn google-btn">
-              Google로 시작하기
-            </button>
           </form>
         </div>
       </div>
