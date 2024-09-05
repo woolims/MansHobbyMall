@@ -41,16 +41,16 @@
                     <div class="image-container">
                         <div class="image-box" style="background-image: url(../../resources/images/img.png);">
                             <div class="overlay">
-                                <h2>타이틀 1</h2>
-                                <p>여기에 설명 문구가 들어갑니다.</p>
-                                <a href="#" class="cta-btn">자세히 보기</a>
+                                <h2>e-sports</h2>
+                                <p>절대 들키지 말 것.</p>
+                                <a href="/game.do?categoryNo=1" class="cta-btn">자세히 보기</a>
                             </div>
                         </div>
                         <div class="image-box" style="background-image: url(../../resources/images/도커.png);">
                             <div class="overlay">
-                                <h2>타이틀 2</h2>
-                                <p>여기에 설명 문구가 들어갑니다.</p>
-                                <a href="#" class="cta-btn">자세히 보기</a>
+                                <h2>sports</h2>
+                                <p>관리하는 사람들의 건전한 취미</p>
+                                <a href="/sports.do?categoryNo=2" class="cta-btn">자세히 보기</a>
                             </div>
                         </div>
                     </div>

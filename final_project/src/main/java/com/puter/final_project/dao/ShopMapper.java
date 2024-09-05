@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.ShopVo;
 
 @Mapper
@@ -34,5 +35,19 @@ public interface ShopMapper {
     List<ShopVo> selectProductDCategoryList(int dCategoryNo);
 
     ShopVo selectProductInfoList(int categoryNo, int pIdx);
+
+    List<ShopVo> selectAdminList();
+
+    String selectPEx(int pIdx);
+
+    int selectCategoryNo(String categoryName);
+
+    int selectMcategoryNo(String mcategoryName);
+
+    int selectDcategoryNo(String dcategoryName);
+
+    ProductVo productInsert(ProductVo product);
+
+    int productUpdate(ShopVo shop);
 
 }

@@ -7,8 +7,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 전체조회 -->
     <select id="selectList" resultType="product">
-       select * from product order by pIdx 
+       select * from shop_list_view order by pIdx desc
     </select>
 
+    <insert id="productInsert" parameterType="product">
+        insert into product values( pIdx=null, categoryNo=#{categoryNo}, dcategoryNo=#{dcategoryNo}, mcategoryNo=#{mcategoryNo}, pName=#{pName}, pEx=#{pEx}, amount=#{amount}, price=#{price}
+        )
+    </insert>
 
+    <delete id="pDelete" parameterType="int">
+        delete from product where pIdx=#{pIdx}
+    </delete>
 </mapper>
