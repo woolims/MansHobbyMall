@@ -19,15 +19,15 @@
         //window.onload = function(){}
 
         function closeModal(modalId) {
-          document.getElementById(modalId).style.display = 'none';
+            document.getElementById(modalId).style.display = 'none';
         }
 
-        window.onload = function () {
-          var showSignUpModal = ${ showSignUpModal };
-          if (showSignUpModal) {
-            document.getElementById('registerEmailModal').style.display = 'flex';
-            showSignUpModal = false;
-          }
+        window.onload = function() {
+            var showSignUpModal = ${showSignUpModal};
+            if (showSignUpModal) {
+                document.getElementById('registerEmailModal').style.display = 'flex';
+                showSignUpModal = false;
+            }
         };
 
         //jQuery 초기화
@@ -46,7 +46,7 @@
           function showMessage() {
             // 현재 URL 가져오기
             let url = new URL(window.location.href);
-
+            
             // URLSearchParams 객체 생성
             let params = new URLSearchParams(url.search);
 
@@ -214,7 +214,7 @@
               alert(err.responseText);
             }
           });
-        }//end:check_id()
+          }//end:check_id()
 
         function find_addr() {
 
@@ -344,6 +344,27 @@
           f.submit();
         }//end:registerEmailUser()
 
+        function integration(f){
+          let ig_id = f.ig_id.value.trim();
+          let ig_password = f.ig_password.value.trim();
+
+          if (ig_id == '') {
+            alert("아이디를 입력하세요.");
+            f.ig_id.value = "";
+            f.ig_id.focus();
+            return;
+          }
+          if (ig_password == '') {
+            alert("비밀번호를 입력하세요.");
+            f.ig_password.value = "";
+            f.ig_password.focus();
+            return;
+          }
+
+          f.action = "${pageContext.request.contextPath}/user/integration.do";
+          f.submit();
+        }
+
       </script>
 
     </head>
@@ -351,26 +372,22 @@
     <body>
       <!-- 네비게이션 바 -->
       <nav class="navbar">
-        <div class="logo col-sm-2" style="display: inline-block;"><a
-            href="${pageContext.request.contextPath}/home.do">Logo</a></div>
+        <div class="logo col-sm-2" style="display: inline-block;"><a href="${pageContext.request.contextPath}/home.do">Logo</a></div>
         <div class="col-sm-10" style="display: inline-block; margin-top: 10px;">
           <ul class="menu" style="text-align: right !important;">
             <li>
-              <a href="${ pageContext.request.contextPath }/game.do?categoryNo=1">e-sports</a>
+              <a href="${ pageContext.request.contextPath }/game.do?categoryNo=1">Gaming</a>
               <ul class="dropdown">
-                <li><a href="${ pageContext.request.contextPath }/game.do?categoryNo=1&mcategoryName=키보드">KeyBoard</a>
-                </li>
-                <li><a href="${ pageContext.request.contextPath }/game.do?categoryNo=1&mcategoryName=마우스">Mouse</a></li>
+                <li><a href="#">게임 메뉴 1</a></li>
+                <li><a href="#">게임 메뉴 2</a></li>
                 <li><a href="#">게임 메뉴 3</a></li>
               </ul>
             </li>
             <li>
-              <a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2">sports</a>
+              <a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2">Sports</a>
               <ul class="dropdown">
-                <li><a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2&mcategoryName=축구">FootBall</a>
-                </li>
-                <li><a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2&mcategoryName=야구">BaseBall</a>
-                </li>
+                <li><a href="#">스포츠 메뉴 1</a></li>
+                <li><a href="#">스포츠 메뉴 2</a></li>
                 <li><a href="#">스포츠 메뉴 3</a></li>
               </ul>
             </li>
@@ -403,7 +420,7 @@
           <span class="close">&times;</span>
           <h2>로그인</h2>
           <form>
-            <input type="hidden" name="url" id="url" />
+            <input type="hidden" name="url" id="url"/>
             <input type="text" name="id" id="id" placeholder="아이디" required />
             <input type="password" name="password" id="password" placeholder="비밀번호" required />
             <input type="button" class="login-btn" value="로그인" onclick="send(this.form);" />
@@ -430,9 +447,9 @@
           <span class="close">&times;</span>
           <h2>회원가입</h2>
           <form>
-            <input type="text" id="re_id" name="re_id" placeholder="아이디" onkeyup="check_id();" required /><span
+            <input type="text" id="re_id" name="id" placeholder="아이디" onkeyup="check_id();" required /><span
               id="id_msg"></span>
-            <input type="password" id="re_password" name="re_password" placeholder="비밀번호" required />
+            <input type="password" id="re_password" name="password" placeholder="비밀번호" required />
             <input type="text" id="nickName" name="nickName" placeholder="닉네임" required />
             <input type="text" id="name" name="name" placeholder="이름" required />
             <input type="text" id="phone" name="phone" placeholder="전화번호(ex.010-1234-1234)" required />
@@ -461,23 +478,23 @@
           <span class="close">&times;</span>
           <h2>회원가입</h2>
           <form>
-            <input type="text" id="em_id" name="em_id" placeholder="아이디" onkeyup="check_id_email();" required />
+            <input type="text" id="em_id" name="id" placeholder="아이디" onkeyup="check_id_email();" required />
             <span id="em_id_msg"></span>
-            <input type="password" id="em_password" name="em_password" placeholder="비밀번호" required />
-            <input type="text" id="em_nickName" name="em_nickName" placeholder="닉네임" required />
-            <input type="text" id="em_name" name="em_name" placeholder="이름" required />
-            <input type="text" id="em_phone" name="em_phone" placeholder="전화번호(ex.010-1234-1234)" required />
-            <input type="text" id="em_addr" name="em_addr" placeholder="주소" required />
-            <input type="text" id="em_subAddr" name="em_subAddr" placeholder="상세주소" required />
-            <input type="hidden" id="email" name="email" value="${email}" />
-            <input type="hidden" id="esite" name="esite" value="${esite}" />
+            <input type="password" id="em_password" name="password" placeholder="비밀번호" required />
+            <input type="text" id="em_nickName" name="nickName" placeholder="닉네임" required />
+            <input type="text" id="em_name" name="name" placeholder="이름" required />
+            <input type="text" id="em_phone" name="phone" placeholder="전화번호(ex.010-1234-1234)" required />
+            <input type="text" id="em_addr" name="addr" placeholder="주소" required />
+            <input type="text" id="em_subAddr" name="subAddr" placeholder="상세주소" required />
+            <input type="hidden" id="email" name="email" value="${email}"/>
+            <input type="hidden" id="esite" name="esite" value="${esite}"/>
 
             <input type="button" id="btn_register_email" class="login-btn" value="회원가입" disabled="disabled"
               onclick="registerEmailUser(this.form);" />
 
             <div class="divider">통합</div>
             <b>회원가입한 적이 있습니까?</b>
-            <input type="button" class="login-btn" id="openintegrationModal" value="로그인 통합" />
+            <input type="button" class="login-btn" id="openIntegrationModal" value="로그인 통합" />
           </form>
         </div>
       </div>
@@ -488,9 +505,11 @@
           <span class="close">&times;</span>
           <h2>로그인 통합</h2>
           <form>
-            <input type="hidden" name="url" id="url" />
+            <input type="hidden" name="url" id="url"/>
             <input type="text" name="id" id="ig_id" placeholder="아이디" required />
             <input type="password" name="password" id="ig_password" placeholder="비밀번호" required />
+            <input type="text" id="email" name="email" value="${email}"/>
+            <input type="text" id="esite" name="esite" value="${esite}"/>
             <input type="button" class="login-btn" value="로그인 통합" onclick="integration(this.form);" />
             <div class="links">
               <a href="#">아이디 · 비밀번호 찾기</a>
@@ -540,7 +559,7 @@
         };
 
         // 모달 열기
-        openRegisterEmailModalBtn.onclick = function () {
+          openRegisterEmailModalBtn.onclick = function () {
           loginModal.style.display = "none";
           registerModal.style.display = "none";
           registerEmailModal.style.display = "flex";

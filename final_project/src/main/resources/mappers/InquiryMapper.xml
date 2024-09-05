@@ -9,4 +9,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   <select id="selectList" resultType="inquiry">
        select * from inquiry order by inIdx
   </select>
+
+  <!-- inquiry 작성 -->
+  <insert id="inquiryInsert" parameterType="inquiry">
+    insert into inquiry values(
+      null, 
+      1, 
+      #{userIdx}, 
+      #{inType}, 
+      #{inContent}, 
+      now(), 
+      null
+      )
+  </insert>
 </mapper>
