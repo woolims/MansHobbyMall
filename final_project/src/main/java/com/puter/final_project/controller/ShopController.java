@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
@@ -26,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 public class ShopController {
 
     @Autowired
-    ShopMapper shopMapper;
+    ShopMapper shop_mapper;
 
     @Autowired
     UserMapper userMapper;
@@ -39,39 +40,52 @@ public class ShopController {
 
     // main 페이지 이동
     @RequestMapping("/home.do")
-    public String home() {
+    public String home(Model model, @RequestParam(value = "showSignUpModal", required = false) String showSignUpModal) {
 
+        String email = (String) session.getAttribute("email");
+        String esite = (String) session.getAttribute("esite");
+
+        model.addAttribute("email", email);
+        model.addAttribute("esite", esite);
+
+        if (showSignUpModal != null && showSignUpModal.equals("true")) {
+            model.addAttribute("showSignUpModal", true);
+        }
+        
         return "home";
     }
 
-    // 간편 로그인
-    @GetMapping("/easyLogin.do")
-    public String easyLogin(Model model) {
+
+	// 간편 로그인
+	@GetMapping("/easyLogin.do")
+    public String easyLogin(RedirectAttributes ra) {
         // 현재 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof OAuth2User) {
             OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 
             String email = oauth2User.getAttribute("email");
-            String esite = "google";
+            String esite = oauth2User.getAttribute("esite");
 
-            // 사용자 정보를 모델에 추가
-            model.addAttribute("name", oauth2User.getAttribute("name"));
-            model.addAttribute("email", email);
-            model.addAttribute("esite", esite);
+            // 사용자 정보를 session에 저장
+            session.setAttribute("email", email);
+            session.setAttribute("esite", esite);
+
+            System.out.println(esite);
 
             UserVo user = userMapper.selectOneFromEmail(email, esite);
-            if (user != null) {
-                // 로그인 처리
+            if(user != null){
+                //로그인 처리
                 session.setAttribute("user", user);
+				return "redirect:home.do";
+            }
+            else {
+                ra.addAttribute("showSignUpModal", "true");
                 return "redirect:home.do";
-            } else {
-                // 회원가입으로 넘기기
-                model.addAttribute("showSignUpModal", true);
             }
 
         }
-        return "home"; // home.jsp로 이동
+		return "home"; // home.jsp로 이동
         // return "redirect:../home.do"; // home.jsp로 이동
     }
 
@@ -83,7 +97,7 @@ public class ShopController {
             @RequestParam(name = "mcategoryName", defaultValue = "emptyMcategoryName") String mcategoryName,
             @RequestParam(name = "dcategoryName", defaultValue = "emptyDcategoryName") String dcategoryNameParam) {
 
-        List<ShopVo> mCategoryNameList = shopMapper.selectMCategoryNameList(categoryNo);
+        List<ShopVo> mCategoryNameList = shop_mapper.selectMCategoryNameList(categoryNo);
 
         ShopVo shop = new ShopVo();
         shop.setCategoryNo(categoryNo);
@@ -92,20 +106,20 @@ public class ShopController {
 
         if (!mcategoryName.equals("emptyMcategoryName")) {
             shop.setMcategoryName(mcategoryName);
-            int mCategoryNo = shopMapper.selectMCategoryNo(shop);
-            List<ShopVo> dCategoryName = shopMapper.selectdCategoryNameList(mCategoryNo);
-            List<ShopVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
+            int mCategoryNo = shop_mapper.selectMCategoryNo(shop);
+            List<ShopVo> dCategoryName = shop_mapper.selectdCategoryNameList(mCategoryNo);
+            List<ShopVo> productMCategoryList = shop_mapper.selectProductMCategoryList(mCategoryNo);
             model.addAttribute("dCategoryName", dCategoryName);
             model.addAttribute("productList", productMCategoryList);
             if (!dcategoryNameParam.equals("emptyDcategoryName")) {
-                int dCategoryNo = shopMapper.selectDCategoryNo(shop);
-                List<ShopVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
+                int dCategoryNo = shop_mapper.selectDCategoryNo(shop);
+                List<ShopVo> productDCategoryList = shop_mapper.selectProductDCategoryList(dCategoryNo);
                 model.addAttribute("productList", productDCategoryList);
             }
         }
         if (mcategoryName.equals("emptyMcategoryName") && dcategoryNameParam.equals("emptyDcategoryName")) {
 
-            List<ShopVo> productList = shopMapper.selectListSports(categoryNo);
+            List<ShopVo> productList = shop_mapper.selectListSports(categoryNo);
             model.addAttribute("productList", productList);
             System.out.println(productList);
 
@@ -120,16 +134,16 @@ public class ShopController {
     }
 
     // 스포츠 상품 클릭 시 이동하는 상세페이지
-    @RequestMapping("/productOne.do")
-    public String productOne(int categoryNo, int pIdx, Model model) {
+    @RequestMapping("/sports_one.do")
+    public String sports_one(int categoryNo, int pIdx, Model model) {
 
-        ShopVo shop = (ShopVo) shopMapper.selectProductInfoList(categoryNo, pIdx);
+        ShopVo shop = (ShopVo) shop_mapper.selectProductInfoList(categoryNo, pIdx);
         shop.setCategoryNo(categoryNo);
         shop.setPIdx(pIdx);
 
         model.addAttribute("shop", shop);
 
-        return "shopPage/productOne";
+        return "shopPage/sportsOne";
     }
 
     // 게임카테고리 전체조회
@@ -144,5 +158,11 @@ public class ShopController {
     public String mypage() {
 
         return "shopPage/mypage";
+    }
+
+    @RequestMapping("/product_insert.do")
+    public String product_insert() {
+
+        return "shopPage/productInsert";
     }
 }

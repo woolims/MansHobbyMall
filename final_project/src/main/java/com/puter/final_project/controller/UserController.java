@@ -128,11 +128,11 @@ public class UserController {
 		UserVo user = userMapper.selectOneFromId(vo.getId());
 		if(user == null){
 			ra.addAttribute("reason", "fail_id");
-			return "redirect:" + url;
+			return "redirect:../home.do";
 		}
 		if(user.getPassword().equals(vo.getPassword()) == false){
 			ra.addAttribute("reason", "fail_password");
-			return "redirect:" + url;
+			return "redirect:../home.do";
 		}
 		vo.setUserIdx(user.getUserIdx());
 		int res = userMapper.emailInsert(vo);
@@ -143,6 +143,8 @@ public class UserController {
 
 		return "redirect:../home.do";
 	}
+
+
 
 	@RequestMapping("admin.do")
 	public String adminPage(Model model) {
