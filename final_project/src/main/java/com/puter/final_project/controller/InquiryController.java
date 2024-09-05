@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.puter.final_project.dao.InquiryMapper;
+import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.InquiryVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -27,6 +28,9 @@ public class InquiryController {
     @Autowired
     InquiryMapper inquiryMapper;
 
+    @Autowired
+    UserMapper userMapper;
+
     // 고객문의 페이지
     @RequestMapping("inquiry.do")
     public String inquiry(Model model) {
@@ -44,7 +48,10 @@ public class InquiryController {
 
         InquiryVo vo = inquiryMapper.selectOne(inIdx);
 
+        UserVo user = userMapper.selectOneFromUserIdx(vo.getUserIdx());
+
         model.addAttribute("vo", vo);
+        model.addAttribute("user", user);
 
         return "inquiry/inquirySelect";
     }

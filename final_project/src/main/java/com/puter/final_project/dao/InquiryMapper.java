@@ -14,6 +14,7 @@ public interface InquiryMapper {
     // 게시글 추가
     public int inquiryInsert(InquiryVo vo);
 
+    // 게시글 상세 조회
     public InquiryVo selectOne(int inIdx);
 
 }
