@@ -4,6 +4,10 @@
     <html>
 
     <head>
+        <!-- Bootstrap 3.x-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <meta charset="UTF-8">
         <title>Admin Page</title>
         <link rel="stylesheet" type="text/css" href="styles.css">
@@ -115,6 +119,19 @@
                 f.action = "pDelete.do";
                 f.submit();
             }
+
+            function pUpdate(f) {
+                // let pIdx = f.pIdx.value;
+                // let categoryName = f.categoryName.value;
+                // let mcategoryName = f.mcategoryName.value;
+                // let dcategoryName = f.dcategoryName.value;
+                // let pName = f.pName.value;
+                // let amount = f.amount.value;
+                // let price = f.price.value;
+                if (confirm("수정하시겠습니까?") == false) return;
+                f.action = "pUpdateForm.do";
+                f.submit();
+            }
         </script>
 
     </head>
@@ -182,8 +199,9 @@
                             <h1>내역이 없습니다.</h1>
                         </c:when>
                         <c:otherwise>
-                            <c:forEach var="p_vo" items="${pList}">
+                            <c:forEach var="pVo" items="${pList}">
                                 <table>
+
                                     <tr id="p_th">
                                         <th>상품번호</th>
                                         <th>대분류</th>
@@ -194,19 +212,28 @@
                                         <th>상품가격</th>
                                     </tr>
                                     <tr>
-                                        <td>${p_vo.getPIdx()}</td>
-                                        <td>${p_vo.getCategoryName()}</td>
-                                        <td>${p_vo.getMcategoryName()}</td>
-                                        <td>${p_vo.getDcategoryName()}</td>
-                                        <td>${p_vo.getPName()}</td>
-                                        <td>${p_vo.getAmount()}</td>
-                                        <td>${p_vo.getPrice()}</td>
 
-                                        <input type="button" name="userIdx" value="수정하기"
-                                            onclick="pUpdate('${p_vo.getPIdx()}');">
+                                        <td>${pVo.getPIdx()}</td>
+                                        <td>${pVo.getCategoryName()}</td>
+                                        <td>${pVo.getMcategoryName()}</td>
+                                        <td>${pVo.getDcategoryName()}</td>
+                                        <td>${pVo.getPName()}</td>
+                                        <td>${pVo.getAmount()}</td>
+                                        <td>${pVo.getPrice()}</td>
                                         <form>
-                                            <input type="hidden" name="pIdx" value="${p_vo.getPIdx()}">
-                                            <input type="button" value="삭제하기"
+                                            <input type="hidden" name="pIdx" value="${pVo.getPIdx()}">
+                                            <input type="hidden" name="categoryName" value="${pVo.getCategoryName()}">
+                                            <input type="hidden" name="mcategoryName" value="${pVo.getMcategoryName()}">
+                                            <input type="hidden" name="dcategoryName" value="${pVo.getDcategoryName()}">
+                                            <input type="hidden" name="pName" value="${pVo.getPName()}">
+                                            <input type="hidden" name="amount" value="${pVo.getAmount()}">
+                                            <input type="hidden" name="price" value="${pVo.getPrice()}">
+                                            <input type="button" class="btn btn-default" value="수정"
+                                                onclick="pUpdate(this.form);">
+                                        </form>
+                                        <form>
+                                            <input type="hidden" name="pIdx" value="${pVo.getPIdx()}">
+                                            <input type="button" class="btn btn-danger" value="삭제"
                                                 onclick="confirmProductDelete(this.form);">
                                         </form>
                                     </tr>

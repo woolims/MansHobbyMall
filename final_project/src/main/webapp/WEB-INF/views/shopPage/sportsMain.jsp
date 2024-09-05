@@ -85,28 +85,28 @@
             <div id="main">
               <hr>
               <div id="mcategory">
-                <c:forEach var="shop_m" items="${mCategoryNameList}">
-                  <input type="button" id="${shop_m.mcategoryName}" class="btn btn-default"
-                    value="${shop_m.mcategoryName}" onclick="mCategoryNoParam(this);">
+                <c:forEach var="shopM" items="${mCategoryNameList}">
+                  <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
+                    value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);">
                 </c:forEach>
               </div>
               <hr>
               <c:if test="${mcategoryName != 'emptyMcategoryName'}">
                 <div id="dcategory" style="text-align: center;">
-                  <c:forEach var="shop_d" items="${dCategoryName}">
-                    <input type="button" id="${shop_d.dcategoryNo}" class="btn btn-default"
-                      value="${shop_d.dcategoryName}" style="text-align: center;" onclick="dCategoryNoParam(this);">
+                  <c:forEach var="shopD" items="${dCategoryName}">
+                    <input type="button" id="${shopD.dcategoryNo}" class="btn btn-default"
+                      value="${shopD.dcategoryName}" style="text-align: center;" onclick="dCategoryNoParam(this);">
                   </c:forEach>
                 </div>
                 <hr>
               </c:if>
 
               <div id="product">
-                <c:forEach var="shop_p" items="${productList}">
+                <c:forEach var="shopP" items="${productList}">
                   <div
                     style="margin: auto; border: 1px solid black; width: 280px; height: 350px; display: inline-block;  margin-bottom: 10px; text-align: center;"
-                    onclick="location.href='${ pageContext.request.contextPath }/product_one.do?categoryNo=${shop_p.categoryNo}&pIdx=${shop_p.getPIdx()}'">
-                    <div style="text-align: center;"> ${shop_p.getPName()} </div>
+                    onclick="location.href='${ pageContext.request.contextPath }/productOne.do?categoryNo=${shopP.categoryNo}&pIdx=${shopP.getPIdx()}'">
+                    <div style="text-align: center;"> ${shopP.getPName()} </div>
                   </div>
                 </c:forEach>
               </div>

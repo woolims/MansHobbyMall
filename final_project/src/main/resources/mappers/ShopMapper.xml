@@ -60,6 +60,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from shop_list_view where categoryNo = #{categoryNo} and pIdx=#{pIdx}
     </select>
 
+    <!-- 수정 시 상품 설명가져오기 -->
+    <select id="selectPEx" resultType="String" parameterType="int">
+        select PEx from shop_list_view where pIdx=#{pIdx}
+    </select>
+
+    <!-- categoryName을 이용해서 categoryNo 얻기 -->
+    <select id="selectCategoryNo" resultType="int" parameterType="String">
+        select categoryNo from shop_list_view where categoryName=#{categoryName} Group by categoryNo
+    </select>
+
+    <!-- mcategoryName을 이용해서 categoryNo 얻기 -->
+    <select id="selectMcategoryNo" resultType="int" parameterType="String">
+        select mcategoryNo from shop_list_view where mcategoryName=#{mcategoryName} Group by mcategoryNo
+    </select>
+
+    <!-- dcategoryName을 이용해서 categoryNo 얻기 -->
+    <select id="selectDcategoryNo" resultType="int" parameterType="String">
+        select dcategoryNo from shop_list_view where dcategoryName=#{dcategoryName} Group by dcategoryNo
+    </select>
+
+    <update id="productUpdate" parameterType="shop">
+        update product set categoryNo=#{categoryNo}, dcategoryNo=#{dcategoryNo}, mcategoryNo=#{mcategoryNo}, pName=#{pName}, pEx=#{pEx}, amount=#{amount}, price=#{price} where pIdx=#{pIdx}
+    </update>
+
+
+
 
 
 </mapper>

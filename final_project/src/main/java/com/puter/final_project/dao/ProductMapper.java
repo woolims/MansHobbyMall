@@ -11,8 +11,6 @@ public interface ProductMapper {
 
     List<ProductVo> selectList();
 
-    ProductVo productInsert(ProductVo product);
-
     int pDelete(int pIdx);
 
 }

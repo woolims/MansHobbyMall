@@ -86,18 +86,37 @@ public class AdminController {
         return "redirect:admin.do";
     }
 
-    @RequestMapping("p_insert.do")
-    public String p_insert() {
+    @RequestMapping("/pInsertForm.do")
+    public String productInsert() {
 
-        return "";
-
+        return "shopPage/productInsertForm";
     }
 
-    @RequestMapping("p_select.do")
-    public String p_select() {
+    @RequestMapping("/pUpdateForm.do")
+    public String pUpdateForm(ShopVo shop, Model model) {
+
+        String pEx = shopMapper.selectPEx(shop.getPIdx());
+
+        model.addAttribute("shop", shop);
+        model.addAttribute("pEx", pEx);
+
+        return "shopPage/pUpdateForm";
+    }
+
+    @RequestMapping("/pUpdate.do")
+    public String pUpdate(ShopVo shop, Model model) {
+
+        int categoryNo = shopMapper.selectCategoryNo(shop.getCategoryName());
+        int mcategoryNo = shopMapper.selectMcategoryNo(shop.getMcategoryName());
+        int dcategoryNo = shopMapper.selectDcategoryNo(shop.getDcategoryName());
+
+        shop.setCategoryNo(categoryNo);
+        shop.setMcategoryNo(mcategoryNo);
+        shop.setDcategoryNo(dcategoryNo);
+
+        model.addAttribute(shopMapper.productUpdate(shop));
 
         return "redirect:admin.do";
-
     }
 
 }
