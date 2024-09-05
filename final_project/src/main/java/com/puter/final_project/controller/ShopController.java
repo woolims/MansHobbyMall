@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 public class ShopController {
 
     @Autowired
-    ShopMapper shop_mapper;
+    ShopMapper shopMapper;
 
     @Autowired
     UserMapper userMapper;
@@ -51,13 +51,12 @@ public class ShopController {
         if (showSignUpModal != null && showSignUpModal.equals("true")) {
             model.addAttribute("showSignUpModal", true);
         }
-        
+
         return "home";
     }
 
-
-	// 간편 로그인
-	@GetMapping("/easyLogin.do")
+    // 간편 로그인
+    @GetMapping("/easyLogin.do")
     public String easyLogin(RedirectAttributes ra) {
         // 현재 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,18 +73,17 @@ public class ShopController {
             System.out.println(esite);
 
             UserVo user = userMapper.selectOneFromEmail(email, esite);
-            if(user != null){
-                //로그인 처리
+            if (user != null) {
+                // 로그인 처리
                 session.setAttribute("user", user);
-				return "redirect:home.do";
-            }
-            else {
+                return "redirect:home.do";
+            } else {
                 ra.addAttribute("showSignUpModal", "true");
                 return "redirect:home.do";
             }
 
         }
-		return "home"; // home.jsp로 이동
+        return "home"; // home.jsp로 이동
         // return "redirect:../home.do"; // home.jsp로 이동
     }
 
@@ -97,7 +95,7 @@ public class ShopController {
             @RequestParam(name = "mcategoryName", defaultValue = "emptyMcategoryName") String mcategoryName,
             @RequestParam(name = "dcategoryName", defaultValue = "emptyDcategoryName") String dcategoryNameParam) {
 
-        List<ShopVo> mCategoryNameList = shop_mapper.selectMCategoryNameList(categoryNo);
+        List<ShopVo> mCategoryNameList = shopMapper.selectMCategoryNameList(categoryNo);
 
         ShopVo shop = new ShopVo();
         shop.setCategoryNo(categoryNo);
@@ -106,23 +104,21 @@ public class ShopController {
 
         if (!mcategoryName.equals("emptyMcategoryName")) {
             shop.setMcategoryName(mcategoryName);
-            int mCategoryNo = shop_mapper.selectMCategoryNo(shop);
-            List<ShopVo> dCategoryName = shop_mapper.selectdCategoryNameList(mCategoryNo);
-            List<ShopVo> productMCategoryList = shop_mapper.selectProductMCategoryList(mCategoryNo);
+            int mCategoryNo = shopMapper.selectMCategoryNo(shop);
+            List<ShopVo> dCategoryName = shopMapper.selectdCategoryNameList(mCategoryNo);
+            List<ShopVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
             model.addAttribute("dCategoryName", dCategoryName);
             model.addAttribute("productList", productMCategoryList);
             if (!dcategoryNameParam.equals("emptyDcategoryName")) {
-                int dCategoryNo = shop_mapper.selectDCategoryNo(shop);
-                List<ShopVo> productDCategoryList = shop_mapper.selectProductDCategoryList(dCategoryNo);
+                int dCategoryNo = shopMapper.selectDCategoryNo(shop);
+                List<ShopVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
                 model.addAttribute("productList", productDCategoryList);
             }
         }
         if (mcategoryName.equals("emptyMcategoryName") && dcategoryNameParam.equals("emptyDcategoryName")) {
 
-            List<ShopVo> productList = shop_mapper.selectListSports(categoryNo);
+            List<ShopVo> productList = shopMapper.selectListSports(categoryNo);
             model.addAttribute("productList", productList);
-            System.out.println(productList);
-
         }
         if (mcategoryName.equals("emptyMcategoryName")) {
             model.addAttribute("mcategoryName", mcategoryName);
@@ -134,16 +130,16 @@ public class ShopController {
     }
 
     // 스포츠 상품 클릭 시 이동하는 상세페이지
-    @RequestMapping("/sports_one.do")
+    @RequestMapping("/productOne.do")
     public String sports_one(int categoryNo, int pIdx, Model model) {
 
-        ShopVo shop = (ShopVo) shop_mapper.selectProductInfoList(categoryNo, pIdx);
+        ShopVo shop = (ShopVo) shopMapper.selectProductInfoList(categoryNo, pIdx);
         shop.setCategoryNo(categoryNo);
         shop.setPIdx(pIdx);
 
         model.addAttribute("shop", shop);
 
-        return "shopPage/sportsOne";
+        return "shopPage/productOne";
     }
 
     // 게임카테고리 전체조회
@@ -158,11 +154,5 @@ public class ShopController {
     public String mypage() {
 
         return "shopPage/mypage";
-    }
-
-    @RequestMapping("/product_insert.do")
-    public String product_insert() {
-
-        return "shopPage/productInsert";
     }
 }
