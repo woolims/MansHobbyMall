@@ -20,6 +20,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       rvIdx DESC
   </select>
 
+  <select id="getReviewInfo" parameterType="int" resultType="review">
+    SELECT * FROM ReviewView WHERE rvIdx = #{rvIdx} order by rvDate
+  </select>
+
   <!-- 리뷰 작성 -->
   <insert id="insertReview" parameterType="review">
   INSERT INTO review
@@ -39,7 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     UPDATE review
     SET 
       rvContent = #{rvContent}, 
-      reviewPoint = #{reviewPoint}, 
+      reviewPoint = 5, 
       rvImg = #{rvImg}
     WHERE 
       rvIdx = #{rvIdx}

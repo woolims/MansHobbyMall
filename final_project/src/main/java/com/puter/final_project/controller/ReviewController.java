@@ -3,9 +3,13 @@ package com.puter.final_project.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.vo.InquiryVo;
@@ -61,7 +65,7 @@ public class ReviewController {
             return "redirect:review.do";
         } else {
             model.addAttribute("error", "리뷰 작성에 실패했습니다.");
-            return "shopPage/reviewWriteForm"; // 실패 시 에러 메시지와 함께 폼으로 돌아감
+            return "redirect:review.do"; // 실패 시 에러 메시지와 함께 폼으로 돌아감
         }
     }
 
@@ -75,6 +79,22 @@ public class ReviewController {
             session.setAttribute("alertMsg", "삭제 실패했습니다.");
         }
 
+        return "redirect:review.do";
+    }
+
+    @GetMapping("getReviewInfo.do")
+    public ResponseEntity<ReviewVo> getReviewInfo(@RequestParam("rvIdx") int rvIdx) {
+        ReviewVo reviewVo = reviewMapper.getReviewInfo(rvIdx);
+        if (reviewVo != null) {
+            return ResponseEntity.ok(reviewVo); // 200 OK와 함께 JSON 반환
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
+    }
+
+    @RequestMapping("/reviewModify.do")
+    public String modifyReview(ReviewVo vo) {
+        reviewMapper.updateReview(vo);
         return "redirect:review.do";
     }
 
