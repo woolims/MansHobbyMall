@@ -66,23 +66,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- categoryName을 이용해서 categoryNo 얻기 -->
-    <select id="selectCategoryNo" resultType="int" parameterType="String">
-        select categoryNo from shop_list_view where categoryName=#{categoryName} Group by categoryNo
+    <select id="selectAdminCategoryNo" resultType="int" parameterType="shop">
+        select categoryNo from shop_list_view where categoryName=#{categoryName} and pIdx=#{pIdx} Group by categoryNo
     </select>
 
     <!-- mcategoryName을 이용해서 categoryNo 얻기 -->
-    <select id="selectMcategoryNo" resultType="int" parameterType="String">
-        select mcategoryNo from shop_list_view where mcategoryName=#{mcategoryName} Group by mcategoryNo
+    <select id="selectAdminMcategoryNo" resultType="int" parameterType="shop">
+        select mcategoryNo from shop_list_view where mcategoryName=#{mcategoryName} and pIdx=#{pIdx} Group by mcategoryNo
     </select>
 
     <!-- dcategoryName을 이용해서 categoryNo 얻기 -->
-    <select id="selectDcategoryNo" resultType="int" parameterType="String">
-        select dcategoryNo from shop_list_view where dcategoryName=#{dcategoryName} Group by dcategoryNo
+    <select id="selectAdminDcategoryNo" resultType="int" parameterType="shop">
+        select dcategoryNo from shop_list_view where dcategoryName=#{dcategoryName} and pIdx=#{pIdx} Group by dcategoryNo
     </select>
 
     <update id="productUpdate" parameterType="shop">
         update product set categoryNo=#{categoryNo}, dcategoryNo=#{dcategoryNo}, mcategoryNo=#{mcategoryNo}, pName=#{pName}, pEx=#{pEx}, amount=#{amount}, price=#{price} where pIdx=#{pIdx}
     </update>
+
+    <select id="selectCategoryNameList" resultType="shop">
+        select categoryName from shop_list_view Group by categoryName
+    </select>
 
 
 

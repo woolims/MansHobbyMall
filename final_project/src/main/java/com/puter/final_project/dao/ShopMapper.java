@@ -40,14 +40,16 @@ public interface ShopMapper {
 
     String selectPEx(int pIdx);
 
-    int selectCategoryNo(String categoryName);
+    int selectAdminCategoryNo(ShopVo shop);
 
-    int selectMcategoryNo(String mcategoryName);
+    int selectAdminMcategoryNo(ShopVo shop);
 
-    int selectDcategoryNo(String dcategoryName);
+    int selectAdminDcategoryNo(ShopVo shop);
 
     ProductVo productInsert(ProductVo product);
 
     int productUpdate(ShopVo shop);
+
+    List<ShopVo> selectCategoryNameList();
 
 }

@@ -192,16 +192,26 @@
 
                 <div id="menu2" class="tab-pane">
                     <h2>상품 관리</h2>
-
+                        <form>
+                            <div>
+                                <select name="searchOption" id="searchOption">
+                                        <option value="none">선택안함</option>
+                                    <c:forEach var="vo" items="${categoryName}">
+                                        <option value="${vo.getCategoryName()}">${vo.getCategoryName()}</option>
+                                    </c:forEach>
+                                </select>
+                                <input type="text" name="search" id="search">
+                                <input type="button" name="searchBtn" id="searchBtn" value="검색" onclick="search(this.form);">
+                            </div>
+                        </form>
                     <c:choose>
-                        <c:when test="${empty list}">
+                        <c:when test="${empty pList}">
                             <!-- list2가 null이거나 비어있을 때 표시할 내용 -->
                             <h1>내역이 없습니다.</h1>
                         </c:when>
                         <c:otherwise>
                             <c:forEach var="pVo" items="${pList}">
                                 <table>
-
                                     <tr id="p_th">
                                         <th>상품번호</th>
                                         <th>대분류</th>
@@ -212,7 +222,6 @@
                                         <th>상품가격</th>
                                     </tr>
                                     <tr>
-
                                         <td>${pVo.getPIdx()}</td>
                                         <td>${pVo.getCategoryName()}</td>
                                         <td>${pVo.getMcategoryName()}</td>

@@ -50,6 +50,9 @@ public class AdminController {
         List<UserVo> list = adminMapper.selectListUserView();
 
         List<ShopVo> pList = shopMapper.selectAdminList();
+
+        List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
+        
         // // 상품 관리 불러오기
         // List<AboardVo> list2 = .selectListMySb(user.getUserNo());
         // // 주문 관리 불러오기
@@ -57,6 +60,7 @@ public class AdminController {
         // // 공지사항 관리 불러오기
         // List<AboardVo> list4 = aboard_dao.selectListMySc(user.getUserNo());
 
+        model.addAttribute("categoryName", categoryName);
         model.addAttribute("list", list);
         model.addAttribute("pList", pList);
 
@@ -106,9 +110,9 @@ public class AdminController {
     @RequestMapping("/pUpdate.do")
     public String pUpdate(ShopVo shop, Model model) {
 
-        int categoryNo = shopMapper.selectCategoryNo(shop.getCategoryName());
-        int mcategoryNo = shopMapper.selectMcategoryNo(shop.getMcategoryName());
-        int dcategoryNo = shopMapper.selectDcategoryNo(shop.getDcategoryName());
+        int categoryNo = shopMapper.selectAdminCategoryNo(shop);
+        int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
+        int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
 
         shop.setCategoryNo(categoryNo);
         shop.setMcategoryNo(mcategoryNo);
