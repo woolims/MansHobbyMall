@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.puter.final_project.dao.AdminMapper;
 import com.puter.final_project.dao.ProductMapper;
@@ -17,6 +19,8 @@ import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/admin/")
@@ -52,6 +56,8 @@ public class AdminController {
         List<ShopVo> pList = shopMapper.selectAdminList();
 
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
+
+        
         
         // // 상품 관리 불러오기
         // List<AboardVo> list2 = .selectListMySb(user.getUserNo());
@@ -70,6 +76,71 @@ public class AdminController {
 
         return "shopPage/adminMain";
     }
+    @RequestMapping("adminAjax.do")
+    @ResponseBody
+    public List<ShopVo> adminAjax(@RequestParam(defaultValue = "none")String categoryName, String mcategoryName){
+
+        if (categoryName.equals("none")) {
+            List<ShopVo> AdminList = shopMapper.selectAdminList();
+            return AdminList;
+        }
+
+        if (categoryName != null && !categoryName.equals("none")) {
+            String categoryNameParam = categoryName;
+            List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryNameParam);
+            return mcategoryNameList;
+        }
+        if (mcategoryName != null && !mcategoryName.equals("none")){
+            String mcategoryNameParam = mcategoryName;
+            List<ShopVo> dcategoryNameList = shopMapper.selectDcategoryNameList(mcategoryNameParam);
+            return dcategoryNameList;
+        }
+
+        return Collections.emptyList();
+    }
+
+    @RequestMapping("adminAjaxPList.do")
+    @ResponseBody
+    public List<ShopVo> adminAjaxPList(String search, ShopVo shop){
+
+        shop.setPName(search);
+
+        // 검색어(상품명)만 입력한 경우
+        if (shop.getCategoryName()==null) {
+            List<ShopVo> searchList = shopMapper.selectSearchList(search);
+            return searchList;
+        }
+
+        // // 대분류만 검색한 경우
+        // if (shop.getCategoryName()!=null && search == null) {
+        //     List<ShopVo> categoryList = shopMapper.selectCategoryList(shop);
+        //     return categoryList;
+        // }
+
+        // // 대분류와 검색어(상품명)를 검색한 경우
+        // if (shop.getCategoryName()!=null && search != null) {
+        //     List<ShopVo> categorySearchList = shopMapper.selectCategorySearchList(shop);
+        //     return categorySearchList;
+        // }
+
+        // // 대분류와 중분류를 검색한 경우
+        // if (shop.getMcategoryName()!=null && search == null) {
+        //     List<ShopVo> mcategorySearchList = shopMapper.selectMcategoryList(shop);
+        //     return mcategorySearchList;
+        // }
+
+        // // 중분류와 검색어(상품명)를 검색한 경우
+        // if (shop.getMcategoryName()!=null && search == null) {
+        //     List<ShopVo> mcategorySearchList = shopMapper.selectMcategorySearchList(shop);
+        //     return mcategorySearchList;
+        // }
+
+
+
+
+        return Collections.emptyList();
+    }
+
 
     @RequestMapping("delete.do")
     public String delete(int userIdx) {

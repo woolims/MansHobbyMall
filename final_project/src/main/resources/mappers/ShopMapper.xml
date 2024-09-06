@@ -88,6 +88,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select categoryName from shop_list_view Group by categoryName
     </select>
 
+    <select id="selectMcategoryNameList" resultType="shop" parameterType="String">
+        select mcategoryName from shop_list_view where categoryName=#{categoryName} Group by mcategoryName 
+    </select>
+
+    <select id="selectDcategoryNameList" resultType="shop" parameterType="String">
+        select dcategoryName from shop_list_view where mcategoryName=#{mcategoryName} Group by dcategoryName 
+    </select>
+
+    <select id="selectSearchList" resultType="shop" parameterType="String">
+        select pName from shop_list_view where Like '#{search}' Group by pName 
+    </select>
+
+    
+
 
 
 

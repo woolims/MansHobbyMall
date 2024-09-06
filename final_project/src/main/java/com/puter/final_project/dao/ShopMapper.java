@@ -52,4 +52,10 @@ public interface ShopMapper {
 
     List<ShopVo> selectCategoryNameList();
 
+    List<ShopVo> selectMcategoryNameList(String categoryName);
+
+    List<ShopVo> selectDcategoryNameList(String mcategoryName);
+
+    List<ShopVo> selectSearchList(String search);
+
 }
