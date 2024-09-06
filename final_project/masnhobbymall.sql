@@ -427,9 +427,6 @@ insert into product values(null, 2, 6, 16, '기타', '모자?', 4, 100);
 
 
 CREATE OR REPLACE
-    ALGORITHM = UNDEFINED 
-    DEFINER = `final`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,
@@ -439,14 +436,16 @@ VIEW `shop_list_view` AS
         `p`.`pName` AS `pName`,
         `p`.`pEx` AS `pEx`,
         `p`.`price` AS `price`,
+		`p`.`amount` As `amount`,
         `c`.`categoryName` AS `categoryName`,
         `m`.`mcategoryName` AS `mcategoryName`,
         `d`.`dcategoryName` AS `dcategoryName`
+        
     FROM
         (((`product` `p`
         JOIN `category` `c` ON ((`p`.`categoryNo` = `c`.`categoryNo`)))
         JOIN `mcategory` `m` ON ((`p`.`mcategoryNo` = `m`.`mcategoryNo`)))
-        JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)))
+        JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)));
 
 
         CREATE OR REPLACE VIEW UserStatusView AS
