@@ -10,7 +10,7 @@ import com.puter.final_project.vo.ReviewVo;
 public interface ReviewMapper {
 
     // 모든 리뷰 가져오기
-    List<ReviewVo> getAllReviews();
+    List<ReviewVo> selectList();
 
     // 특정 리뷰 조회
     ReviewVo getReviewByIdx(int rvIdx);
@@ -23,4 +23,6 @@ public interface ReviewMapper {
 
     // 리뷰 삭제
     int deleteReview(int rvIdx);
+
+    ReviewVo getReviewInfo(int rvIdx);
 }

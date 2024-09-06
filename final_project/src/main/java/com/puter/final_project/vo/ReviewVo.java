@@ -14,5 +14,18 @@ public class ReviewVo {
     String rvContent;
     int reviewPoint;
     String rvImg;
+    String rvDate;
+
+    int gIdx;
+    String id;
+    String password;
+    String nickName;
+    String name;
+    String phone;
+    String addr;
+    String subAddr;
+    String adminAt;
+    int point;
+    String createAt;
 
 }

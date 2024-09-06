@@ -225,7 +225,8 @@ CREATE TABLE review (
     pIdx int NOT NULL,
     userIdx int NOT NULL,
     rvContent LONGTEXT NOT NULL,
-    reviewPoint int NOT NULL DEFAULT 5
+    reviewPoint int NOT NULL DEFAULT 5,
+    rvDate DATETIME NOT NULL DEFAULT now()
 );
 -- Review 테이블과 Product, User 테이블의 외래 키
 ALTER TABLE Review
@@ -446,7 +447,7 @@ VIEW `shop_list_view` AS
         (((`product` `p`
         JOIN `category` `c` ON ((`p`.`categoryNo` = `c`.`categoryNo`)))
         JOIN `mcategory` `m` ON ((`p`.`mcategoryNo` = `m`.`mcategoryNo`)))
-        JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)))
+        JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)));
 
 
     CREATE OR REPLACE VIEW UserStatusView AS
