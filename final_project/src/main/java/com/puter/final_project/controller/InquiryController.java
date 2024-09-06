@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.puter.final_project.dao.InquiryMapper;
-import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.InquiryVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -66,6 +65,15 @@ public class InquiryController {
         vo.setUserIdx(user.getUserIdx());
 
         int res = inquiryMapper.inquiryInsert(vo);
+
+        return "redirect:inquiry.do";
+    }
+
+    // 게시글 삭제
+    @RequestMapping("inquiryDelete.do")
+    public String inquiryDelete(int inIdx) {
+
+        int res = inquiryMapper.delete(inIdx);
 
         return "redirect:inquiry.do";
     }

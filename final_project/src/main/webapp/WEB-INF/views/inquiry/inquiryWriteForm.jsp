@@ -67,7 +67,13 @@
                 <form>
                     <div class="form-group">
                         <label for="title">제목</label>
-                        <input type="text" class="form-control" id="inType" name="inType" required>
+                        <select class="form-control" id="inType" name="inType" required>
+                            <option value="">-- 제목 선택 --</option>
+                            <option value="문의">문의</option>
+                            <option value="불만사항">불만사항</option>
+                            <option value="칭찬">칭찬</option>
+                            <option value="기타">기타</option>
+                        </select>
                     </div>
                     <div class="form-group" style="color: black;">
                         <label for="content" style="color: white;">내용</label>

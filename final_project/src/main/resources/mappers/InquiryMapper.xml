@@ -15,10 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select * from InquiryView where inIdx=#{inIdx}
   </select>
 
-  <!-- inquiry 작성 -->
+  <!-- 게시글 작성 -->
   <insert id="inquiryInsert" parameterType="inquiry">
+    <!-- 나중에 수정 필요 -->
     insert into inquiry values(
-      null, 
+      null,
       1, 
       #{userIdx}, 
       #{inType}, 
@@ -27,4 +28,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       null
       )
   </insert>
+
+  <!-- 게시글 삭제 -->
+  <delete id="delete" parameterType="int">
+    delete from inquiry where inIdx=#{inIdx}
+  </delete>
+  
 </mapper>
