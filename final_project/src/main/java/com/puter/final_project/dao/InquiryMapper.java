@@ -20,4 +20,7 @@ public interface InquiryMapper {
     // 게시글 삭제
     public int delete(int inIdx);
 
+    // 게시글 수정
+    public int update(InquiryVo vo);
+
 }
