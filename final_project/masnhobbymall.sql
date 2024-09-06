@@ -449,22 +449,35 @@ VIEW `shop_list_view` AS
         JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)))
 
 
-        CREATE OR REPLACE VIEW UserStatusView AS
-        SELECT DISTINCT
-            u.userIdx,
-            u.gIdx,
-            u.id,
-            u.password,
-            u.nickName,
-            u.name,
-            u.phone,
-            u.addr,
-            u.subAddr,
-            u.adminAt,
-            u.point,
-            u.createAt,
-            e.emailIdx,
-            e.email,
-            e.esite
-        FROM email e
-        INNER JOIN User u ON e.userIdx = u.userIdx;
+    CREATE OR REPLACE VIEW UserStatusView AS
+    SELECT DISTINCT
+        u.userIdx,
+        u.gIdx,
+        u.id,
+        u.password,
+        u.nickName,
+        u.name,
+        u.phone,
+        u.addr,
+        u.subAddr,
+        u.adminAt,
+        u.point,
+        u.createAt,
+        e.emailIdx,
+        e.email,
+        e.esite
+    FROM email e
+    INNER JOIN User u ON e.userIdx = u.userIdx;
+
+    CREATE OR REPLACE VIEW InquiryView AS
+    SELECT
+        i.inIdx,
+        i.pIdx,
+        i.userIdx,
+        i.inType,
+        i.inContent,
+        i.inDate,
+        i.inPP,
+        u.name
+    FROM Inquiry i
+    INNER JOIN User u ON i.userIdx = u.userIdx;
