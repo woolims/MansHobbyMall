@@ -426,9 +426,7 @@
             </div>
             <div class="divider">또는</div>
             <a href="/oauth2/authorization/naver" class="social-btn naver-btn">네이버로 시작하기</a>
-            <button type="button" class="social-btn kakao-btn">
-              카카오로 시작하기
-            </button>
+            <a href="/oauth2/authorization/kakao" class="social-btn kakao-btn">카카오로 시작하기</a>
             <a href="/oauth2/authorization/google" class="social-btn google-btn">구글로 시작하기</a>
           </form>
         </div>
