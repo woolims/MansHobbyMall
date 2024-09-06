@@ -82,7 +82,7 @@
                         </div>
                     </div>
                 </section>
-
+                
                 <!-- 푸터 -->
                 <%@ include file="menubar/footer.jsp" %>
                 

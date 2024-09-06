@@ -32,24 +32,37 @@ public class ReviewController {
     public String list(Model model) {
 
         // 전체 리뷰 불러오기
-        List<ReviewVo> list = reviewMapper.getAllReviews();
+        List<ReviewVo> list = reviewMapper.selectList();
 
         model.addAttribute("list", list);
 
         return "shopPage/review";
     }
 
-    // 게시글 작성
+    // 리뷰 작성
+    @RequestMapping("reviewWriteForm.do")
+    public String reviewWriteForm() {
+
+        return "shopPage/reviewWriteForm";
+    }
+
     @RequestMapping("reviewWrite.do")
-    public String reviewWrite(ReviewVo vo) {
+    public String reviewWrite(ReviewVo vo, HttpSession session, Model model) {
 
         UserVo user = (UserVo) session.getAttribute("user");
 
+        // 유저 정보 세팅
         vo.setUserIdx(user.getUserIdx());
 
+        // 데이터 삽입
         int res = reviewMapper.insertReview(vo);
 
-        return "redirect:review.do";
+        if (res > 0) {
+            return "redirect:review.do";
+        } else {
+            model.addAttribute("error", "리뷰 작성에 실패했습니다.");
+            return "shopPage/reviewWriteForm"; // 실패 시 에러 메시지와 함께 폼으로 돌아감
+        }
     }
 
     @RequestMapping("delete.do")

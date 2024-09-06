@@ -107,7 +107,7 @@
                         <!-- 푸터 -->
                         <%@ include file="../menubar/payment.jsp" %>
                     </div>
-
+                    <a href="/review/review.do">리뷰 테스트</a>
             </body>
 
             </html>
