@@ -99,6 +99,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSearchList" resultType="shop" parameterType="String">
         select pName from shop_list_view where Like '#{search}' Group by pName 
     </select>
+    
+     <select id="selectAdminMcategoryList" resultType="shop">
+        select mcategoryName from shop_list_view Group by mcategoryName 
+    </select>
 
     
 

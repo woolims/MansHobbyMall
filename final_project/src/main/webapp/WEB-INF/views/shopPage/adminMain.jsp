@@ -146,25 +146,25 @@
             }
 
             function mcategoryName(val){
-                if(val=='none') {
+                if($("#categorySearch").val()=='대분류 선택') {
                     let categoryName = val;
                     $.ajax({
-                    url: "/admin/adminAjax.do",
-                    data: {"categoryName": categoryName},
-                    dataType: "json",
-                    method: 'GET',
-                    success: function (data) {
-                        var mSelect = $('#mcategorySearch');
-                        var dSelect = $('#dcategorySearch');
-                        mSelect.empty();
-                        dSelect.empty();
-                        mSelect.append($('<option></option>').val('none').text('중분류 선택'))
-                        dSelect.append($('<option></option>').val('none').text('소분류 선택'))
-                    },
-                    error: function (err) {
-                        console.log(err.responseText);
-                    }
-                });
+                        url: "/admin/adminAjax.do",
+                        data: {"categoryName": categoryName},
+                        dataType: "json",
+                        method: 'GET',
+                        success: function (data) {
+                            var mSelect = $('#mcategorySearch');
+                            var dSelect = $('#dcategorySearch');
+                            mSelect.empty();
+                            dSelect.empty();
+                            mSelect.append($('<option></option>').val('중분류 선택').text('중분류 선택'))
+                            dSelect.append($('<option></option>').val('소분류 선택').text('소분류 선택'))
+                        },
+                        error: function (err) {
+                            console.log(err.responseText);
+                        }
+                    });
                     return;
                 }
 
@@ -175,13 +175,16 @@
                     dataType: "json",
                     method: 'GET',
                     success: function (data) {
-                        var select = $('#mcategorySearch');
-                        select.empty();
-                        select.append($('<option></option>').val('none').text('중분류 선택'))
+                        var mselect = $('#mcategorySearch');
+                        var dselect = $('#dcategorySearch');
+                        mselect.empty();
+                        dselect.empty();
+                        mselect.append($('<option></option>').val('중분류 선택').text('중분류 선택'))
+                        dselect.append($('<option></option>').val('소분류 선택').text('소분류 선택'))
                         // 데이터가 배열이라고 가정하고 수정
                         $.each(data, function(index, item) {
                             // 옵션 생성
-                            select.append($('<option></option>').val(item.mcategoryName).text(item.mcategoryName));
+                            mselect.append($('<option></option>').val(item.mcategoryName).text(item.mcategoryName));
                         });
                     },
                     error: function (err) {
@@ -191,7 +194,24 @@
             }
 
             function dcategoryName(val){
-                if(val=='중분류 선택') return;
+                if($("#mcategorySearch").val()=='중분류 선택') {
+                    let mcategoryName = val;
+                    $.ajax({
+                        url: "/admin/adminAjax.do",
+                        data: {"mcategoryName": mcategoryName},
+                        dataType: "json",
+                        method: 'GET',
+                        success: function (data) {
+                            var dSelect = $('#dcategorySearch');
+                            dSelect.empty();
+                            dSelect.append($('<option></option>').val('소분류 선택').text('소분류 선택'))
+                        },
+                        error: function (err) {
+                            console.log(err.responseText);
+                        }
+                    });
+                    return;
+                }
 
                 let mcategoryName = val;
                 $.ajax({
@@ -202,10 +222,8 @@
                     success: function (data) {
                         var select = $('#dcategorySearch');
                         select.empty();
-                        select.append($('<option></option>').val('none').text('소분류 선택'))
-                        // 데이터가 배열이라고 가정하고 수정
+                        select.append($('<option></option>').val('소분류 선택').text('소분류 선택'))
                         $.each(data, function(index, item) {
-                            // 옵션 생성
                             select.append($('<option></option>').val(item.dcategoryName).text(item.dcategoryName));
                         });
                     },
@@ -217,9 +235,9 @@
 
             function search(f){
                 let search = f.search.val().trim();
-                let categoryName = f.categorySearch.text();
-                let mcategoryName = f.mcategorySearch.text();
-                let dcategoryName = f.dcategorySearch.text();
+                let categoryName = f.categorySearch.val();
+                let mcategoryName = f.mcategorySearch.val();
+                let dcategoryName = f.dcategorySearch.val();
 
                 if(categoryName=='대분류 선택'){
                     if(search==""){
@@ -361,16 +379,16 @@
                         <form>
                             <div>
                                 <select name="categorySearch" id="categorySearch" onchange="mcategoryName(this.value);">
-                                    <option value="none">대분류 선택</option>
+                                    <option value="대분류 선택">대분류 선택</option>
                                     <c:forEach var="vo" items="${categoryName}">
                                         <option value="${vo.getCategoryName()}">${vo.getCategoryName()}</option>
                                     </c:forEach>
                                 </select>
                                 <select name="mcategorySearch" id="mcategorySearch" onchange="dcategoryName(this.value);">
-                                    <option value="none">중분류 선택</option>
+                                    <option value="중분류 선택">중분류 선택</option>
                                 </select>
                                 <select name="dcategorySearch" id="dcategorySearch">
-                                    <option value="none">소분류 선택</option>
+                                    <option value="소분류 선택">소분류 선택</option>
                                 </select>
                             </div>
                             <div id="searchs">

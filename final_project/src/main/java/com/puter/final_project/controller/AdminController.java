@@ -78,19 +78,14 @@ public class AdminController {
     }
     @RequestMapping("adminAjax.do")
     @ResponseBody
-    public List<ShopVo> adminAjax(@RequestParam(defaultValue = "none")String categoryName, String mcategoryName){
+    public List<ShopVo> adminAjax(@RequestParam(defaultValue = "대분류 선택")String categoryName, String mcategoryName){
 
-        if (categoryName.equals("none")) {
-            List<ShopVo> AdminList = shopMapper.selectAdminList();
-            return AdminList;
-        }
-
-        if (categoryName != null && !categoryName.equals("none")) {
+        if (categoryName != null && !categoryName.equals("대분류 선택")) {
             String categoryNameParam = categoryName;
             List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryNameParam);
             return mcategoryNameList;
         }
-        if (mcategoryName != null && !mcategoryName.equals("none")){
+        if (mcategoryName != null && !mcategoryName.equals("중분류 선택")){
             String mcategoryNameParam = mcategoryName;
             List<ShopVo> dcategoryNameList = shopMapper.selectDcategoryNameList(mcategoryNameParam);
             return dcategoryNameList;
