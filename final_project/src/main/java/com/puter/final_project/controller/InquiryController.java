@@ -78,4 +78,24 @@ public class InquiryController {
         return "redirect:inquiry.do";
     }
 
+    // 게시글 수정폼 이동
+    @RequestMapping("inquiryModifyForm.do")
+    public String inquiryModifyForm(int inIdx, Model model) {
+
+        InquiryVo vo = inquiryMapper.selectOne(inIdx);
+
+        model.addAttribute("vo", vo);
+
+        return "inquiry/inquiryModifyForm";
+    }
+
+    // 게시글 수정
+    @RequestMapping("inquiryModify.do")
+    public String inquiryModify(InquiryVo vo) {
+
+        int res = inquiryMapper.update(vo);
+
+        return "redirect:inquiry.do";
+    }
+
 }

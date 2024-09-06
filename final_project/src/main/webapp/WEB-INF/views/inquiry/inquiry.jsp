@@ -43,7 +43,7 @@
     function check_user(inIdx, userIdx) {
         // JSP에서 자바스크립트로 값을 전달하기 위해 변수로 변환
         var currentUserIdx = "${not empty user ? user.userIdx : -1}";
-        var isAdmin = (currentUserIdx == 1);  // 관리자 확인
+        var isAdmin = "${user.adminAt}"=="Y";  // 관리자 확인
 
         // 사용자가 관리자이거나 본인인지 확인
         if ((userIdx == currentUserIdx || isAdmin) && currentUserIdx != -1) {
