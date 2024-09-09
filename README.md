@@ -50,3 +50,19 @@ MansHobby는 남성들이 좋아할 취미 물품을 전문으로 다루는 쇼�
    ```bash
    git clone https://github.com/yourusername/MansHobby.git
    cd MansHobby
+2. **필요한 의존성 설치**
+   ```bash
+   npm install
+   # 또는
+   pip install -r requirements.txt
+3. 서버 실행
+   ```bash
+   npm start
+   # 또는
+   python manage.py runserver
+## 사용 방법
+- **회원가입/로그인**: 웹사이트 상단의 '회원가입' 또는 '로그인' 버튼을 클릭하여 계정을 생성하거나 로그인합니다.
+- **상품 탐색**: 메인 페이지에서 '게임' 및 '스포츠' 카테고리를 통해 다양한 상품을 탐색합니다.
+- **상품 구매**: 원하는 상품을 장바구니에 추가하고 결제 과정을 완료합니다.
+- **후기 작성**: 구매한 상품에 대해 후기를 작성하고, 다른 사용자의 후기를 확인합니다.
+
