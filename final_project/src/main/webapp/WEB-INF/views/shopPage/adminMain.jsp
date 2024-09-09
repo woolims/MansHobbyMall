@@ -233,38 +233,36 @@
                 });
             }
 
-            function search(f){
-                let search = f.search.val().trim();
-                let categoryName = f.categorySearch.val();
-                let mcategoryName = f.mcategorySearch.val();
-                let dcategoryName = f.dcategorySearch.val();
+            function pSearch(f){
+                let searchParam = f.searchParam.value.trim();
+                let categoryName = $("#categorySearch").val();
+                let mcategoryName = $("#mcategorySearch").val();
+                let dcategoryName = $("#dcategorySearch").val();
 
                 if(categoryName=='대분류 선택'){
-                    if(search==""){
+                    if(searchParam==""){
                         alert('카테고리를 선택하거나 검색어를 입력하세요')
-                        f.search.focus();
+                        f.searchParam.focus();
                         return;
                     }
+                    categoryName="";
                 }
 
                 if(mcategoryName=='중분류 선택'){
-                    f.mcategorySearch.val("");
+                    mcategoryName="";
                 }
 
                 if(dcategoryName=='소분류 선택'){
-                    f.dcategorySearch.val("");
+                    dcategoryName="";
                 }
 
                 $.ajax({
                     url: "/admin/adminAjaxPList.do",
-                    data: { "search":search,"categoryName":categoryName ,"mcategoryName": mcategoryName,"dcategoryName":dcategoryName},
+                    data: { "searchParam":searchParam,"categoryName":categoryName ,"mcategoryName": mcategoryName,"dcategoryName":dcategoryName},
                     dataType: "json",
                     method: 'GET',
                     success: function(data) {
-                        // 테이블 헤더와 데이터의 기본 구조 생성
-                        var pListHtml;
-                        $.each(data, function(index, pVo) {
-                         pListHtml = `
+                        var pListHtml = `
                             <table>
                                 <thead>
                                     <tr>
@@ -278,28 +276,31 @@
                                         <th>작업</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody>`;
+
+                        $.each(data, function(index, pVo) {
+                            pListHtml += `
                                 <tr>
-                                    <td>${pVo.pIdx}</td>
-                                    <td>${pVo.categoryName}</td>
-                                    <td>${pVo.mcategoryName}</td>
-                                    <td>${pVo.dcategoryName}</td>
-                                    <td>${pVo.pName}</td>
-                                    <td>${pVo.amount}</td>
-                                    <td>${pVo.price}</td>
+                                    <td>${pVo.getPIdx()}</td>
+                                    <td>${pVo.getCategoryName()}</td>
+                                    <td>${pVo.getMcategoryName()}</td>
+                                    <td>${pVo.getDcategoryName()}</td>
+                                    <td>${pVo.getPName()}</td>
+                                    <td>${pVo.getAmount()}</td>
+                                    <td>${pVo.getPrice()}</td>
                                     <td>
                                         <form>
-                                            <input type="hidden" name="pIdx" value="${pVo.pIdx}">
-                                            <input type="hidden" name="categoryName" value="${pVo.categoryName}">
-                                            <input type="hidden" name="mcategoryName" value="${pVo.mcategoryName}">
-                                            <input type="hidden" name="dcategoryName" value="${pVo.dcategoryName}">
-                                            <input type="hidden" name="pName" value="${pVo.pName}">
-                                            <input type="hidden" name="amount" value="${pVo.amount}">
-                                            <input type="hidden" name="price" value="${pVo.price}">
+                                            <input type="hidden" name="pIdx" value="${pVo.getPIdx()}">
+                                            <input type="hidden" name="categoryName" value="${pVo.getCategoryName()}">
+                                            <input type="hidden" name="mcategoryName" value="${pVo.getMcategoryName()}">
+                                            <input type="hidden" name="dcategoryName" value="${pVo.getDcategoryName()}">
+                                            <input type="hidden" name="pName" value="${pVo.getPName()}">
+                                            <input type="hidden" name="amount" value="${pVo.getAmount()}">
+                                            <input type="hidden" name="price" value="${pVo.getPrice()}">
                                             <input type="button" class="btn btn-default" value="수정" onclick="pUpdate(this.form);">
                                         </form>
                                         <form>
-                                            <input type="hidden" name="pIdx" value="${pVo.pIdx}">
+                                            <input type="hidden" name="pIdx" value="${pVo.getPIdx()}">
                                             <input type="button" class="btn btn-danger" value="삭제" onclick="confirmProductDelete(this.form);">
                                         </form>
                                     </td>
@@ -315,6 +316,7 @@
                         console.log(err.responseText);
                     }
                 });
+                return;
             }
         </script>
 
@@ -376,29 +378,26 @@
 
                 <div id="menu2" class="tab-pane">
                     <h2>상품 관리</h2>
-                        <form>
-                            <div>
-                                <select name="categorySearch" id="categorySearch" onchange="mcategoryName(this.value);">
-                                    <option value="대분류 선택">대분류 선택</option>
-                                    <c:forEach var="vo" items="${categoryName}">
-                                        <option value="${vo.getCategoryName()}">${vo.getCategoryName()}</option>
-                                    </c:forEach>
-                                </select>
-                                <select name="mcategorySearch" id="mcategorySearch" onchange="dcategoryName(this.value);">
-                                    <option value="중분류 선택">중분류 선택</option>
-                                </select>
-                                <select name="dcategorySearch" id="dcategorySearch">
-                                    <option value="소분류 선택">소분류 선택</option>
-                                </select>
-                            </div>
-                            <div id="searchs">
-                                <input type="text" name="search" id="search">
-                                <input type="button" class="btn btn-default" name="searchBtn" id="searchBtn" value="검색" onclick="search(this.form);">
-                            </div>
+                        <div>
+                            <select name="categorySearch" id="categorySearch" onchange="mcategoryName(this.value);">
+                                <option value="대분류 선택">대분류 선택</option>
+                                <c:forEach var="vo" items="${categoryName}">
+                                    <option value="${vo.getCategoryName()}">${vo.getCategoryName()}</option>
+                                </c:forEach>
+                            </select>
+                            <select name="mcategorySearch" id="mcategorySearch" onchange="dcategoryName(this.value);">
+                                <option value="중분류 선택">중분류 선택</option>
+                            </select>
+                            <select name="dcategorySearch" id="dcategorySearch">
+                                <option value="소분류 선택">소분류 선택</option>
+                            </select>
+                        </div>
+                        <form id="searchs">
+                            <input type="text" name="searchParam" id="search">
+                            <input type="button" class="btn btn-default" name="searchBtn" id="searchBtn" value="검색" onclick="pSearch(this.form);">
                         </form>
                     <c:choose>
                         <c:when test="${empty pList}">
-                            <!-- list2가 null이거나 비어있을 때 표시할 내용 -->
                             <h1>내역이 없습니다.</h1>
                         </c:when>
                         <c:otherwise>

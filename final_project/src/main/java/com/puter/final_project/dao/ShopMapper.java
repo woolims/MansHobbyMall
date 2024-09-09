@@ -56,8 +56,20 @@ public interface ShopMapper {
 
     List<ShopVo> selectDcategoryNameList(String mcategoryName);
 
-    List<ShopVo> selectSearchList(String search);
     
-    List<ShopVo> selectAdminMcategoryList();
+
+    List<ShopVo> selectSearchList(ShopVo shop);
+    
+    List<ShopVo> selectCategoryList(ShopVo shop);
+
+    List<ShopVo> selectCategorySearchList(ShopVo shop);
+
+    List<ShopVo> selectMcategoryList(ShopVo shop);
+
+    List<ShopVo> selectMcategorySearchList(ShopVo shop);
+
+    List<ShopVo> selectDcategoryList(ShopVo shop);
+
+    List<ShopVo> selectDcategorySearchList(ShopVo shop);
 
 }

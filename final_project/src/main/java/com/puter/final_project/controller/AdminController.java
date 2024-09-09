@@ -96,44 +96,74 @@ public class AdminController {
 
     @RequestMapping("adminAjaxPList.do")
     @ResponseBody
-    public List<ShopVo> adminAjaxPList(String search, ShopVo shop){
+    public List<ShopVo> adminAjaxPList( @RequestParam(defaultValue="")String searchParam,
+                                        @RequestParam(defaultValue="")String categoryName, 
+                                        @RequestParam(defaultValue="")String mcategoryName,
+                                        @RequestParam(defaultValue="")String dcategoryName) {
 
-        shop.setPName(search);
+        ShopVo shop = new ShopVo();
+        shop.setPName(searchParam);
+        shop.setCategoryName(categoryName);
+        shop.setMcategoryName(mcategoryName);
+        shop.setDcategoryName(dcategoryName);
+
+        if (!categoryName.equals("")) {
+            int categoryNo = shopMapper.selectAdminCategoryNo(shop);
+            shop.setCategoryNo(categoryNo);
+            if (!mcategoryName.equals("")) {
+                int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
+                shop.setMcategoryNo(mcategoryNo);
+                if(!dcategoryName.equals("")) {
+                    int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
+                    shop.setDcategoryNo(dcategoryNo);
+                }
+            }
+        }
 
         // 검색어(상품명)만 입력한 경우
-        if (shop.getCategoryName()==null) {
-            List<ShopVo> searchList = shopMapper.selectSearchList(search);
+        if (categoryName.equals("")) {
+            List<ShopVo> searchList = shopMapper.selectSearchList(shop);
+            System.out.println(searchList);
             return searchList;
         }
 
-        // // 대분류만 검색한 경우
-        // if (shop.getCategoryName()!=null && search == null) {
-        //     List<ShopVo> categoryList = shopMapper.selectCategoryList(shop);
-        //     return categoryList;
-        // }
+        // 대분류만 검색한 경우
+        if (!categoryName.equals("") && searchParam.equals("")) {
+            List<ShopVo> categoryList = shopMapper.selectCategoryList(shop);
+            return categoryList;
+        }
 
-        // // 대분류와 검색어(상품명)를 검색한 경우
-        // if (shop.getCategoryName()!=null && search != null) {
-        //     List<ShopVo> categorySearchList = shopMapper.selectCategorySearchList(shop);
-        //     return categorySearchList;
-        // }
+        // 대분류와 검색어(상품명)를 검색한 경우
+        if (!categoryName.equals("") && !searchParam.equals("")) {
+            List<ShopVo> categorySearchList = shopMapper.selectCategorySearchList(shop);
+            return categorySearchList;
+        }
 
-        // // 대분류와 중분류를 검색한 경우
-        // if (shop.getMcategoryName()!=null && search == null) {
-        //     List<ShopVo> mcategorySearchList = shopMapper.selectMcategoryList(shop);
-        //     return mcategorySearchList;
-        // }
+        // 중분류를 검색한 경우
+        if (!mcategoryName.equals("") && searchParam.equals("") && dcategoryName.equals("")) {
+            List<ShopVo> mcategorySearchList = shopMapper.selectMcategoryList(shop);
+            return mcategorySearchList;
+        }
 
-        // // 중분류와 검색어(상품명)를 검색한 경우
-        // if (shop.getMcategoryName()!=null && search == null) {
-        //     List<ShopVo> mcategorySearchList = shopMapper.selectMcategorySearchList(shop);
-        //     return mcategorySearchList;
-        // }
+        // 중분류와 검색어(상품명)를 검색한 경우
+        if (!mcategoryName.equals("") && !searchParam.equals("") && dcategoryName.equals("")) {
+            List<ShopVo> mcategorySearchList = shopMapper.selectMcategorySearchList(shop);
+            return mcategorySearchList;
+        }
 
+        // 소분류만 검색한 경우
+        if (!dcategoryName.equals("") && searchParam.equals("")) {
+            List<ShopVo> dcategoryList = shopMapper.selectDcategoryList(shop);
+            return dcategoryList;
+        }
 
+        // 소분류와 검색어(상품명)를 검색한 경우
+        if (!dcategoryName.equals("") && !searchParam.equals("")) {
+            List<ShopVo> dcategorySearchList = shopMapper.selectDcategorySearchList(shop);
+            return dcategorySearchList;
+        }
 
-
-        return Collections.emptyList();
+        return Collections.emptyList(); //그냥 리턴 적으려고 쓴 코드 실제로 작동안함
     }
 
 
