@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 전체조회 -->
   <select id="selectList" resultType="review">
-       select * from ReviewView order by rvIdx
+    select * from ReviewView order by rvIdx
   </select>
 
   <select id="getReviewInfo" parameterType="int" resultType="review">
@@ -47,9 +47,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 특정 상품에 리뷰 조회 -->
   <select id="selectReviewsByProduct" parameterType="int" resultType="review">
-    SELECT * 
-    FROM ReviewView
-    WHERE pIdx = #{pIdx}
-</select>
+    SELECT * FROM ReviewView WHERE pIdx = #{pIdx}
+  </select>
+
+  <!-- 좋아요 추가 -->
+  <insert id="insertLike" parameterType="like">
+    INSERT INTO follow (rvIdx, userIdx, fStatus)
+    VALUES (#{rvIdx}, #{userIdx}, #{fStatus})
+  </insert>
+
+  <!-- 좋아요 취소 -->
+  <update id="cancelLike" parameterType="like">
+    UPDATE follow SET f_status = 'N' WHERE rvIdx = #{rvIdx} AND userIdx = #{userIdx}
+  </update>
+
+  <!-- 각 리뷰 좋아요 수 조회 -->
+  <select id="countLikes" parameterType="int" resultType="review">
+    SELECT COUNT(*) FROM follow WHERE rvIdx = #{rvIdx} AND fStatus = 'Y'
+  </select>
+
 
 </mapper>

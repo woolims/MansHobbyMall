@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.puter.final_project.dao.ReviewMapper;
+import com.puter.final_project.vo.ReviewLikeVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -93,6 +94,48 @@ public class ReviewController {
     @RequestMapping("/reviewModify.do")
     public String modifyReview(ReviewVo vo) {
         reviewMapper.updateReview(vo);
+        return "redirect:review.do";
+    }
+
+    @RequestMapping("addLike.do")
+    public String addLike(@RequestParam("rvIdx") int rvIdx, HttpSession session) {
+
+        UserVo user = (UserVo) session.getAttribute("user");
+        ReviewLikeVo like = new ReviewLikeVo();
+        
+        like.setRvIdx(rvIdx);
+        like.setUserIdx(user.getUserIdx());
+        like.setFStatus("Y");
+        
+        // 좋아요 추가
+        int res = reviewMapper.insertReviewLike(like);
+        
+        if (res > 0) {
+            session.setAttribute("alertMsg", "좋아요!");
+        } else {
+            session.setAttribute("alertMsg", "오류");
+        }
+        return "redirect:review.do";
+    }
+
+    @RequestMapping("cancelLike.do")
+    public String cancelLike(@RequestParam("rvIdx") int rvIdx, HttpSession session) {
+
+        UserVo user = (UserVo) session.getAttribute("user");
+        ReviewLikeVo like = new ReviewLikeVo();
+        
+        like.setRvIdx(rvIdx);
+        like.setUserIdx(user.getUserIdx());
+        like.setFStatus("N");
+        
+        // 좋아요 취소
+        int res = reviewMapper.cancelReviewLike(like);
+        
+        if (res > 0) {
+            session.setAttribute("alertMsg", "좋아요 취소");
+        } else {
+            session.setAttribute("alertMsg", "오류");
+        }
         return "redirect:review.do";
     }
 

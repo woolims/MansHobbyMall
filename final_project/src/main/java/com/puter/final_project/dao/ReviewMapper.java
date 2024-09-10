@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.puter.final_project.vo.ReviewLikeVo;
 import com.puter.final_project.vo.ReviewVo;
 
 @Mapper
@@ -28,5 +29,14 @@ public interface ReviewMapper {
 
     // 특정 상품에 대한 리뷰 목록 조회
     List<ReviewVo> selectReviewsByProduct(int pIdx);
+
+     // 좋아요 추가
+    int insertReviewLike(ReviewLikeVo like);
+
+    // 좋아요 취소
+    int cancelReviewLike(ReviewLikeVo like);
+
+    // 각 리뷰에 대한 좋아요 조회
+    ReviewLikeVo getReviewLikeStatus(ReviewLikeVo like);
 
 }

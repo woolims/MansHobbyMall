@@ -85,6 +85,8 @@
 
 
                     }
+
+                    
                 </script>
             </head>
 
@@ -116,7 +118,10 @@
                                 <p><strong>작성자:</strong> ${review.nickName}</p>
                                 <p><strong>평점:</strong> ${review.reviewPoint}</p>
                                 <p><strong>리뷰 내용:</strong> ${review.rvContent}</p>
-                                <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p>
+                                <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p> 
+                                <button type="button" class="like-button" data-cmt-idx="${vo.rvIdx}"
+                                    onclick="toggleLike('${vo.rvIdx}', this)">좋아요</button>
+                                <span id="like-count-${vo.rvIdx}">${vo.likeCount}</span>
                             </div>
                         </c:forEach>
                     </div>
