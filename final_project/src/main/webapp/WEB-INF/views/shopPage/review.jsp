@@ -171,7 +171,8 @@
           <form>
             <input type="hidden" name="userIdx" value="${user.userIdx}" />
             <div class="form-group" style="color: black;">
-                <label for="content" style="color: white;">내용</label>
+                상품번호 : <intput type="text" name="pIdx" value="1" /><br>
+                <label for="content" style="color: black;">내용</label>
                 <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
             </div>
             <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
