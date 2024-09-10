@@ -34,8 +34,57 @@
             return;
         }
 
-
+        $.ajax({
+            url: "${pageContext.request.contextPath}/inquiryComment/insert.do",
+            data: {
+                commentContent: commentContent,
+                inIdx: "${vo.inIdx}",
+                userIdx: "${sessionScope.user.userIdx}",
+                name: "${sessionScope.user.name}"
+            },
+            dataType: "json",
+            success: function (res_data) {
+                $("#commentContent").val("");
+                if (res_data.result == false) {
+                    alert("댓글 등록 실패!!");
+                    return;
+                }
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
     }
+
+    function comment_delete(aIdx, btn) {
+        if (confirm("정말 삭제하시겠습니까?") == false) return;
+
+        $(btn).prop('disabled', true); // 버튼 비활성화하여 중복 클릭 방지
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/qna_comment/delete.do",
+            data: {
+                "aIdx": aIdx
+            },
+            dataType: "json",
+            success: function (res_data) {
+                $(btn).prop('disabled', false); // 버튼 다시 활성화
+
+                if (res_data.result == false) {
+                    alert("삭제 실패!!");
+                    return;
+                }
+            },
+            error: function (err) {
+                $(btn).prop('disabled', false); // 버튼 다시 활성화
+                alert(err.responseText);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        comment_list(1); // 페이지 로드 시 첫 페이지 댓글 목록을 로드
+    });
 </script>
 
 <body>
@@ -48,7 +97,8 @@
                     <h3 class="panel-title" style="font-size: 30px;">제목 : ${ vo.inType }</h3>
                     <div style="display: inline-block; float: right;">
                         <c:if test="${ (user.id eq 'admin') or (user.userIdx eq vo.userIdx) }">
-                            <input class="btn btn-success" type="button" value="수정" onclick="location.href='inquiryModifyForm.do?inIdx=${ vo.inIdx }'">
+                            <input class="btn btn-success" type="button" value="수정"
+                                onclick="location.href='inquiryModifyForm.do?inIdx=${ vo.inIdx }'">
                             <input class="btn btn-danger" type="button" value="삭제" onclick="del('${ vo.inIdx }');">
                         </c:if>
                     </div>
@@ -68,18 +118,13 @@
         </div>
 
         <!-- 댓글 섹션 -->
-        <div class="comment-section" style="background-color: #8f8f8fed; color: #f1f1f1;">
+        <div class="comment-section" style="color: black;">
             <div class="comment-section-header">
                 <h5 style="font-weight: bold; margin-bottom: 10px;">댓글</h5>
-                <ul class="pagination">
-                    <c:forEach begin="1" end="${pageTotal}" var="pageNum">
-                        <li><a href="#" onclick="comment_list('${pageNum}'); return false;">${pageNum}</a></li>
-                    </c:forEach>
-                </ul>
             </div>
 
             <!-- 댓글 작성 폼 -->
-            <div class="comment-form" style="background-color: #303030; color: #f1f1f1;">
+            <div class="comment-form" style="color: #f1f1f1;">
                 <textarea style="background-color: #303030; color: #f1f1f1;" class="form-control" id="commentContent"
                     placeholder="댓글을 작성하세요"></textarea>
                 <button class="btn btn-primary" onclick="comment_insert();" style="align-self: flex-end;">등록</button>
