@@ -8,6 +8,51 @@
     <meta charset="UTF-8">
     <title>회원 정보 수정</title>
     <link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/accountInfo.css">
+
+    <script>
+
+        function userModifySend(f){
+            let nickName = f.nickName.value.trim();
+            let name = f.name.value.trim();
+            let phone = f.phone.value.trim();
+            let addr = f.addr.value.trim();
+            let subAddr = f.subAddr.value.trim();
+
+            if(nickName == ""){
+                alert("닉네임을 입력해주세요.")
+                f.nickName.value = "";
+                f.nickName.focus();
+                return;
+            }
+            if(name == ""){
+                alert("이름을 입력해주세요.")
+                f.name.value = "";
+                f.name.focus();
+                return;
+            }
+            if(phone == ""){
+                alert("전화번호를 입력해주세요.")
+                f.phone.value = "";
+                f.phone.focus();
+                return;
+            }
+            if(addr == ""){
+                alert("주소를 입력해주세요.")
+                f.addr.value = "";
+                f.addr.focus();
+                return;
+            }
+            if(subAddr == ""){
+                alert("상세 주소를 입력해주세요.")
+                f.subAddr.value = "";
+                f.subAddr.focus();
+                return;
+            }
+
+            f.action = "${pageContext.request.contextPath}/user/userModify.do";
+            f.submit();
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -60,7 +105,7 @@
             </div>
     
             <div class="form-group">
-                <input type="button" value="정보 수정"/>
+                <input type="button" value="정보 수정" onclick="userModifySend(this.form)"/>
             </div>
         </form>
     </div>

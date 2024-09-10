@@ -163,11 +163,19 @@ public class UserController {
 	}
 
 	@RequestMapping("accountInfo.do")
-	public String accountInfo(Model model){
-
-		
-
+	public String accountInfo(){
 		return "myPage/accountInfo";
 	}
 
+	@RequestMapping("userModify.do")
+	public String userModify(UserVo vo){
+
+		int res = userMapper.userModify(vo);
+
+		UserVo user = userMapper.selectOneFromId(vo.getId());
+
+		session.setAttribute("user", user);
+
+		return "redirect:mypage.do";
+	}
 }
