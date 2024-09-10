@@ -15,7 +15,7 @@ public class ShopVo {
     int dcategoryNo;
     String pName;
     String pEx;
-    int amount; // 뷰에 미포함
+    int amount;
     int price;
 
     // 대분류

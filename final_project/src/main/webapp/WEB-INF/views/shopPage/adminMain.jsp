@@ -255,62 +255,59 @@
                 if(dcategoryName=='소분류 선택'){
                     dcategoryName="";
                 }
+                console.log(searchParam,categoryName,mcategoryName,dcategoryName);
 
                 $.ajax({
                     url: "/admin/adminAjaxPList.do",
                     data: { "searchParam":searchParam,"categoryName":categoryName ,"mcategoryName": mcategoryName,"dcategoryName":dcategoryName},
                     dataType: "json",
                     method: 'GET',
-                    success: function(data) {
-                        var pListHtml = `
+                    success: function(res_data) {
+                        console.log(res_data);
+                        var pListHtml = ``;
+                        $.each(res_data, function(index, pVo) { 
+                            console.log(pVo.pidx);
+                            pListHtml +=`
                             <table>
-                                <thead>
-                                    <tr>
-                                        <th>상품번호</th>
-                                        <th>대분류</th>
-                                        <th>중분류</th>
-                                        <th>소분류</th>
-                                        <th>상품이름</th>
-                                        <th>상품갯수</th>
-                                        <th>상품가격</th>
-                                        <th>작업</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-
-                        $.each(data, function(index, pVo) {
-                            pListHtml += `
+                                <tr id="p_th">
+                                    <th>상품번호</th>
+                                    <th>대분류</th>
+                                    <th>중분류</th>
+                                    <th>소분류</th>
+                                    <th>상품이름</th>
+                                    <th>상품갯수</th>
+                                    <th>상품가격</th>
+                                    <th>작업</th>
+                                </tr>
                                 <tr>
-                                    <td>${pVo.getPIdx()}</td>
-                                    <td>${pVo.getCategoryName()}</td>
-                                    <td>${pVo.getMcategoryName()}</td>
-                                    <td>${pVo.getDcategoryName()}</td>
-                                    <td>${pVo.getPName()}</td>
-                                    <td>${pVo.getAmount()}</td>
-                                    <td>${pVo.getPrice()}</td>
+                                    <td>\${pVo.pidx}</td>
+                                    <td>\${pVo.categoryName}</td>
+                                    <td>\${pVo.mcategoryName}</td>
+                                    <td>\${pVo.dcategoryName}</td>
+                                    <td>\${pVo.pname}</td>
+                                    <td>\${pVo.amount}</td>
+                                    <td>\${pVo.price}</td>
                                     <td>
                                         <form>
-                                            <input type="hidden" name="pIdx" value="${pVo.getPIdx()}">
-                                            <input type="hidden" name="categoryName" value="${pVo.getCategoryName()}">
-                                            <input type="hidden" name="mcategoryName" value="${pVo.getMcategoryName()}">
-                                            <input type="hidden" name="dcategoryName" value="${pVo.getDcategoryName()}">
-                                            <input type="hidden" name="pName" value="${pVo.getPName()}">
-                                            <input type="hidden" name="amount" value="${pVo.getAmount()}">
-                                            <input type="hidden" name="price" value="${pVo.getPrice()}">
+                                            <input type="hidden" name="pIdx" value="\${pVo.pidx}">
+                                            <input type="hidden" name="categoryName" value="\${pVo.categoryName}">
+                                            <input type="hidden" name="mcategoryName" value="\${pVo.mcategoryName}">
+                                            <input type="hidden" name="dcategoryName" value="\${pVo.dcategoryName}">
+                                            <input type="hidden" name="pName" value="\${pVo.pname}">
+                                            <input type="hidden" name="amount" value="\${pVo.amount}">
+                                            <input type="hidden" name="price" value="\${pVo.price}">
                                             <input type="button" class="btn btn-default" value="수정" onclick="pUpdate(this.form);">
                                         </form>
                                         <form>
-                                            <input type="hidden" name="pIdx" value="${pVo.getPIdx()}">
+                                            <input type="hidden" name="pIdx" value="\${pVo.pidx}">
                                             <input type="button" class="btn btn-danger" value="삭제" onclick="confirmProductDelete(this.form);">
                                         </form>
                                     </td>
-                                </tr>`;
+                                </tr>
+                            </table><br><br>`
                         });
-
-                        pListHtml += `</tbody></table><br><br>`;
-
                         // HTML을 특정 컨테이너에 삽입
-                        $('#pList').html(pListHtml);
+                        $("#pList").html(pListHtml);
                     },
                     error: function(err){
                         console.log(err.responseText);
@@ -393,7 +390,7 @@
                             </select>
                         </div>
                         <form id="searchs">
-                            <input type="text" name="searchParam" id="search">
+                            <input type="text" name="searchParam" id="search" placeholder="상품명을 입력하세요">
                             <input type="button" class="btn btn-default" name="searchBtn" id="searchBtn" value="검색" onclick="pSearch(this.form);">
                         </form>
                     <c:choose>

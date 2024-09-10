@@ -123,18 +123,17 @@ public class AdminController {
         // 검색어(상품명)만 입력한 경우
         if (categoryName.equals("")) {
             List<ShopVo> searchList = shopMapper.selectSearchList(shop);
-            System.out.println(searchList);
             return searchList;
         }
 
         // 대분류만 검색한 경우
-        if (!categoryName.equals("") && searchParam.equals("")) {
+        if (!categoryName.equals("") && searchParam.equals("") && mcategoryName.equals("")) {
             List<ShopVo> categoryList = shopMapper.selectCategoryList(shop);
             return categoryList;
         }
 
         // 대분류와 검색어(상품명)를 검색한 경우
-        if (!categoryName.equals("") && !searchParam.equals("")) {
+        if (!categoryName.equals("") && !searchParam.equals("") && mcategoryName.equals("")) {
             List<ShopVo> categorySearchList = shopMapper.selectCategorySearchList(shop);
             return categorySearchList;
         }
