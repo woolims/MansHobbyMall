@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.puter.final_project.vo.AnswerVo;
 import com.puter.final_project.vo.InquiryVo;
 
 @Mapper
@@ -26,5 +27,7 @@ public interface InquiryMapper {
 
     // 게시글 수정
     public int update(InquiryVo vo);
+
+    public List<AnswerVo> inquiryAList();
 
 }

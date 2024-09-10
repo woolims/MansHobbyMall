@@ -26,25 +26,25 @@
             return;
         }
 
-        let commentContent = $("#commentContent").val().trim();
-        if (commentContent == '') {
+        let aContent = $("#aContent").val().trim();
+        if (aContent == '') {
             alert("댓글 내용을 입력하세요!!");
-            $("#commentContent").val("");
-            $("#commentContent").focus();
+            $("#aContent").val("");
+            $("#aContent").focus();
             return;
         }
 
         $.ajax({
-            url: "${pageContext.request.contextPath}/inquiryComment/insert.do",
+            url: "${pageContext.request.contextPath}/answer/insert.do",
             data: {
-                commentContent: commentContent,
+                aContent: aContent,
                 inIdx: "${vo.inIdx}",
                 userIdx: "${sessionScope.user.userIdx}",
                 name: "${sessionScope.user.name}"
             },
             dataType: "json",
             success: function (res_data) {
-                $("#commentContent").val("");
+                $("#aContent").val("");
                 if (res_data.result == false) {
                     alert("댓글 등록 실패!!");
                     return;
@@ -62,7 +62,7 @@
         $(btn).prop('disabled', true); // 버튼 비활성화하여 중복 클릭 방지
 
         $.ajax({
-            url: "${pageContext.request.contextPath}/qna_comment/delete.do",
+            url: "${pageContext.request.contextPath}/answer/delete.do",
             data: {
                 "aIdx": aIdx
             },
@@ -125,7 +125,7 @@
 
             <!-- 댓글 작성 폼 -->
             <div class="comment-form" style="color: #f1f1f1;">
-                <textarea style="background-color: #303030; color: #f1f1f1;" class="form-control" id="commentContent"
+                <textarea style="background-color: #303030; color: #f1f1f1;" class="form-control" id="aContent"
                     placeholder="댓글을 작성하세요"></textarea>
                 <button class="btn btn-primary" onclick="comment_insert();" style="align-self: flex-end;">등록</button>
             </div>

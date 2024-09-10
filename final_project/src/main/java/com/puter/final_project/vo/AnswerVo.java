@@ -12,4 +12,7 @@ public class AnswerVo {
     int userIdx;
     String aContent;
     String aDate;
+
+    String name;
+    String adminAt;
 }
