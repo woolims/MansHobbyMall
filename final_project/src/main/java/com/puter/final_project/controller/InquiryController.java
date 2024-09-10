@@ -61,6 +61,8 @@ public class InquiryController {
 		}
         List<InquiryVo> list = inquiryMapper.selectByCondition(map);
 
+        
+
         model.addAttribute("list", list);
 
         return "inquiry/inquiry";
