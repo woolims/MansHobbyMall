@@ -23,4 +23,6 @@ public interface UserMapper {
     // 이메일 추가
     public int emailInsert(UserVo vo);
 
+    int userModify(UserVo vo);
+
 }

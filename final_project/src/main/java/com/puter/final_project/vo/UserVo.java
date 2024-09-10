@@ -24,5 +24,9 @@ public class UserVo {
     int emailIdx;
     String email;
     String esite;
+
+    String gradeName;
+    int authority;
+    int discount;
     
 }

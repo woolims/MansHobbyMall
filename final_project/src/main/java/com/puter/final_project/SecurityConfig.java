@@ -21,7 +21,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/", "/**", "/**/**", "/home.do", "/login", "/public/**").permitAll()
+                    .requestMatchers("/", "/**", "/**/**", "/home.do", "/login", "/public/**", "/user/**").permitAll()
                     .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> 
