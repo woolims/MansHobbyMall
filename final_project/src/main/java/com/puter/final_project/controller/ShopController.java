@@ -149,10 +149,5 @@ public class ShopController {
         return "shopPage/gameMain";
     }
 
-    // 마이페이지 이동
-    @RequestMapping("/mypage.do")
-    public String mypage() {
 
-        return "shopPage/mypage";
-    }
 }

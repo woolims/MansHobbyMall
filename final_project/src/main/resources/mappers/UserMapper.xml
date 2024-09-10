@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 상세 조회 id -->
   <select id="selectOneFromId" parameterType="String" resultType="user">
-		select * from user where id=#{ id }
+		select * from LoginUserView where id=#{ id }
   </select>
 
   <!-- 상세 조회 email -->

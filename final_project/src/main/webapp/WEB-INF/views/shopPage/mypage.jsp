@@ -51,10 +51,12 @@
 
         #content {
             background: #ccc;
-            height: 850px;
             margin-bottom: 50px;
             padding: 20px;
+            min-height: 850px; /* 최소 높이 설정 */
         }
+
+
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -84,10 +86,10 @@
         <div>
             <h1>My Page</h1>
             <ul>
-                <li data-page="cart.jsp">장바구니</li>
-                <li data-page="purchaseHistory.jsp">구매내역</li>
-                <li data-page="shippingTracking.jsp">배송조회</li>
-                <li data-page="accountInfo.jsp">정보수정</li>
+                <li data-page="cart.do">장바구니</li>
+                <li data-page="purchaseHistory.do">구매내역</li>
+                <li data-page="shippingTracking.do">배송조회</li>
+                <li data-page="accountInfo.do">정보수정</li>
             </ul>
         </div>
     </header>
