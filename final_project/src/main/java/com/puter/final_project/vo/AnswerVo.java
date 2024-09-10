@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Alias("answer")
-public class Answer {
+public class AnswerVo {
 
     int aIdx;
     int inIdx;
