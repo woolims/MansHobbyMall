@@ -52,5 +52,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </trim>
   </select>
 
+  <select id="inquiryAList" resultType="answer">
+		select * from AnswerView where name = '관리자'
+  </select>
 
 </mapper>

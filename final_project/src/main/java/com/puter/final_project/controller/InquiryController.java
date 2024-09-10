@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.puter.final_project.dao.InquiryMapper;
+import com.puter.final_project.vo.AnswerVo;
 import com.puter.final_project.vo.InquiryVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -34,36 +35,45 @@ public class InquiryController {
     public String inquiry(Model model) {
 
         // 1. parameter 받기
-		String search		= request.getParameter("search");
-		String search_text	= request.getParameter("search_text");
-		
-		if(search == null) search="all";
-		
-		// 검색조건을 담을 맵
-		Map<String, String> map = new HashMap<String, String>();
-		
-		// 이름 + 제목
-		if(search.equals("name")) {
-			
-			map.put("name", search_text);
-			map.put("inType", search_text);
-			
-		} else if(search.equals("name")) {		// search == "name" (X)
-			
-			// 이름
-			map.put("name", search_text);
-			
-		} else if(search.equals("inType")) {	
-			
-			// 제목
-			map.put("inType", search_text);
-			
-		}
+        String search = request.getParameter("search");
+        String search_text = request.getParameter("search_text");
+
+        if (search == null)
+            search = "all";
+
+        // 검색조건을 담을 맵
+        Map<String, String> map = new HashMap<String, String>();
+
+        // 이름 + 제목
+        if (search.equals("name")) {
+
+            map.put("name", search_text);
+            map.put("inType", search_text);
+
+        } else if (search.equals("name")) { // search == "name" (X)
+
+            // 이름
+            map.put("name", search_text);
+
+        } else if (search.equals("inType")) {
+
+            // 제목
+            map.put("inType", search_text);
+
+        }
         List<InquiryVo> list = inquiryMapper.selectByCondition(map);
 
-        
+        // 게시물의 답변 상태를 맵에 저장
+        Map<Integer, Boolean> answerMap = new HashMap<>();
+        List<AnswerVo> comments = inquiryMapper.inquiryAList();
+        for (AnswerVo comment : comments) {
+            answerMap.put(comment.getAIdx(), true); // 답변이 존재하면 true
+        }
 
         model.addAttribute("list", list);
+        model.addAttribute("answerMap", answerMap);
+        model.addAttribute("search", search);
+	    model.addAttribute("search_text", search_text);
 
         return "inquiry/inquiry";
     }

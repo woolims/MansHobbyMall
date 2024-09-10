@@ -5,6 +5,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.puter.final_project.dao.AnswerMapper">
 
-
+    <!-- 댓글 작성 -->
+    <insert id="insert" parameterType="answer">
+    insert into answer values(
+      null,
+      #{inIdx}, 
+      #{userIdx}, 
+      #{aContent},
+      now()
+      )
+    </insert>
 
 </mapper>
