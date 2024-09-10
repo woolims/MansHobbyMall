@@ -104,10 +104,22 @@
                                 <p id="product-description">${shop.getPEx()}</p>
                             </div>
                         </div>
+
+                        
                         <!-- 푸터 -->
                         <%@ include file="../menubar/payment.jsp" %>
                     </div>
-                    <a href="/review/review.do">리뷰 테스트</a>
+                    <div>
+                        <!-- 리뷰 목록 출력 -->
+                        <c:forEach var="review" items="${reviewList}">
+                            <div class="review-item">
+                                <p><strong>작성자:</strong> ${review.nickName}</p>
+                                <p><strong>평점:</strong> ${review.reviewPoint}</p>
+                                <p><strong>리뷰 내용:</strong> ${review.rvContent}</p>
+                                <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p>
+                            </div>
+                        </c:forEach>
+                    </div>
             </body>
 
             </html>

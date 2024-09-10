@@ -25,4 +25,8 @@ public interface ReviewMapper {
     int deleteReview(int rvIdx);
 
     ReviewVo getReviewInfo(int rvIdx);
+
+    // 특정 상품에 대한 리뷰 목록 조회
+    List<ReviewVo> selectReviewsByProduct(int pIdx);
+
 }
