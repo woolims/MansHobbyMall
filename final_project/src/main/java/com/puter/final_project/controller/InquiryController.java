@@ -1,6 +1,8 @@
 package com.puter.final_project.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +33,33 @@ public class InquiryController {
     @RequestMapping("inquiry.do")
     public String inquiry(Model model) {
 
-        List<InquiryVo> list = inquiryMapper.selectList();
+        // 1. parameter 받기
+		String search		= request.getParameter("search");
+		String search_text	= request.getParameter("search_text");
+		
+		if(search == null) search="all";
+		
+		// 검색조건을 담을 맵
+		Map<String, String> map = new HashMap<String, String>();
+		
+		// 이름 + 제목
+		if(search.equals("name")) {
+			
+			map.put("name", search_text);
+			map.put("inType", search_text);
+			
+		} else if(search.equals("name")) {		// search == "name" (X)
+			
+			// 이름
+			map.put("name", search_text);
+			
+		} else if(search.equals("inType")) {	
+			
+			// 제목
+			map.put("inType", search_text);
+			
+		}
+        List<InquiryVo> list = inquiryMapper.selectByCondition(map);
 
         model.addAttribute("list", list);
 

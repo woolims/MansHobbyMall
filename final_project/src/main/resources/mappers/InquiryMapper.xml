@@ -37,6 +37,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   <!-- 게시글 수정 -->
   <update id="update" parameterType="inquiry">
     update inquiry set inType=#{inType}, inContent=#{inContent} where inIdx=#{inIdx}
-  </update> 
+  </update>
+
+  <!-- 검색조건별 조회 -->
+  <select id="selectByCondition" parameterType="Map" resultType="inquiry">
+    select * from InquiryView
+    <trim prefix="where" prefixOverrides="or">
+      <if test="name != null">
+            name like CONCAT('%', #{name}, '%')
+      </if>
+      <if test="inType != null">
+            or inType like CONCAT('%', #{inType}, '%')
+      </if>
+    </trim>
+  </select>
+
 
 </mapper>

@@ -13,37 +13,45 @@
 </head>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        // JSP에서 서버측 데이터를 JavaScript 변수로 변환하여 사용
+        var search = "${param.search}";
+
+        // 검색 조건이 있으면 선택된 값을 설정
+        if (search !== "") {
+            $("#search").val(search);
+        }
+
+        // 검색 조건이 'all'이면 입력창을 비웁니다.
+        if (search === "all") {
+            $("#search_text").val("");
+        }
+    });
+
+
     function find() {
-        
+
         let search = $("#search").val();
         let search_text = $("#search_text").val().trim();
 
-        if (search === "all") {
-            location.href = "inquiry.do";
-            return;
-        }
-
-        if (search_text === "") {
-            alert("검색어를 입력하세요!!");
+        // 전체검색이 아닌데 검색어가 비어있으면
+        if (search != "all" && search_text == "") {
+            alert("검색어를 입력하세요");
+            $("#search_text").val("");
             $("#search_text").focus();
             return;
         }
 
-        // JavaScript에서 직접 사용
-        location.href = "inquiry.do?search=" + search + "&search_text=" + search_text;
+        // 자바스크립트 이용해서 호출
+        location.href = "inquiry.do?search=" + search + "&search_text=" + encodeURIComponent(search_text, "utf-8");
+
     }
 
-    function changeFilter() {
-        let search = $("#search").vuserIdxal();
-        if (search === "all") {
-            location.href = "inquiry.do";
-        }
-    }
 
     function check_user(inIdx, userIdx) {
         // JSP에서 자바스크립트로 값을 전달하기 위해 변수로 변환
         var currentUserIdx = "${not empty user ? user.userIdx : -1}";
-        var isAdmin = "${user.adminAt}"=="Y";  // 관리자 확인
+        var isAdmin = "${user.adminAt}" == "Y"; // 관리자 확인
 
         // 사용자가 관리자이거나 본인인지 확인
         if ((userIdx == currentUserIdx || isAdmin) && currentUserIdx != -1) {
@@ -72,21 +80,18 @@
                     </div>
                 </div>
 
-                <!-- 상단 검색 창 -->
-                <div class="search-container">
-                    <form class="form-inline search-box">
-                        <select id="search" class="form-control" onchange="changeFilter()">
-                            <option value="all" <c:if test="${param.search == 'all'}">selected</c:if>>전체</option>
-                            <option value="name" <c:if test="${param.search == 'name'}">selected</c:if>>이름
-                            </option>
-                            <option value="inType" <c:if test="${param.search == 'inType'}">selected</c:if>>제목
-                            </option>
-                            <option value="name_title" <c:if test="${param.search == 'name_title'}">selected</c:if>
-                                >이름+제목</option>
+                <!-- 검색메뉴 -->
+                <div style="text-align: right; margin-bottom: 5px;">
+                    <form action="" class="form-inline">
+                        <select id="search" class="form-control">
+                            <option value="all">전체보기</option>
+                            <option value="name">이름</option>
+                            <option value="inType">제목</option>
+                            <option value="name_content">이름+제목</option>
                         </select>
-                        <input id="search_text" class="form-control" placeholder="검색어 입력"
-                            value="${param.search_text != 'null' ? param.search_text : ''}">
-                        <button onclick="find()">검색</button>
+
+                        <input id="search_text" class="form-control" value="${ param.search_text }">
+                        <input type="button" class="btn btn-primary" value="검색" onclick="find();">
                     </form>
                 </div>
 
