@@ -222,7 +222,7 @@
                     success: function (data) {
                         var select = $('#dcategorySearch');
                         select.empty();
-                        select.append($('<option></option>').val('소분류 선택').text('소분류 선택'))
+                        select.append($('<option></option>').val('').text('소분류 선택'));
                         $.each(data, function(index, item) {
                             select.append($('<option></option>').val(item.dcategoryName).text(item.dcategoryName));
                         });
@@ -315,6 +315,10 @@
                 });
                 return;
             }
+
+            function pInsert(){
+                location.href = "/admin/pInsertForm.do";
+            }
         </script>
 
     </head>
@@ -374,9 +378,14 @@
                 </div>
 
                 <div id="menu2" class="tab-pane">
-                    <h2>상품 관리</h2>
+                    <div style="display: inline-block;">
+                        <h2>상품 관리</h2>  
+                    </div>
+                    <div style="display: inline-block;">
+                        <input type="button" class="btn btn-success" name="pInsert" id="pInsert" onclick="pInsert();" value="상품 등록">
+                    </div>
                         <div>
-                            <select name="categorySearch" id="categorySearch" onchange="mcategoryName(this.value);">
+                            <select name="categorySearch" id="categorySearch" onclick="mcategoryName(this.value);">
                                 <option value="대분류 선택">대분류 선택</option>
                                 <c:forEach var="vo" items="${categoryName}">
                                     <option value="${vo.getCategoryName()}">${vo.getCategoryName()}</option>
@@ -390,7 +399,7 @@
                             </select>
                         </div>
                         <form id="searchs">
-                            <input type="text" name="searchParam" id="search" placeholder="상품명을 입력하세요">
+                            <input type="text" name="searchParam" id="search" placeholder="상품명을 입력하세요" autofocus>
                             <input type="button" class="btn btn-default" name="searchBtn" id="searchBtn" value="검색" onclick="pSearch(this.form);">
                         </form>
                     <c:choose>

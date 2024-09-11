@@ -1,7 +1,6 @@
 package com.puter.final_project.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -46,7 +45,9 @@ public interface ShopMapper {
 
     int selectAdminDcategoryNo(ShopVo shop);
 
-    ProductVo productInsert(ProductVo product);
+    int selectMaxPIdx();
+
+    int productInsert(ShopVo shop);
 
     int productUpdate(ShopVo shop);
 

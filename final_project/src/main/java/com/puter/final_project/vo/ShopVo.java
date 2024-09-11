@@ -2,9 +2,11 @@ package com.puter.final_project.vo;
 
 import org.apache.ibatis.type.Alias;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Alias("shop")
 public class ShopVo {
 
@@ -31,5 +33,9 @@ public class ShopVo {
     int scIdx; // 뷰에 미포함
     int userIdx; // 뷰에 미포함
     int scamount; // 뷰에 미포함
+
+    
+
+    
 
 }

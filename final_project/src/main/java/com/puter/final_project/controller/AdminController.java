@@ -186,9 +186,30 @@ public class AdminController {
     }
 
     @RequestMapping("/pInsertForm.do")
-    public String productInsert() {
+    public String pInsertForm(ShopVo shop, Model model) {
+        
+        int maxPIdx = shopMapper.selectMaxPIdx();
+        List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
+        List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
+        List<ShopVo> dcategoryName = shopMapper.selectDcategoryNameList(shop.getMcategoryName());
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("mcategoryName", mcategoryName);
+        model.addAttribute("dcategoryName", dcategoryName);
+        model.addAttribute("shop", shop);
+        model.addAttribute("maxPIdx", maxPIdx+1);
+        return "shopPage/pInsertForm";
+    }
 
-        return "shopPage/productInsertForm";
+    @RequestMapping("/pInsert.do")
+    public String productInsert(ShopVo shop, Model model) {
+        int categoryNo = shopMapper.selectAdminCategoryNo(shop);
+        int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
+        int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
+        shop.setCategoryNo(categoryNo);
+        shop.setMcategoryNo(mcategoryNo);
+        shop.setDcategoryNo(dcategoryNo);
+        int res = shopMapper.productInsert(shop);
+        return "redirect:admin.do";
     }
 
     @RequestMapping("/pUpdateForm.do")
@@ -196,6 +217,12 @@ public class AdminController {
 
         String pEx = shopMapper.selectPEx(shop.getPIdx());
 
+        List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
+        List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
+        List<ShopVo> dcategoryName = shopMapper.selectDcategoryNameList(shop.getMcategoryName());
+        model.addAttribute("categoryName", categoryName);
+        model.addAttribute("mcategoryName", mcategoryName);
+        model.addAttribute("dcategoryName", dcategoryName);
         model.addAttribute("shop", shop);
         model.addAttribute("pEx", pEx);
 

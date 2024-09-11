@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from shop_list_view order by pIdx desc
     </select>
 
-
+ 
     <!-- 메인카테고리 번호만 조회 -->
     <!-- <select id="selectCategoryNo" resultType="int">
         select categoryNo from shop_list_view
@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProductMCategoryList" resultType="shop" parameterType="int">
         select * from shop_list_view where mcategoryNo = #{mCategoryNo} order by pIdx desc
     </select>
+    
     <!-- 상품 상세 페이지에 띄울 정보 -->
     <select id="selectProductInfoList" resultType="shop" parameterType="shop">
         select * from shop_list_view where categoryNo = #{categoryNo} and pIdx=#{pIdx}
@@ -62,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 수정 시 상품 설명가져오기 -->
     <select id="selectPEx" resultType="String" parameterType="int">
-        select PEx from shop_list_view where pIdx=#{pIdx}
+        select pEx from shop_list_view where pIdx=#{pIdx}
     </select>
 
     <!-- categoryName을 이용해서 categoryNo 얻기 -->
@@ -85,6 +86,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update product set categoryNo=#{categoryNo}, dcategoryNo=#{dcategoryNo}, mcategoryNo=#{mcategoryNo}, pName=#{pName}, pEx=#{pEx}, amount=#{amount}, price=#{price} where pIdx=#{pIdx}
     </update>
 
+    <!-- 가장 큰 상품번호만 조회 -->
+    <select id="selectMaxPIdx" resultType="int">
+        select max(pIdx) from product
+    </select>
+
+    <!-- 상품 등록 -->
+    <insert id="productInsert" parameterType="shop">
+        insert into product values( null,
+                                    #{categoryNo},
+                                    #{mcategoryNo},
+                                    #{dcategoryNo},
+                                    #{pName},
+                                    #{pEx},
+                                    #{amount},
+                                    #{price}
+                                  )
+    </insert>
+
 <!-- 여기부터 상품관리 카테고리 선택기능 ajax처리용 sql문 -->
     <!-- categoryName 전체조회 -->
     <select id="selectCategoryNameList" resultType="shop">
@@ -101,11 +120,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select dcategoryName from shop_list_view where mcategoryName=#{mcategoryName} Group by dcategoryName 
     </select>
     <!-- 여기까지 상품관리 카테고리 선택기능 ajax처리용 sql문 -->
-
-    <!-- 전체mcategoryName조회 -->
-    <!-- <select id="selectAdminMcategoryList" resultType="shop">
-        select mcategoryName from shop_list_view Group by mcategoryName 
-    </select> -->
 
     <!-- 여기부터 상품관리탭 검색기능 -->
     <!-- 검색어(상품명)만 입력한 경우 -->
@@ -142,8 +156,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectDcategorySearchList" resultType="shop" parameterType="shop">
         select * from shop_list_view where pName Like CONCAT('%', #{pName}, '%') and dcategoryNo=#{dcategoryNo} and mcategoryNo=#{mcategoryNo} and categoryNo=#{categoryNo} order by pIdx desc
     </select>
-
     <!-- 여기까지 상품관리탭 검색기능 -->
+
 </mapper>
 
 
