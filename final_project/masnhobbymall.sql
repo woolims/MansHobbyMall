@@ -373,9 +373,6 @@ insert into product values(null, 2, 6, 16, '기타', '모자?', 4, 100);
 
 
 CREATE OR REPLACE
-    ALGORITHM = UNDEFINED 
-    DEFINER = `final`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,
@@ -389,6 +386,7 @@ VIEW `shop_list_view` AS
         `c`.`categoryName` AS `categoryName`,
         `m`.`mcategoryName` AS `mcategoryName`,
         `d`.`dcategoryName` AS `dcategoryName`
+        
     FROM
         (((`product` `p`
         JOIN `category` `c` ON ((`p`.`categoryNo` = `c`.`categoryNo`)))

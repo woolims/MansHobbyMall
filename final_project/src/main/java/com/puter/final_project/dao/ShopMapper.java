@@ -1,7 +1,6 @@
 package com.puter.final_project.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -40,14 +39,38 @@ public interface ShopMapper {
 
     String selectPEx(int pIdx);
 
-    int selectCategoryNo(String categoryName);
+    int selectAdminCategoryNo(ShopVo shop);
 
-    int selectMcategoryNo(String mcategoryName);
+    int selectAdminMcategoryNo(ShopVo shop);
 
-    int selectDcategoryNo(String dcategoryName);
+    int selectAdminDcategoryNo(ShopVo shop);
 
-    ProductVo productInsert(ProductVo product);
+    // int selectMaxPIdx();
+
+    int productInsert(ShopVo shop);
 
     int productUpdate(ShopVo shop);
+
+    List<ShopVo> selectCategoryNameList();
+
+    List<ShopVo> selectMcategoryNameList(String categoryName);
+
+    List<ShopVo> selectDcategoryNameList(String mcategoryName);
+
+    
+
+    List<ShopVo> selectSearchList(ShopVo shop);
+    
+    List<ShopVo> selectCategoryList(ShopVo shop);
+
+    List<ShopVo> selectCategorySearchList(ShopVo shop);
+
+    List<ShopVo> selectMcategoryList(ShopVo shop);
+
+    List<ShopVo> selectMcategorySearchList(ShopVo shop);
+
+    List<ShopVo> selectDcategoryList(ShopVo shop);
+
+    List<ShopVo> selectDcategorySearchList(ShopVo shop);
 
 }
