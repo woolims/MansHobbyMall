@@ -16,6 +16,8 @@ public interface ReviewMapper {
     // 특정 리뷰 조회
     ReviewVo getReviewByIdx(int rvIdx);
 
+    ReviewVo getReviewByLike(ReviewLikeVo like);
+
     // 리뷰 작성
     int insertReview(ReviewVo review);
 
@@ -30,13 +32,19 @@ public interface ReviewMapper {
     // 특정 상품에 대한 리뷰 목록 조회
     List<ReviewVo> selectReviewsByProduct(int pIdx);
 
-     // 좋아요 추가
-    int insertReviewLike(ReviewLikeVo like);
+    // 리뷰 좋아요 추가
+    int insertLike(ReviewLikeVo like);
 
-    // 좋아요 취소
-    int cancelReviewLike(ReviewLikeVo like);
+    // 리뷰 좋아요 취소
+    int deleteLike(ReviewLikeVo like);
 
-    // 각 리뷰에 대한 좋아요 조회
-    ReviewLikeVo getReviewLikeStatus(ReviewLikeVo like);
+    // 각 리뷰에 대한 좋아요 수
+    int countLikes(int rvIdx);
+
+    // 사용자가 특정 리뷰에 좋아요를 눌렀는지 확인
+    int LikedByUser(ReviewLikeVo like);
+
+    // 리뷰 삭제 시 해당 리뷰의 좋아요 삭제
+    int deleteByReview(int rvIdx);
 
 }

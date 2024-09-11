@@ -14,6 +14,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     SELECT * FROM ReviewView WHERE rvIdx = #{rvIdx} order by rvDate
   </select>
 
+  <select id="getReviewByLike" parameterType="like" resultType="review">
+    SELECT * FROM follow WHERE rvIdx=#{rvIdx} AND userIdx=#{userIdx}
+  </select>
+
   <!-- 리뷰 작성 -->
   <insert id="insertReview" parameterType="review">
   INSERT INTO review
@@ -52,19 +56,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 좋아요 추가 -->
   <insert id="insertLike" parameterType="like">
-    INSERT INTO follow (rvIdx, userIdx, fStatus)
-    VALUES (#{rvIdx}, #{userIdx}, #{fStatus})
+    INSERT INTO follow (rfIdx, rvIdx, userIdx)
+    VALUES (#{rfIdx}, #{rvIdx}, #{userIdx})
   </insert>
 
   <!-- 좋아요 취소 -->
-  <update id="cancelLike" parameterType="like">
-    UPDATE follow SET f_status = 'N' WHERE rvIdx = #{rvIdx} AND userIdx = #{userIdx}
-  </update>
+  <delete id="deleteLike" parameterType="like">
+    DELETE FROM follow where rfIdx = #{rfIdx}
+  </delete>
 
-  <!-- 각 리뷰 좋아요 수 조회 -->
-  <select id="countLikes" parameterType="int" resultType="review">
-    SELECT COUNT(*) FROM follow WHERE rvIdx = #{rvIdx} AND fStatus = 'Y'
+  <!-- 각 리뷰에 대한 좋아요 수 -->
+  <select id="countLikes" parameterType="int" resultType="int">
+    SELECT COUNT(*) FROM follow WHERE rvIdx = #{rvIdx}
   </select>
+
+  <!-- 사용자가 해당 리뷰에 좋아요를 눌렀는지 확인 -->
+  <select id="LikedByUser" parameterType="like" resultType="int">
+    SELECT COUNT(*) FROM follow WHERE rvIdx = #{rvIdx} AND userIdx = #{userIdx}
+  </select>
+
+  <!-- 리뷰 삭제 시 해당 리뷰의 좋아요 삭제 -->
+  <delete id="deleteByReview" parameterType="int">
+    DELETE FROM follow WHERE rvIdx = #{rvIdx}
+  </delete>
 
 
 </mapper>

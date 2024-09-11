@@ -10,5 +10,11 @@ public class ReviewLikeVo {
     int rfIdx;
     int rvIdx;
     int userIdx;
-    String fStatus;
+
+    int pIdx;
+    String rvContent;
+    int reviewPoint;
+    String rvImg;
+    String rvDate;
+    int likeCount;
 }

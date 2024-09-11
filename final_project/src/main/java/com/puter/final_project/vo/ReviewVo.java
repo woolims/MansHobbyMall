@@ -15,6 +15,7 @@ public class ReviewVo {
     int reviewPoint;
     String rvImg;
     String rvDate;
+    int likeCount;
 
     int gIdx;
     String id;
@@ -27,5 +28,7 @@ public class ReviewVo {
     String adminAt;
     int point;
     String createAt;
+
+    int rfIdx;
 
 }
