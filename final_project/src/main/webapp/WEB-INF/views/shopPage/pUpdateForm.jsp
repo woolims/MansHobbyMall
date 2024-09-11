@@ -12,7 +12,7 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
                 <meta charset="UTF-8">
-                <title>update title here</title>
+                <title>상품수정</title>
 
                 <script>
                     function pUpdate() {
@@ -27,21 +27,53 @@
                         let amount = $("#amount").val(); 
 
                         
+                        const numberRegex = /^[0-9]+$/;
+
+                        if(categoryName=='대분류 선택'){
+                            alert("대분류를 선택하세요");
+                            return;
+                        }
+                        if(mcategoryName=='중분류 선택'){
+                            alert("중분류를 선택하세요");
+                            return;
+                        }
+                        if(dcategoryName=='소분류 선택'){
+                            alert("소분류를 선택하세요");
+                            return;
+                        }
                         if (pName == "") {
-                            alert("상품명을 입력해야합니다.");
-                            pName.focus();
+                            alert("상품명을 입력하세요");
+                            $("#pName").focus();
+                            return;
+                        }
+                        if (amount == "") {
+                            alert("수량을 입력하세요");
+                            $("#amount").focus();
+                            return;
+                        }
+                        if (!numberRegex.test(amount)) {
+                            alert("상품수량에는 숫자만 입력가능합니다");
+                            $("#amount").val("");
+                            $("#amount").focus();
                             return;
                         }
                         if (price == "") {
-                            alert("가격을 입력해야합니다.");
-                            price.focus();
+                            alert("가격을 입력하세요");
+                            $("#price").focus();
+                            return;
+                        }
+                        if (!numberRegex.test(price)) {
+                            alert("가격은 숫자만 입력가능합니다");
+                            $("#price").val("");
+                            $("#price").focus();
                             return;
                         }
                         if (pEx == "") {
-                            alert("상품설명을 입력해야합니다.");
+                            alert("상품설명을 입력하세요");
+                            $("#pEx").focus();
                             return;
                         }
-                        if (confirm("수정하시겠습니까?") == false) {
+                        if (confirm("등록하시겠습니까?") == false) {
                             return;
                         }else{
                             location.href = "pUpdate.do?amount=" + amount + "&pName=" + pName + "&price=" + price + "&pEx=" + pEx + "&pIdx=" + pIdx + "&categoryName=" + categoryName + "&mcategoryName=" + mcategoryName + "&dcategoryName=" + dcategoryName;
@@ -138,7 +170,7 @@
                 }
 
                 function updateCancel(){
-                    if(confirm("수정을 취소하시겠습니까?")==false) return;
+                    if(confirm("수정을 취소하시겠습니까?\n내용은 저장되지 않습니다.")==false) return;
                     location.href='/admin/admin.do'
                 }
                 </script>

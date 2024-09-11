@@ -12,43 +12,74 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
                 <meta charset="UTF-8">
-                <title>insert title here</title>
+                <title>상품등록</title>
 
                 <script>
                     function pInsert() {
                         let pName = $("#pName").val().trim();
                         let price = $("#price").val().trim();
                         let pEx = $("#pEx").val().trim();
-                        let pIdx = $("#pIdx").val();
                         let categoryName = $("#categorySearch").val();
                         let mcategoryName = $("#mcategorySearch").val();
                         let dcategoryName = $("#dcategorySearch").val();
                         let amount = $("#amount").val(); 
 
+                        const numberRegex = /^[0-9]+$/;
+
+                        if(categoryName=='대분류 선택'){
+                            alert("대분류를 선택하세요");
+                            return;
+                        }
+                        if(mcategoryName=='중분류 선택'){
+                            alert("중분류를 선택하세요");
+                            return;
+                        }
+                        if(dcategoryName=='소분류 선택'){
+                            alert("소분류를 선택하세요");
+                            return;
+                        }
                         if (pName == "") {
-                            alert("상품명을 입력해야합니다.");
-                            pName.focus();
+                            alert("상품명을 입력하세요");
+                            $("#pName").focus();
+                            return;
+                        }
+                        if (amount == "") {
+                            alert("수량을 입력하세요");
+                            $("#amount").focus();
+                            return;
+                        }
+                        if (!numberRegex.test(amount)) {
+                            alert("상품수량에는 숫자만 입력가능합니다");
+                            $("#amount").val("");
+                            $("#amount").focus();
                             return;
                         }
                         if (price == "") {
-                            alert("가격을 입력해야합니다.");
-                            price.focus();
+                            alert("가격을 입력하세요");
+                            $("#price").focus();
+                            return;
+                        }
+                        if (!numberRegex.test(price)) {
+                            alert("가격은 숫자만 입력가능합니다");
+                            $("#price").val("");
+                            $("#price").focus();
                             return;
                         }
                         if (pEx == "") {
-                            alert("상품설명을 입력해야합니다.");
+                            alert("상품설명을 입력하세요");
+                            $("#pEx").focus();
                             return;
                         }
                         if (confirm("등록하시겠습니까?") == false) {
                             return;
                         }else{
-                            location.href = "pInsert.do?amount=" + amount + "&pName=" + pName + "&price=" + price + "&pEx=" + pEx + "&pIdx=" + pIdx + "&categoryName=" + categoryName + "&mcategoryName=" + mcategoryName + "&dcategoryName=" + dcategoryName;
+                            location.href = "pInsert.do?amount=" + amount + "&pName=" + pName + "&price=" + price + "&pEx=" + pEx + "&categoryName=" + categoryName + "&mcategoryName=" + mcategoryName + "&dcategoryName=" + dcategoryName;
                             alert("상품이 등록되었습니다.")
                         }
                     }
 
                     function mcategoryName(val){
-                        if($("#categorySearch").val()=='대분류 선택') {
+                        if($("#categorySearch").val()=='대분류 선택' || $("#categorySearch").val()=='전체보기') {
                             let categoryName = val;
                             $.ajax({
                                 url: "/admin/adminAjax.do",
@@ -60,8 +91,8 @@
                                     var dSelect = $('#dcategorySearch');
                                     mSelect.empty();
                                     dSelect.empty();
-                                    mSelect.append($('<option disabled selected hidden></option>').val('중분류 선택').text('중분류 선택'))
-                                    dSelect.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))
+                                    mSelect.append($('<option selected hidden></option>').val('중분류 선택').text('중분류 선택'))
+                                    dSelect.append($('<option selected hidden></option>').val('소분류 선택').text('소분류 선택'))
                                 },
                                 error: function (err) {
                                     console.log(err.responseText);
@@ -81,8 +112,8 @@
                                 var dselect = $('#dcategorySearch');
                                 mselect.empty();
                                 dselect.empty();
-                                mselect.append($('<option disabled selected hidden></option>').val('중분류 선택').text('중분류 선택'))
-                                dselect.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))                                
+                                mselect.append($('<option selected hidden disabled></option>').val('중분류 선택').text('중분류 선택'))
+                                dselect.append($('<option selected hidden disabled></option>').val('소분류 선택').text('소분류 선택'))                                
                                 $.each(data, function(index, item) {
                                     mselect.append($('<option></option>').val(item.mcategoryName).text(item.mcategoryName));
                                 });
@@ -94,7 +125,7 @@
                     }
 
                 function dcategoryName(val){
-                    if($("#mcategorySearch").val()=='중분류 선택') {
+                    if($("#mcategorySearch").val()=='선택 안 함') {
                         let mcategoryName = val;
                         $.ajax({
                             url: "/admin/adminAjax.do",
@@ -104,7 +135,7 @@
                             success: function (data) {
                                 var dSelect = $('#dcategorySearch');
                                 dSelect.empty();
-                                dSelect.append($('<option disabled selected></option>').val('소분류 선택').text('소분류 선택'))
+                                dSelect.append($('<option selected></option>').val('소분류 선택').text('소분류 선택'))
                             },
                             error: function (err) {
                                 console.log(err.responseText);
@@ -122,7 +153,7 @@
                         success: function (data) {
                             var select = $('#dcategorySearch');
                             select.empty();
-                            select.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))
+                            select.append($('<option selected hidden></option>').val('소분류 선택').text('소분류 선택'))
                             $.each(data, function(index, item) {
                                 select.append($('<option></option>').val(item.dcategoryName).text(item.dcategoryName));
                             });
@@ -131,6 +162,11 @@
                             console.log(err.responseText);
                         }
                     });
+                }
+
+                function insertCancel(){
+                    if(confirm("등록을 취소하시겠습니까?\n내용은 저장되지 않습니다.")==false) return;
+                    location.href='/admin/admin.do'
                 }
                 </script>
 
@@ -146,12 +182,6 @@
                 <form>
                     <table>
                         <tr>
-                            <th>상품번호</th>
-                            <td><input type="text" class="form-control" value="${maxPIdx}" id="pIdx" name="pIdx"
-                                    readonly="readonly">
-                            </td>
-                        </tr>
-                        <tr>
                             <select name="categorySearch" id="categorySearch" onchange="mcategoryName(this.value);">
                                 <option value="대분류 선택" hidden selected>대분류 선택</option>
                                 <c:forEach var="vo" items="${categoryName}">
@@ -160,11 +190,11 @@
                             </select>
                             <br>
                             <select name="mcategorySearch" id="mcategorySearch" onchange="dcategoryName(this.value);">
-                                <option value="${shop.mcategoryName}">중분류 선택</option>
+                                <option value="중분류 선택">중분류 선택</option>
                             </select>
                             <br>
                             <select name="dcategorySearch" id="dcategorySearch">
-                                <option value="${shop.dcategoryName}">소분류 선택</option>
+                                <option value="소분류 선택">소분류 선택</option>
                             </select>
                         </tr>
                         <tr>
@@ -187,6 +217,7 @@
                     </table>
                     <input type="button" class="btn btn-default" id="insertBtn" value="등록하기"
                         onclick="pInsert();">
+                    <input type="button" class="btn btn-danger" id="canselBtn" value="등록취소" onclick="insertCancel();">
                 </form>
             </body>
 

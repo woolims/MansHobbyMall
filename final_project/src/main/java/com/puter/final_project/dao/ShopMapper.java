@@ -45,7 +45,7 @@ public interface ShopMapper {
 
     int selectAdminDcategoryNo(ShopVo shop);
 
-    int selectMaxPIdx();
+    // int selectMaxPIdx();
 
     int productInsert(ShopVo shop);
 

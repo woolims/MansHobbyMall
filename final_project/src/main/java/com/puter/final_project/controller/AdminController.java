@@ -80,12 +80,13 @@ public class AdminController {
     @ResponseBody
     public List<ShopVo> adminAjax(@RequestParam(defaultValue = "대분류 선택")String categoryName, String mcategoryName){
 
-        if (categoryName != null && !categoryName.equals("대분류 선택")) {
+        if (categoryName != null && !categoryName.equals("대분류 선택") && !categoryName.equals("전체보기") && mcategoryName== null) {
             String categoryNameParam = categoryName;
             List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryNameParam);
             return mcategoryNameList;
         }
-        if (mcategoryName != null && !mcategoryName.equals("중분류 선택")){
+        
+        if (mcategoryName != null && !mcategoryName.equals("선택 안 함")){
             String mcategoryNameParam = mcategoryName;
             List<ShopVo> dcategoryNameList = shopMapper.selectDcategoryNameList(mcategoryNameParam);
             return dcategoryNameList;
@@ -107,7 +108,10 @@ public class AdminController {
         shop.setMcategoryName(mcategoryName);
         shop.setDcategoryName(dcategoryName);
 
-        if (!categoryName.equals("")) {
+        if (categoryName.equals("전체보기")) {
+            List<ShopVo> productList = shopMapper.selectAdminList();
+            return productList;
+        }else if (!categoryName.equals("")) {
             int categoryNo = shopMapper.selectAdminCategoryNo(shop);
             shop.setCategoryNo(categoryNo);
             if (!mcategoryName.equals("")) {
@@ -188,15 +192,15 @@ public class AdminController {
     @RequestMapping("/pInsertForm.do")
     public String pInsertForm(ShopVo shop, Model model) {
         
-        int maxPIdx = shopMapper.selectMaxPIdx();
+        // int maxPIdx = shopMapper.selectMaxPIdx();
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
         List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
         List<ShopVo> dcategoryName = shopMapper.selectDcategoryNameList(shop.getMcategoryName());
+        // model.addAttribute("maxPIdx", maxPIdx+1);
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("mcategoryName", mcategoryName);
         model.addAttribute("dcategoryName", dcategoryName);
         model.addAttribute("shop", shop);
-        model.addAttribute("maxPIdx", maxPIdx+1);
         return "shopPage/pInsertForm";
     }
 
