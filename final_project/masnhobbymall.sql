@@ -452,7 +452,7 @@ SELECT
 FROM Inquiry i
 INNER JOIN User u ON i.userIdx = u.userIdx;
 
-CREATE OR REPLACE VIEW Answer AS
+CREATE OR REPLACE VIEW AnswerView AS
 SELECT
     a.aIdx,
     a.inIdx,

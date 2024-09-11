@@ -5,8 +5,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.puter.final_project.dao.AnswerMapper">
 
-    <!-- 댓글 작성 -->
-    <insert id="insert" parameterType="answer">
+  <!-- 전체조회 -->
+  <select id="selectList" parameterType="int" resultType="answer">
+		select * from AnswerView where inIdx=#{inIdx} order by aDate desc
+  </select>
+
+  <!-- 부분조회 -->
+  <select id="selectOne" parameterType="int" resultType="answer">
+		select * from answer where aIdx=#{aIdx}
+  </select>
+
+  <!-- 댓글 작성 -->
+  <insert id="answerInsert" parameterType="answer">
     insert into answer values(
       null,
       #{inIdx}, 
@@ -14,6 +24,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       #{aContent},
       now()
       )
-    </insert>
+  </insert>
+
+  <!-- 댓글 삭제 -->
+  <delete id="answerDelete" parameterType="int">
+		delete from answer where aIdx=#{aIdx}
+  </delete>
 
 </mapper>

@@ -11,7 +11,9 @@
     <meta charset="UTF-8">
     <title>게시물 상세</title>
 </head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
     function del(inIdx) {
         if (confirm('정말 삭제 하시겠습니까?') == false) return;
         location.href = "inquiryDelete.do?inIdx=" + encodeURIComponent(inIdx);
@@ -20,7 +22,6 @@
     function comment_insert() {
         // 로그인이 안 되었으면
         if ("${ empty user }" == "true") {
-
             loginModal.style.display = 'flex';
             alert('로그아웃되었습니다.\n로그인하세요.')
             return;
@@ -35,7 +36,7 @@
         }
 
         $.ajax({
-            url: "${pageContext.request.contextPath}/answer/insert.do",
+            url: "${pageContext.request.contextPath}/answer/answerInsert.do",
             data: {
                 aContent: aContent,
                 inIdx: "${vo.inIdx}",
@@ -44,11 +45,13 @@
             },
             dataType: "json",
             success: function (res_data) {
-                $("#aContent").val("");
+                $("#aContent").val(""); // 입력창 초기화
                 if (res_data.result == false) {
                     alert("댓글 등록 실패!!");
                     return;
                 }
+                // 댓글 등록 성공 시, 댓글 목록을 새로고침
+                comment_list(); // 추가된 댓글 목록을 불러옴
             },
             error: function (err) {
                 alert(err.responseText);
@@ -56,34 +59,78 @@
         });
     }
 
+
+    function comment_list() {
+        $.ajax({
+            url: "${pageContext.request.contextPath}/answer/answerList.do",
+            data: {
+                "inIdx": "${vo.inIdx}"
+            }, // 게시글 ID를 전달
+            dataType: "json", // JSON 형식으로 응답을 받음
+            success: function (res_data) {
+                let answerHtml = "";
+
+                $.each(res_data, function (index, answer) {
+                    let deleteButton = '';
+
+                    // JavaScript에서 사용자 권한 확인
+                    const currentUserIdx = "${sessionScope.user.userIdx}";
+                    const isAdmin = "${sessionScope.user.adminAt}" === 'Y';
+
+                    if (isAdmin || currentUserIdx == answer.userIdx) {
+                        deleteButton =
+                            `<button class="btn btn-danger" onclick="comment_delete(\${answer.aidx}, this);">삭제</button>`;
+                    }
+
+                    answerHtml += `
+                    <div class="comment-item">
+                        <p><strong>\${answer.name}</strong> (\${answer.adate})</p>
+                        <p>\${answer.acontent}</p>
+                        \${deleteButton}
+                        <hr>
+                    </div>
+                `;
+                });
+
+                $("#comment_display").html(answerHtml); // 댓글 목록을 표시하는 요소에 추가
+            },
+            error: function (err) {
+                alert("댓글 목록 로드 실패: " + err.responseText);
+            }
+        });
+    }
+
+
     function comment_delete(aIdx, btn) {
         if (confirm("정말 삭제하시겠습니까?") == false) return;
 
-        $(btn).prop('disabled', true); // 버튼 비활성화하여 중복 클릭 방지
+        $(btn).prop('disabled', true); // 중복 클릭 방지를 위해 버튼 비활성화
 
         $.ajax({
-            url: "${pageContext.request.contextPath}/answer/delete.do",
+            url: "${pageContext.request.contextPath}/answer/answerDelete.do",
+            type: "GET",
             data: {
-                "aIdx": aIdx
+                "aIdx": aIdx // 삭제할 댓글 ID
             },
             dataType: "json",
             success: function (res_data) {
                 $(btn).prop('disabled', false); // 버튼 다시 활성화
-
-                if (res_data.result == false) {
-                    alert("삭제 실패!!");
-                    return;
+                if (res_data.result) {
+                    comment_list(); // 댓글 목록을 새로 불러옴
+                } else {
+                    alert("댓글 삭제 실패!!");
                 }
             },
             error: function (err) {
                 $(btn).prop('disabled', false); // 버튼 다시 활성화
-                alert(err.responseText);
+                alert("댓글 삭제 실패: " + err.responseText);
             }
         });
     }
 
     $(document).ready(function () {
-        comment_list(1); // 페이지 로드 시 첫 페이지 댓글 목록을 로드
+        // 페이지 로드 시 댓글 목록을 불러옴
+        comment_list();
     });
 </script>
 
