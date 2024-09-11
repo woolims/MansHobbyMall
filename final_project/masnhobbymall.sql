@@ -29,62 +29,41 @@ CREATE TABLE Grade (
     authority int NOT NULL,
     discount int NOT NULL
 );
--- Grade 테이블에 샘플 데이터 삽입
-INSERT INTO Grade(gradeName, authority, discount)
-VALUES ('브론즈', 1, 0),
-	('실버', 1, 3),
-	('골드', 2, 3),
-	('다이아', 2, 5),
-	('마스터', 3, 5);
 
 -- User 테이블
 CREATE TABLE User (
     userIdx int PRIMARY KEY AUTO_INCREMENT,
     gIdx int NOT NULL DEFAULT 1,
-    id varchar(50) NOT NULL,
+    id varchar(50) NOT NULL UNIQUE,
     password varchar(50) NOT NULL,
-    nickName varchar(50) NOT NULL,
+    nickName varchar(50) NOT NULL UNIQUE,
     name varchar(50) NOT NULL,
-    phone varchar(50) NOT NULL,
+    phone varchar(50) NOT NULL UNIQUE,
     addr varchar(70) NOT NULL,
     subAddr varchar(45),
     adminAt char(1) NOT NULL DEFAULT 'N',
     point bigint NOT NULL DEFAULT 0,
-    createAt DATETIME NOT NULL default now()
+    createAt DATETIME NOT NULL default now(),
+    FOREIGN KEY (gIdx) REFERENCES Grade (gIdx) ON DELETE CASCADE
 );
--- User 테이블과 Grade 테이블의 외래 키
-ALTER TABLE User
-ADD CONSTRAINT FK_Grade_TO_User FOREIGN KEY (gIdx) REFERENCES Grade (gIdx);
--- User 테이블에 샘플 데이터 삽입
-INSERT INTO User(gIdx, id, password, nickName, name, phone, addr, subAddr, adminAt, point)
-VALUES (5, 'admin', 'admin', '관리자', '관리자', '010-1111-1111', '서울시 관악구', '미공개', 'Y', 10000000),
-	(1, 'user1', 'user1', '사용자1', '김원진', '미공개', '미공개', '미공개', 'N', default),
-	(2, 'user2', 'user2', '사용자2', '배현진', '미공개', '미공개', '미공개', 'N', default),
-	(3, 'user3', 'user3', '사용자3', '강민경', '미공개', '미공개', '미공개', 'N', default),
-	(4, 'user4', 'user4', '사용자4', '손호영', '미공개', '미공개', '미공개', 'N', default),
-	(5, 'user5', 'user5', '매니저(심우림)', '김원진', '미공개', '미공개', '미공개', 'N', 1000000);
 
 -- Email 테이블
 CREATE TABLE Email (
     emailIdx int PRIMARY KEY AUTO_INCREMENT,
     userIdx int NOT NULL,
     email varchar(50) NULL,
-    esite varchar(20) NOT NULL
+    esite varchar(20) NOT NULL,
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
--- Email 테이블과 User 테이블의 외래 키
-ALTER TABLE Email
-ADD CONSTRAINT FK_User_TO_Email FOREIGN KEY (userIdx) REFERENCES User (userIdx);
 
 -- DAddress 테이블
 CREATE TABLE DAddress (
     daIdx int PRIMARY KEY AUTO_INCREMENT,
     userIdx int NOT NULL,
     daPhone varchar(20) NOT NULL,
-    daAddr LONGTEXT NOT NULL
+    daAddr LONGTEXT NOT NULL,
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
--- DAddress 테이블과 User 테이블의 외래 키
-ALTER TABLE DAddress
-ADD CONSTRAINT FK_User_TO_DAddress FOREIGN KEY (userIdx) REFERENCES User (userIdx);
 
 -- GCondition 테이블
 CREATE TABLE GCondition (
@@ -92,11 +71,9 @@ CREATE TABLE GCondition (
     userIdx int NOT NULL,
     bpAmount BIGINT NOT NULL DEFAULT 0,
     rCount int NOT NULL DEFAULT 0,
-    sGradeAt char(1) NOT NULL DEFAULT 'N'
+    sGradeAt char(1) NOT NULL DEFAULT 'N',
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
--- GCondition 테이블과 User 테이블의 외래 키
-ALTER TABLE GCondition
-ADD CONSTRAINT FK_User_TO_GCondition_1 FOREIGN KEY (userIdx) REFERENCES User (userIdx);
 
 -- Coupon 테이블
 CREATE TABLE coupon (
@@ -111,14 +88,10 @@ CREATE TABLE CouponBox (
     cbIdx int PRIMARY KEY AUTO_INCREMENT,
     userIdx int NOT NULL,
     cIdx int NOT NULL,
-    useAt char(1) NOT NULL DEFAULT 'N'
+    useAt char(1) NOT NULL DEFAULT 'N',
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE,
+    FOREIGN KEY (cIdx) REFERENCES Coupon (cIdx) ON DELETE CASCADE
 );
--- CouponBox 테이블과 User, Coupon 테이블의 외래 키
-ALTER TABLE CouponBox
-ADD CONSTRAINT FK_User_TO_CouponBox FOREIGN KEY (userIdx) REFERENCES User (userIdx);
-
-ALTER TABLE CouponBox
-ADD CONSTRAINT FK_coupon_TO_CouponBox FOREIGN KEY (cIdx) REFERENCES Coupon (cIdx);
 
 -- Category 테이블
 CREATE TABLE Category (
@@ -130,21 +103,17 @@ CREATE TABLE Category (
 CREATE TABLE MCategory (
     mcategoryNo int PRIMARY KEY AUTO_INCREMENT,
     categoryNo int NOT NULL,
-    mcategoryName varchar(200) NOT NULL
+    mcategoryName varchar(200) NOT NULL,
+    FOREIGN KEY (categoryNo) REFERENCES Category (categoryNo) ON DELETE CASCADE
 );
--- MCategory 테이블과 Category 테이블의 외래 키
-ALTER TABLE MCategory
-ADD CONSTRAINT FK_Category_TO_MCategory FOREIGN KEY (categoryNo) REFERENCES Category (categoryNo);
 
 -- DCategory 테이블
 CREATE TABLE DCategory (
     dcategoryNo int PRIMARY KEY AUTO_INCREMENT,
     mcategoryNo int NOT NULL,
-    dcategoryName varchar(200) NOT NULL
+    dcategoryName varchar(200) NOT NULL,
+    FOREIGN KEY (mcategoryNo) REFERENCES MCategory (mcategoryNo) ON DELETE CASCADE
 );
--- DCategory 테이블과 Category 테이블의 외래 키
-ALTER TABLE DCategory
-ADD CONSTRAINT FK_MCategory_TO_DCategory FOREIGN KEY (mcategoryNo) REFERENCES MCategory (mcategoryNo);
 
 -- Product 테이블
 CREATE TABLE Product (
@@ -155,17 +124,11 @@ CREATE TABLE Product (
     pName varchar(200) NOT NULL,
     pEx LONGTEXT NOT NULL,
     amount BIGINT NOT NULL DEFAULT 0,
-    price BIGINT NOT NULL DEFAULT 0
+    price BIGINT NOT NULL DEFAULT 0,
+    FOREIGN KEY (categoryNo) REFERENCES Category (categoryNo) ON DELETE CASCADE,
+    FOREIGN KEY (mcategoryNo) REFERENCES MCategory (mcategoryNo) ON DELETE CASCADE,
+    FOREIGN KEY (dcategoryNo) REFERENCES DCategory (dcategoryNo) ON DELETE CASCADE
 );
--- Product 테이블과 Category, DCategory 테이블의 외래 키
-ALTER TABLE Product
-ADD CONSTRAINT FK_Category_TO_Product FOREIGN KEY (categoryNo) REFERENCES Category (categoryNo);
-
-ALTER TABLE Product
-ADD CONSTRAINT FK_MCategory_TO_Product FOREIGN KEY (mcategoryNo) REFERENCES MCategory (mcategoryNo);
-
-ALTER TABLE Product
-ADD CONSTRAINT FK_DCategory_TO_Product FOREIGN KEY (dcategoryNo) REFERENCES DCategory (dcategoryNo);
 
 -- DStatus 테이블
 CREATE TABLE DStatus (
@@ -180,11 +143,9 @@ CREATE TABLE Orders (
     dsIdx int NOT NULL,
     usepoint BIGINT NOT NULL DEFAULT 0,
     oDate DATETIME NOT NULL DEFAULT now(),
-    oaddress LONGTEXT NOT NULL
+    oaddress LONGTEXT NOT NULL,
+    FOREIGN KEY (dsIdx) REFERENCES DStatus (dsIdx) ON DELETE CASCADE
 );
--- Orders 테이블과 DStatus 테이블의 외래 키
-ALTER TABLE Orders
-ADD CONSTRAINT FK_DStatus_TO_Orders FOREIGN KEY (dsIdx) REFERENCES DStatus (dsIdx);
 
 -- BuyList 테이블
 CREATE TABLE BuyList (
@@ -193,31 +154,21 @@ CREATE TABLE BuyList (
     pIdx int NOT NULL,
     oIdx int NOT NULL,
     bamount int NOT NULL,
-    buyDate DATETIME NOT NULL DEFAULT now()
+    buyDate DATETIME NOT NULL DEFAULT now(),
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE,
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE,
+    FOREIGN KEY (oIdx) REFERENCES Orders (oIdx) ON DELETE CASCADE
 );
--- BuyList 테이블과 User, Product, Orders 테이블의 외래 키
-ALTER TABLE BuyList
-ADD CONSTRAINT FK_User_TO_BuyList FOREIGN KEY (userIdx) REFERENCES User (userIdx);
-
-ALTER TABLE BuyList
-ADD CONSTRAINT FK_Product_TO_BuyList FOREIGN KEY (pIdx) REFERENCES Product (pIdx);
-
-ALTER TABLE BuyList
-ADD CONSTRAINT FK_Orders_TO_BuyList FOREIGN KEY (oIdx) REFERENCES Orders (oIdx);
 
 -- SCart 테이블
 CREATE TABLE SCart (
     scIdx int PRIMARY KEY AUTO_INCREMENT,
     userIdx int NOT NULL,
     pIdx int NOT NULL,
-    scamount int NOT NULL DEFAULT 1
+    scamount int NOT NULL DEFAULT 1,
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx)  ON DELETE CASCADE,
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
 );
--- SCart 테이블과 User, Product 테이블의 외래 키
-ALTER TABLE SCart
-ADD CONSTRAINT FK_User_TO_SCart FOREIGN KEY (userIdx) REFERENCES User (userIdx);
-
-ALTER TABLE SCart
-ADD CONSTRAINT FK_Product_TO_SCart FOREIGN KEY (pIdx) REFERENCES Product (pIdx);
 
 -- Review 테이블
 CREATE TABLE review (
@@ -226,28 +177,21 @@ CREATE TABLE review (
     userIdx int NOT NULL,
     rvContent LONGTEXT NOT NULL,
     reviewPoint int NOT NULL DEFAULT 5,
-    rvDate DATETIME NOT NULL DEFAULT now()
+    rvImg LONGTEXT NULL,
+    rvDate DATETIME NOT NULL DEFAULT now(),
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE,
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
--- Review 테이블과 Product, User 테이블의 외래 키
-ALTER TABLE Review
-ADD CONSTRAINT FK_Product_TO_Review FOREIGN KEY (pIdx) REFERENCES Product (pIdx);
-
-ALTER TABLE Review
-ADD CONSTRAINT FK_User_TO_Review FOREIGN KEY (userIdx) REFERENCES User (userIdx);
 
 -- Follow 테이블
 CREATE TABLE Follow (
     fIdx int PRIMARY KEY AUTO_INCREMENT,
     rvIdx int NOT NULL,
     userIdx int NOT NULL,
-    followDate DATETIME NOT NULL DEFAULT now()
+    followDate DATETIME NOT NULL DEFAULT now(),
+    FOREIGN KEY (rvIdx) REFERENCES Review (rvIdx) ON DELETE CASCADE,
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
--- Follow 테이블과 Review, User 테이블의 외래 키
-ALTER TABLE Follow
-ADD CONSTRAINT FK_Review_TO_Follow_1 FOREIGN KEY (rvIdx) REFERENCES Review (rvIdx);
-
-ALTER TABLE Follow
-ADD CONSTRAINT FK_User_TO_Follow_1 FOREIGN KEY (userIdx) REFERENCES User (userIdx);
 
 -- Inquiry 테이블
 CREATE TABLE Inquiry (
@@ -257,14 +201,10 @@ CREATE TABLE Inquiry (
     inType varchar(30) NOT NULL DEFAULT '기타',
     inContent LONGTEXT NOT NULL,
     inDate DATETIME NOT NULL DEFAULT now(),
-    inPP LONGTEXT NULL
+    inPP LONGTEXT NULL,
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE,
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
--- Inquiry 테이블과 Product, User 테이블의 외래 키
-ALTER TABLE Inquiry
-ADD CONSTRAINT FK_Product_TO_Inquiry_1 FOREIGN KEY (pIdx) REFERENCES Product (pIdx);
-
-ALTER TABLE Inquiry
-ADD CONSTRAINT FK_User_TO_Inquiry_1 FOREIGN KEY (userIdx) REFERENCES User (userIdx);
 
 -- Answer 테이블
 CREATE TABLE Answer (
@@ -272,14 +212,10 @@ CREATE TABLE Answer (
     inIdx int NOT NULL,
     userIdx int NOT NULL,
     aContent LONGTEXT NOT NULL,
-    aDate DATETIME NOT NULL DEFAULT now()
+    aDate DATETIME NOT NULL DEFAULT now(),
+    FOREIGN KEY (inIdx) REFERENCES Inquiry (inIdx) ON DELETE CASCADE,
+    FOREIGN KEY (userIdx) REFERENCES Inquiry (userIdx) ON DELETE CASCADE
 );
--- Answer 테이블과 Inquiry 테이블의 외래 키
-ALTER TABLE Answer
-ADD CONSTRAINT FK_Inquiry_TO_Answer_1 FOREIGN KEY (inIdx) REFERENCES Inquiry (inIdx);
-
-ALTER TABLE Answer
-ADD CONSTRAINT FK_Inquiry_TO_Answer_3 FOREIGN KEY (userIdx) REFERENCES Inquiry (userIdx);
 
 -- Compony 테이블
 CREATE TABLE Compony (
@@ -302,12 +238,21 @@ CREATE TABLE Chat_logs (
 );
 
 -- Grade 테이블에 샘플 데이터 삽입
-INSERT INTO Grade (gradeName, authority, discount)
-VALUES ('Bronze', 1, 5),
-       ('Silver', 2, 10),
-       ('Gold', 3, 15),
-       ('Platinum', 4, 20);
+INSERT INTO Grade(gradeName, authority, discount)
+VALUES ('브론즈', 1, 0),
+	('실버', 1, 3),
+	('골드', 2, 3),
+	('다이아', 2, 5),
+	('마스터', 3, 5);
 
+-- User 테이블에 샘플 데이터 삽입
+INSERT INTO User(gIdx, id, password, nickName, name, phone, addr, subAddr, adminAt, point)
+VALUES (5, 'admin', 'admin', '관리자', '관리자', '010-0000-0000', '서울시 관악구', '미공개', 'Y', 10000000),
+	(1, 'user1', 'user1', '사용자1', '김원진', '010-1111-1111', '미공개', '미공개', 'N', default),
+	(2, 'user2', 'user2', '사용자2', '배현진', '010-2222-2222', '미공개', '미공개', 'N', default),
+	(3, 'user3', 'user3', '사용자3', '강민경', '010-3333-3333', '미공개', '미공개', 'N', default),
+	(4, 'user4', 'user4', '사용자4', '손호영', '010-4444-4444', '미공개', '미공개', 'N', default),
+	(5, 'user5', 'user5', '매니저(심우림)', '김원진', '010-5555-5555', '미공개', '미공개', 'N', 1000000);
 
 -- 대 카테고리 데이터 추가
 INSERT INTO category values(null,'게임');
@@ -440,6 +385,7 @@ VIEW `shop_list_view` AS
         `p`.`pName` AS `pName`,
         `p`.`pEx` AS `pEx`,
         `p`.`price` AS `price`,
+		`p`.`amount` As `amount`,
         `c`.`categoryName` AS `categoryName`,
         `m`.`mcategoryName` AS `mcategoryName`,
         `d`.`dcategoryName` AS `dcategoryName`
@@ -449,36 +395,71 @@ VIEW `shop_list_view` AS
         JOIN `mcategory` `m` ON ((`p`.`mcategoryNo` = `m`.`mcategoryNo`)))
         JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)));
 
+CREATE OR REPLACE VIEW LoginUserView AS
+SELECT DISTINCT
+    u.userIdx,
+    u.gIdx,
+    u.id,
+    u.password,
+    u.nickName,
+    u.name,
+    u.phone,
+    u.addr,
+    u.subAddr,
+    u.adminAt,
+    u.point,
+    u.createAt,
+    g.gradeName,
+    g.authority,
+    g.discount
+FROM User u
+INNER JOIN Grade g ON u.gIdx = g.gIdx;
 
-    CREATE OR REPLACE VIEW UserStatusView AS
-    SELECT DISTINCT
-        u.userIdx,
-        u.gIdx,
-        u.id,
-        u.password,
-        u.nickName,
-        u.name,
-        u.phone,
-        u.addr,
-        u.subAddr,
-        u.adminAt,
-        u.point,
-        u.createAt,
-        e.emailIdx,
-        e.email,
-        e.esite
-    FROM email e
-    INNER JOIN User u ON e.userIdx = u.userIdx;
+CREATE OR REPLACE VIEW UserStatusView AS
+SELECT DISTINCT
+    u.userIdx,
+    u.gIdx,
+    u.id,
+    u.password,
+    u.nickName,
+    u.name,
+    u.phone,
+    u.addr,
+    u.subAddr,
+    u.adminAt,
+    u.point,
+    u.createAt,
+    e.emailIdx,
+    e.email,
+    e.esite,
+    g.gradeName,
+    g.authority,
+    g.discount
+FROM email e
+INNER JOIN User u ON e.userIdx = u.userIdx
+INNER JOIN Grade g ON u.gIdx = g.gIdx;
 
-    CREATE OR REPLACE VIEW InquiryView AS
-    SELECT
-        i.inIdx,
-        i.pIdx,
-        i.userIdx,
-        i.inType,
-        i.inContent,
-        i.inDate,
-        i.inPP,
-        u.name
-    FROM Inquiry i
-    INNER JOIN User u ON i.userIdx = u.userIdx;
+CREATE OR REPLACE VIEW InquiryView AS
+SELECT
+    i.inIdx,
+    i.pIdx,
+    i.userIdx,
+    i.inType,
+    i.inContent,
+    i.inDate,
+    i.inPP,
+    u.name
+FROM Inquiry i
+INNER JOIN User u ON i.userIdx = u.userIdx;
+
+CREATE OR REPLACE VIEW Answer AS
+SELECT
+    a.aIdx,
+    a.inIdx,
+    a.userIdx,
+    a.aContent,
+    a.aDate,
+    u.name,
+    u.adminAt
+FROM Answer a
+INNER JOIN User u ON a.userIdx = u.userIdx;
