@@ -170,8 +170,8 @@
           <h2>리뷰 작성</h2>
           <form>
             <input type="hidden" name="userIdx" value="${user.userIdx}" />
+            상품번호 : <input type="text" name="pIdx" value="1"/><br>
             <div class="form-group" style="color: black;">
-                상품번호 : <intput type="text" name="pIdx" value="1" /><br>
                 <label for="content" style="color: black;">내용</label>
                 <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
             </div>

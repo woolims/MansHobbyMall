@@ -50,13 +50,20 @@
         }
 
         #content {
-            background: #ccc;
+            background: #fff;
             margin-bottom: 50px;
             padding: 20px;
             min-height: 850px; /* 최소 높이 설정 */
+            text-align: center;
+            font-size: 24px;
+            color: #333;
         }
 
-
+        .welcome-message {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-top: 100px;
+        }
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -75,6 +82,9 @@
                     }
                 });
             });
+
+            // 기본 콘텐츠로 환영 메시지를 추가합니다.
+            $("#content").html('<div class="welcome-message">환영합니다! 여기는 마이페이지입니다.</div>');
         });
     </script>
 </head>
@@ -98,13 +108,7 @@
         <div id="content" class="col-sm-12">
             <!-- Default content can be loaded here -->
             <div style="text-align: center;">
-                <c:forEach var="i" begin="1" end="20" step="1">
-                    <div style="border: 1px solid red; width: 180px; height: 200px; display: inline-block;  margin-top: 10px; text-align: center;">
-                        이미지
-                        <span>제목 ${i}</span>
-                        <span>가격 ${i*300}</span>
-                    </div>
-                </c:forEach>
+                <!-- 환영 메시지가 자바스크립트에서 설정됩니다. -->
             </div>
         </div>
     </div>

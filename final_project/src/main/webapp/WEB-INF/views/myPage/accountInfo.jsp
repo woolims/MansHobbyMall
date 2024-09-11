@@ -57,6 +57,8 @@
 <body>
     <div class="container">
         <h1>회원 정보 수정</h1>
+    </div>
+    <div class="container">
         <form>
             <input type="hidden" name="userIdx" value="${user.userIdx}"/>
             <div class="form-group">
@@ -109,5 +111,6 @@
             </div>
         </form>
     </div>
+    
 </body>
 </html>
