@@ -162,6 +162,21 @@ public class UserController {
 		return "shopPage/mypage";
 	}
 
+	@RequestMapping("cart.do")
+	public String cart(){
+		return "myPage/cart";
+	}
+
+	@RequestMapping("purchaseHistory.do")
+	public String purchaseHistory(){
+		return "myPage/purchaseHistory";
+	}
+
+	@RequestMapping("shippingTracking.do")
+	public String shippingTracking(){
+		return "myPage/shippingTracking";
+	}
+
 	@RequestMapping("accountInfo.do")
 	public String accountInfo(){
 		return "myPage/accountInfo";
