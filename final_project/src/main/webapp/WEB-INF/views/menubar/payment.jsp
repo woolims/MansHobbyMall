@@ -174,12 +174,6 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 </head>
 
 <body>
-    <!-- 상품 페이지 내용 -->
-    <div class="paymentbar">
-        <h1>상품 제목</h1>
-        <p>상품 설명 텍스트가 여기에 들어갑니다...</p>
-    </div>
-
     <!-- 고정된 푸터 -->
     <div class="fixed-footer">
         <div class="button-container">

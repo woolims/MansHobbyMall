@@ -91,6 +91,7 @@
             <body>
                 <!-- 메뉴바 -->
                 <%@ include file="../menubar/navbar.jsp" %>
+                <div style="height: 30px;"></div>
                     <div class="container">
                         <div class="product-container">
                             <div class="product-image">
@@ -104,22 +105,23 @@
                                 <p id="product-description">${shop.getPEx()}</p>
                             </div>
                         </div>
-
-                        
-                        <!-- 푸터 -->
-                        <%@ include file="../menubar/payment.jsp" %>
                     </div>
-                    <div>
+                    <h1 style="margin-left: 380px; margin-top: 50px;">후기</h1>
+                    <c:forEach var="review" items="${reviewList}">
+                    <div class="container" style="margin-top: 10px;">
                         <!-- 리뷰 목록 출력 -->
-                        <c:forEach var="review" items="${reviewList}">
-                            <div class="review-item">
-                                <p><strong>작성자:</strong> ${review.nickName}</p>
-                                <p><strong>평점:</strong> ${review.reviewPoint}</p>
-                                <p><strong>리뷰 내용:</strong> ${review.rvContent}</p>
-                                <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p>
-                            </div>
-                        </c:forEach>
+                        <div class="review-item">
+                            <p><strong>작성자:</strong> ${review.nickName}</p>
+                            
+                            <p><strong>평점:</strong> ${review.reviewPoint}</p>
+                            <p><strong>리뷰 내용:</strong> ${review.rvContent}</p>
+                            <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p>
+                        </div>
                     </div>
+                    </c:forEach>
+                    <!-- 푸터 -->
+                    <div style="height: 200px;"></div>
+                    <%@ include file="../menubar/payment.jsp" %>
             </body>
 
             </html>
