@@ -113,12 +113,23 @@
             });
         }
 
-
+        function updateLikeCount(rvIdx) {
+            $.ajax({
+                url: "${pageContext.request.contextPath}/review/count.do",
+                data: { rvIdx : rvIdx },
+                dataType: "json",
+                success: function(response) {
+                $("#like-count-" + rvIdx).text(response.count);
+                }
+            });
+        }
+        
 
         $(document).ready(function() {
+
             // 초기화 작업 수행
             $(".like-button").each(function() {
-                var rvIdx = $(this).data("rvIdx");
+                var rvIdx = $(this).data("rvidx");
                 var btn = this;
                 $.ajax({
                     url: "${pageContext.request.contextPath}/review/isLiked.do",
@@ -134,7 +145,7 @@
             });
         });
 
-        
+       
     </script>
 </head>
 
