@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.UserMapper;
+import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +35,9 @@ public class UserController {
 	// 처음에 1회연결
 	@Autowired
 	UserMapper userMapper;
+
+	@Autowired
+	OrdersMapper ordersMapper;
 
 	// 회원전체목록
 	@RequestMapping("list.do")
@@ -173,7 +178,13 @@ public class UserController {
 	}
 
 	@RequestMapping("shippingTracking.do")
-	public String shippingTracking(){
+	public String shippingTracking(Model model){
+		UserVo user = (UserVo) session.getAttribute("user");
+
+		List<OrdersVo> orderList = ordersMapper.selectList(user.getUserIdx());
+
+		model.addAttribute("orderList", orderList);
+
 		return "myPage/shippingTracking";
 	}
 
