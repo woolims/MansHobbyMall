@@ -145,6 +145,71 @@
             });
         });
 
+
+        function send1(f) {
+            let url = new URL(window.location.href);
+            if ("${ empty user }" == "true") {
+                alert('로그아웃되었습니다.\n로그인하세요.');
+                return;
+            }
+
+            let rvContent = f.rvContent.value;
+
+            if (rvContent.trim() == '') {
+                alert("내용을 입력하세요");
+                f.rvContent.focus();
+                return;
+            }
+            
+            f.url.value = url.href;
+            console.log(url.href);
+
+            f.action = "${pageContext.request.contextPath}/review/reviewWrite.do";
+            f.submit();
+        }
+
+        function send2(f) {
+            if ("${ empty user }" == "true") {
+                alert('로그아웃되었습니다.\n로그인하세요.');
+                return;
+            }
+
+            let rvContent = f.rvContent.value;
+
+            if (rvContent.trim() == '') {
+                alert("내용을 입력하세요");
+                f.rvContent.focus();
+                return;
+            }
+
+            f.action = "${pageContext.request.contextPath}/review/reviewModify.do"; // 리뷰 수정 전송
+            f.submit();
+        }
+
+        function check_user(rvIdx, userIdx) {
+            if ("${not empty user}") {
+                if ("${user.userIdx}" == userIdx) {
+                    // AJAX 요청으로 리뷰 정보를 가져와서 모달에 채워넣기
+                    $.ajax({
+                        url: 'getReviewInfo.do',
+                        type: 'GET',
+                        data: { rvIdx: rvIdx },
+                        success: function(data) {
+                            // 모달을 열고 데이터를 채웁니다.
+                            $('#reviewModifyModal').show();
+                            $('textarea[name="rvContent"]').val(data.rvContent);
+                            $('input[name="rvIdx"]').val(data.rvIdx);
+                        },
+                        error: function () {
+                            alert('리뷰 정보를 가져오는 데 실패했습니다.');
+                        }
+                    });
+                    return;
+                }
+            }
+            alert('수정 권한이 없습니다.');
+        }
+
        
     </script>
 </head>
@@ -170,6 +235,10 @@
 
     <h1 style="margin-left: 380px; margin-top: 50px;">후기</h1>
 
+            <c:if test="${ not empty user }">
+                <button type="button" class="btn btn-primary" id="openReviewModal">리뷰 등록</button>
+            </c:if>
+
     <c:forEach var="review" items="${reviewList}">
         <div class="container" style="margin-top: 0px;">
             <!-- 리뷰 목록 출력 -->
@@ -188,6 +257,58 @@
         </div>
     </c:forEach>
 
+
+    <!-- 리뷰 작성 모달 -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="document.getElementById('reviewModal').style.display='none'">&times;</span>
+          <h2>리뷰 작성</h2>
+          <form>
+            <input type="hidden" name="url" id="url" value="../home.do"/>
+            <input type="hidden" name="userIdx" value="${user.userIdx}" />
+            상품번호 : <input type="text" name="pIdx" value="1"/><br>
+            <div class="form-group" style="color: black;">
+                <label for="content" style="color: black;">내용</label>
+                <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
+          </form>
+        </div>
+    </div>
+
+    <!-- 리뷰 수정 모달 -->
+    <div id="reviewModifyModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
+          <h2>리뷰 수정</h2>
+          <form>
+            <input type="hidden" name="rvIdx" />
+            <input type="hidden" name="userIdx" value="${user.userIdx}" />
+            <div class="form-group" style="color: black;">
+                <label for="content" style="color: white;">내용</label>
+                <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="send2(this.form)">등록</button>
+          </form>
+        </div>
+    </div>
+
+    <script>
+        const reviewModal = document.getElementById("reviewModal");
+        const openReviewModalBtn = document.getElementById("openReviewModal");
+        const reviewModifyModal = document.getElementById("reviewModifyModal");
+
+        openReviewModalBtn.onclick = function () {
+            reviewModal.style.display = "flex";
+        };
+
+        document.querySelectorAll(".close").forEach(el => {
+            el.onclick = function () {
+                el.closest(".modal").style.display = "none";
+            };
+        });
+    </script>
+    
 </body>
 
 </html>

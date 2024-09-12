@@ -529,3 +529,23 @@ INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES (
     (SELECT dsIdx FROM DStatus WHERE dsType = 'pending'), 
     1, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY)
 );
+
+CREATE OR REPLACE VIEW ShippingView AS
+SELECT
+    o.oIdx,
+    o.dsIdx,
+    o.bIdx,
+    o.daStartDate,
+    o.daEndDate,
+    b.userIdx,
+    b.pIdx,
+    b.bamount,
+    b.buyDate,
+    ds.dsContent,
+    u.name,
+    p.pName
+FROM Orders o
+INNER JOIN Buylist b ON o.bIdx = b.bIdx
+INNER JOIN DStatus ds ON o.dsIdx = ds.dsIdx
+INNER JOIN User u ON b.userIdx = u.userIdx
+INNER JOIN Product p ON b.pIdx = p.pIdx;

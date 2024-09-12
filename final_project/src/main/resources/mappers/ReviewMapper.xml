@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 전체조회 -->
   <select id="selectList" resultType="review">
-    select * from ReviewView order by rvIdx
+    select * from ReviewView order by rvIdx desc
   </select>
 
   <select id="getReviewInfo" parameterType="int" resultType="review">
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 특정 상품에 리뷰 조회 -->
   <select id="selectReviewsByProduct" parameterType="int" resultType="review">
-    SELECT * FROM ReviewView WHERE pIdx = #{pIdx}
+    SELECT * FROM ReviewView WHERE pIdx = #{pIdx} order by rvIdx desc
   </select>
 
   <!-- 좋아요 추가 -->

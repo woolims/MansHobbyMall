@@ -52,7 +52,7 @@ public class ReviewController {
     }
 
     @RequestMapping("reviewWrite.do")
-    public String reviewWrite(ReviewVo vo, HttpSession session, Model model) {
+    public String reviewWrite(ReviewVo vo, String url, HttpSession session, Model model) {
 
         UserVo user = (UserVo) session.getAttribute("user");
 
@@ -63,10 +63,10 @@ public class ReviewController {
         int res = reviewMapper.insertReview(vo);
 
         if (res > 0) {
-            return "redirect:review.do";
+            return "redirect:"+url;
         } else {
             model.addAttribute("error", "리뷰 작성에 실패했습니다.");
-            return "redirect:review.do"; // 실패 시 에러 메시지와 함께 폼으로 돌아감
+            return "redirect:"+url; // 실패 시 에러 메시지와 함께 폼으로 돌아감
         }
     }
 
