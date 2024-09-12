@@ -214,7 +214,7 @@ CREATE TABLE Answer (
     aContent LONGTEXT NOT NULL,
     aDate DATETIME NOT NULL DEFAULT now(),
     FOREIGN KEY (inIdx) REFERENCES Inquiry (inIdx) ON DELETE CASCADE,
-    FOREIGN KEY (userIdx) REFERENCES Inquiry (userIdx) ON DELETE CASCADE
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
 
 -- Compony 테이블

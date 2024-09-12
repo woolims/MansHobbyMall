@@ -67,7 +67,7 @@ public class InquiryController {
         Map<Integer, Boolean> answerMap = new HashMap<>();
         List<AnswerVo> comments = inquiryMapper.inquiryAList();
         for (AnswerVo comment : comments) {
-            answerMap.put(comment.getAIdx(), true); // 답변이 존재하면 true
+            answerMap.put(comment.getInIdx(), true); // 답변이 존재하면 true
         }
 
         model.addAttribute("list", list);
