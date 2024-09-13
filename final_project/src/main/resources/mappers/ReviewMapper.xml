@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 리뷰 삭제 시 해당 리뷰의 좋아요 삭제 -->
   <delete id="deleteByReview" parameterType="int">
-    DELETE FROM follow WHERE rvIdx = #{rvIdx}
+    DELETE FROM Review WHERE rvIdx = #{rvIdx}
   </delete>
 
 

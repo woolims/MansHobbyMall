@@ -213,7 +213,7 @@
         function deleteReview(rvIdx) {
             if (confirm('정말로 삭제하시겠습니까?')) {
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     url: '${pageContext.request.contextPath}/review/deleteReview.do',
                     data: { rvIdx: rvIdx },
                     dataType: 'json',

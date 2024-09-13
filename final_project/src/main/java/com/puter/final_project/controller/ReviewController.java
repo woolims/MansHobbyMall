@@ -162,7 +162,9 @@ public class ReviewController {
     @RequestMapping(value = "deleteReview.do", produces = "application/json; charset=utf-8;")
     @ResponseBody
     public String deleteReview(@RequestParam("rvIdx") int rvIdx) {
+        System.out.println("=================== rvIdx ================="+rvIdx);
         int res = reviewMapper.deleteByReview(rvIdx);
+        System.out.println("=================== res ================="+res);
 
         JSONObject json = new JSONObject();
         json.put("result", res > 0 ? "success" : "failure");
