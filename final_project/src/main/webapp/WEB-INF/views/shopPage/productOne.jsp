@@ -169,6 +169,7 @@
         }
 
         function send2(f) {
+            let url = new URL(window.location.href);
             if ("${ empty user }" == "true") {
                 alert('로그아웃되었습니다.\n로그인하세요.');
                 return;
@@ -181,6 +182,7 @@
                 f.rvContent.focus();
                 return;
             }
+            f.url.value = url.href;
 
             f.action = "${pageContext.request.contextPath}/review/reviewModify.do"; // 리뷰 수정 전송
             f.submit();
@@ -191,7 +193,7 @@
                 if ("${user.userIdx}" == userIdx) {
                     // AJAX 요청으로 리뷰 정보를 가져와서 모달에 채워넣기
                     $.ajax({
-                        url: 'getReviewInfo.do',
+                        url: '${pageContext.request.contextPath}/review/getReviewInfo.do',
                         type: 'GET',
                         data: { rvIdx: rvIdx },
                         success: function(data) {
@@ -208,6 +210,29 @@
                 }
             }
             alert('수정 권한이 없습니다.');
+        }
+
+        function deleteReview(rvIdx) {
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                $.ajax({
+                    type: 'GET',
+                    url: '${pageContext.request.contextPath}/review/deleteReview.do',
+                    data: { rvIdx: rvIdx },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.result === 'success') {
+                            alert('삭제되었습니다.');
+                            // 페이지를 새로 고침하여 삭제된 리뷰를 제거할 수 있습니다.
+                            location.reload();
+                        } else {
+                            alert('삭제 실패했습니다.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                });
+            }
         }
 
        
@@ -239,50 +264,64 @@
                 <button type="button" class="btn btn-primary" id="openReviewModal">리뷰 등록</button>
             </c:if>
 
-    <c:forEach var="review" items="${reviewList}">
-        <div class="container" style="margin-top: 0px;">
-            <!-- 리뷰 목록 출력 -->
-            <div class="review-item">
-                <p><strong>작성자:</strong> ${review.nickName}</p>
-                <p><strong>평점:</strong> ${review.reviewPoint}</p>
-                <p><strong>리뷰 내용:</strong> ${review.rvContent}</p>
-                <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p>
-
-                <!-- 좋아요 버튼과 좋아요 수 -->
-                <button id="like-btn-${review.rvIdx}" class="like-button" data-rvIdx="${review.rvIdx}" onclick="toggleLike('${review.rvIdx}', this)">
-                    좋아요
-                </button>
-                <span>좋아요 수: <span id="like-count-${review.rvIdx}">${review.likeCount}</span></span>
-            </div>
-        </div>
-    </c:forEach>
+            <c:forEach var="review" items="${reviewList}">
+                <div class="container" style="margin-top: 0px;">
+                    <!-- 리뷰 목록 출력 -->
+                    <div class="review-item">
+                        <p><strong>작성자:</strong> ${review.nickName}</p>
+                        <p><strong>평점:</strong> ${review.reviewPoint}</p>
+                        <p><strong>리뷰 내용:</strong> ${review.rvContent}</p>
+                        <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p>
+            
+                        <!-- 좋아요 버튼과 좋아요 수 -->
+                        <button id="like-btn-${review.rvIdx}" class="like-button" data-rvIdx="${review.rvIdx}" onclick="toggleLike('${review.rvIdx}', this)">
+                            좋아요
+                        </button>
+                        <span>좋아요 수: <span id="like-count-${review.rvIdx}">${review.likeCount}</span></span>
+            
+                        <!-- 수정 및 삭제 버튼 - 로그인된 사용자와 작성자가 동일할 경우에만 표시 -->
+                        <c:if test="${user.userIdx == review.userIdx}">
+                            <!-- 리뷰 수정 버튼 -->
+                            <button class="btn btn-warning" onclick="check_user('${review.rvIdx}', '${review.userIdx}')">
+                                수정
+                            </button>
+            
+                            <!-- 리뷰 삭제 버튼 -->
+                            <button class="btn btn-danger" onclick="deleteReview('${review.rvIdx}')">
+                                삭제
+                            </button>
+                        </c:if>
+                    </div>
+                </div>
+            </c:forEach>
 
 
     <!-- 리뷰 작성 모달 -->
     <div id="reviewModal" class="modal">
         <div class="modal-content">
-          <span class="close" onclick="document.getElementById('reviewModal').style.display='none'">&times;</span>
-          <h2>리뷰 작성</h2>
-          <form>
-            <input type="hidden" name="url" id="url" value="../home.do"/>
-            <input type="hidden" name="userIdx" value="${user.userIdx}" />
-            상품번호 : <input type="text" name="pIdx" value="1"/><br>
-            <div class="form-group" style="color: black;">
-                <label for="content" style="color: black;">내용</label>
-                <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
-            </div>
-            <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
-          </form>
+            <span class="close" onclick="document.getElementById('reviewModal').style.display='none'">&times;</span>
+            <h2>리뷰 작성</h2>
+            <form>
+                <input type="hidden" name="url" id="url" value="../home.do"/>
+                <input type="hidden" name="userIdx" value="${user.userIdx}" />
+                상품번호 : <input type="text" name="pIdx" value="${shop.getPIdx()}" readonly/><br>
+                <div class="form-group" style="color: black;">
+                    <label for="content" style="color: black;">내용</label>
+                    <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
+            </form>
         </div>
     </div>
-
+    
     <!-- 리뷰 수정 모달 -->
     <div id="reviewModifyModal" class="modal">
         <div class="modal-content">
           <span class="close" onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
           <h2>리뷰 수정</h2>
           <form>
-            <input type="hidden" name="rvIdx" />
+            <input type="hidden" name="url" id="url" value="../home.do"/>
+            <input type="hidden" name="rvIdx"/>
             <input type="hidden" name="userIdx" value="${user.userIdx}" />
             <div class="form-group" style="color: black;">
                 <label for="content" style="color: white;">내용</label>
