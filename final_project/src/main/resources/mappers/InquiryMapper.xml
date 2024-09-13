@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 나중에 수정 필요 -->
     insert into inquiry values(
       null,
-      1, 
+      null, 
       #{userIdx}, 
       #{inType}, 
       #{inContent}, 

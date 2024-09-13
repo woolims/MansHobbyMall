@@ -6,12 +6,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.puter.final_project.dao.BuyListMapper">
 
     <!-- 전체조회 -->
-    <select id="selectList" resultType="buy">
+    <!-- <select id="selectList" resultType="buy">
         select * from buyList order by bIdx
-    </select>
+    </select> -->
 
     <!-- 구매내역 -->
-    <insert>
+    <!-- <insert>
         insert into buyList values(
             null,
             #{userIdx},
@@ -19,6 +19,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{bamount},
             now()
         )
-    </insert>
+    </insert> -->
 
 </mapper>
