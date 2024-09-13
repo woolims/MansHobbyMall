@@ -70,19 +70,6 @@ public class ReviewController {
         }
     }
 
-    @RequestMapping("delete.do")
-    public String delete(int rvIdx) {
-        int res = reviewMapper.deleteReview(rvIdx);
-
-        if (res > 0) {
-            session.setAttribute("alertMsg", "삭제되었습니다.");
-        } else {
-            session.setAttribute("alertMsg", "삭제 실패했습니다.");
-        }
-
-        return "redirect:review.do";
-    }
-
     @GetMapping("getReviewInfo.do")
     public ResponseEntity<ReviewVo> getReviewInfo(@RequestParam("rvIdx") int rvIdx) {
         ReviewVo reviewVo = reviewMapper.getReviewInfo(rvIdx);
@@ -91,6 +78,8 @@ public class ReviewController {
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
+
+        
     }
 
     @RequestMapping("/reviewModify.do")

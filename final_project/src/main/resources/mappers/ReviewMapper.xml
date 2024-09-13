@@ -45,8 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 리뷰 삭제 -->
   <delete id="deleteReview" parameterType="int">
-    DELETE FROM review
-    WHERE rvIdx = #{rvIdx}
+    DELETE FROM review WHERE rvIdx = #{rvIdx}
   </delete>
 
   <!-- 특정 상품에 리뷰 조회 -->
