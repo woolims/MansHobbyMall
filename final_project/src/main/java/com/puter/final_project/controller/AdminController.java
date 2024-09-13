@@ -1,26 +1,32 @@
 package com.puter.final_project.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.puter.final_project.dao.AdminMapper;
 import com.puter.final_project.dao.ProductMapper;
 import com.puter.final_project.dao.ShopMapper;
-import com.puter.final_project.vo.ProductVo;
+import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
-import java.util.Collections;
 
 @Controller
 @RequestMapping("/admin/")
@@ -42,6 +48,9 @@ public class AdminController {
     @Autowired
     ShopMapper shopMapper;
 
+    @Autowired
+    ServletContext application;
+
     @RequestMapping("admin.do")
     public String list(Model model) {
 
@@ -57,8 +66,6 @@ public class AdminController {
 
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
 
-        
-        
         // // 상품 관리 불러오기
         // List<AboardVo> list2 = .selectListMySb(user.getUserNo());
         // // 주문 관리 불러오기
@@ -76,17 +83,19 @@ public class AdminController {
 
         return "shopPage/adminMain";
     }
+
     @RequestMapping("adminAjax.do")
     @ResponseBody
-    public List<ShopVo> adminAjax(@RequestParam(defaultValue = "대분류 선택")String categoryName, String mcategoryName){
+    public List<ShopVo> adminAjax(@RequestParam(defaultValue = "대분류 선택") String categoryName, String mcategoryName) {
 
-        if (categoryName != null && !categoryName.equals("대분류 선택") && !categoryName.equals("전체보기") && mcategoryName== null) {
+        if (categoryName != null && !categoryName.equals("대분류 선택") && !categoryName.equals("전체보기")
+                && mcategoryName == null) {
             String categoryNameParam = categoryName;
             List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryNameParam);
             return mcategoryNameList;
         }
-        
-        if (mcategoryName != null && !mcategoryName.equals("선택 안 함")){
+
+        if (mcategoryName != null && !mcategoryName.equals("선택 안 함")) {
             String mcategoryNameParam = mcategoryName;
             List<ShopVo> dcategoryNameList = shopMapper.selectDcategoryNameList(mcategoryNameParam);
             return dcategoryNameList;
@@ -97,10 +106,10 @@ public class AdminController {
 
     @RequestMapping("adminAjaxPList.do")
     @ResponseBody
-    public List<ShopVo> adminAjaxPList( @RequestParam(defaultValue="")String searchParam,
-                                        @RequestParam(defaultValue="")String categoryName, 
-                                        @RequestParam(defaultValue="")String mcategoryName,
-                                        @RequestParam(defaultValue="")String dcategoryName) {
+    public List<ShopVo> adminAjaxPList(@RequestParam(defaultValue = "") String searchParam,
+            @RequestParam(defaultValue = "") String categoryName,
+            @RequestParam(defaultValue = "") String mcategoryName,
+            @RequestParam(defaultValue = "") String dcategoryName) {
 
         ShopVo shop = new ShopVo();
         shop.setPName(searchParam);
@@ -111,13 +120,13 @@ public class AdminController {
         if (categoryName.equals("전체보기")) {
             List<ShopVo> productList = shopMapper.selectAdminList();
             return productList;
-        }else if (!categoryName.equals("")) {
+        } else if (!categoryName.equals("")) {
             int categoryNo = shopMapper.selectAdminCategoryNo(shop);
             shop.setCategoryNo(categoryNo);
             if (!mcategoryName.equals("")) {
                 int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
                 shop.setMcategoryNo(mcategoryNo);
-                if(!dcategoryName.equals("")) {
+                if (!dcategoryName.equals("")) {
                     int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
                     shop.setDcategoryNo(dcategoryNo);
                 }
@@ -166,9 +175,8 @@ public class AdminController {
             return dcategorySearchList;
         }
 
-        return Collections.emptyList(); //그냥 리턴 적으려고 쓴 코드 실제로 작동안함
+        return Collections.emptyList(); // 그냥 리턴 적으려고 쓴 코드 실제로 작동안함
     }
-
 
     @RequestMapping("delete.do")
     public String delete(int userIdx) {
@@ -189,9 +197,9 @@ public class AdminController {
         return "redirect:admin.do";
     }
 
-    @RequestMapping("/pInsertForm.do")
+    @RequestMapping("pInsertForm.do")
     public String pInsertForm(ShopVo shop, Model model) {
-        
+
         // int maxPIdx = shopMapper.selectMaxPIdx();
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
         List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
@@ -204,8 +212,9 @@ public class AdminController {
         return "shopPage/pInsertForm";
     }
 
-    @RequestMapping("/pInsert.do")
-    public String productInsert(ShopVo shop, Model model) {
+    @PostMapping("pInsert.do")
+    public String pInsert(ShopVo shop, Model model, List<MultipartFile> photo) throws Exception
+             {
         int categoryNo = shopMapper.selectAdminCategoryNo(shop);
         int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
         int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
@@ -213,10 +222,50 @@ public class AdminController {
         shop.setMcategoryNo(mcategoryNo);
         shop.setDcategoryNo(dcategoryNo);
         int res = shopMapper.productInsert(shop);
+
+        List<String> filename_list = new ArrayList<String>();
+
+        String absPath = application.getRealPath("/resources/images/");
+        System.out.println("absPath : " + absPath);
+
+        for (MultipartFile photoOne : photo) {
+            if (!photoOne.isEmpty()) {
+                String filename = photoOne.getOriginalFilename();
+
+                filename = photoOne.getOriginalFilename();
+
+                File f = new File(absPath, filename);
+
+                if (f.exists()) {// 동일한 파일이 존재하냐?
+
+                    // 시간_파일명 이름변경
+                    long tm = System.currentTimeMillis();
+                    filename = String.format("%d_%s", tm, filename);
+
+                    f = new File(absPath, filename);
+                }
+
+                // spring이 저장해놓은 임시파일을 복사한다.
+                photoOne.transferTo(f);
+
+                filename_list.add(filename);
+            }
+        }
+
+        int pIdx = shopMapper.selectMaxPIdx();
+
+        PImageVo pImageVo = new PImageVo();
+
+        for (int i = 0; i < filename_list.size(); i++) {
+            String filename = filename_list.get(i);
+            pImageVo.setPIdx(pIdx);
+            pImageVo.setFileName(filename);
+            shopMapper.insertPImage(pImageVo);
+        }
         return "redirect:admin.do";
     }
 
-    @RequestMapping("/pUpdateForm.do")
+    @RequestMapping("pUpdateForm.do")
     public String pUpdateForm(ShopVo shop, Model model) {
 
         String pEx = shopMapper.selectPEx(shop.getPIdx());
@@ -233,7 +282,7 @@ public class AdminController {
         return "shopPage/pUpdateForm";
     }
 
-    @RequestMapping("/pUpdate.do")
+    @RequestMapping("pUpdate.do")
     public String pUpdate(ShopVo shop, Model model) {
 
         int categoryNo = shopMapper.selectAdminCategoryNo(shop);

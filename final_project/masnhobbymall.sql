@@ -130,6 +130,14 @@ CREATE TABLE Product (
     FOREIGN KEY (dcategoryNo) REFERENCES DCategory (dcategoryNo) ON DELETE CASCADE
 );
 
+-- 상품이미지 테이블
+CREATE TABLE ProductImage (
+    fileIdx int PRIMARY KEY AUTO_INCREMENT,
+    pIdx int NOT NULL,
+    fileName LONGTEXT NOT NULL,
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
+);
+
 -- DStatus 테이블
 CREATE TABLE DStatus (
     dsIdx int PRIMARY KEY AUTO_INCREMENT,
@@ -237,9 +245,6 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
-    ALGORITHM = UNDEFINED 
-    DEFINER = `final`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,

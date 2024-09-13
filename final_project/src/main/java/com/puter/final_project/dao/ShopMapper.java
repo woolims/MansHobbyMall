@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.ShopVo;
 
@@ -45,9 +46,11 @@ public interface ShopMapper {
 
     int selectAdminDcategoryNo(ShopVo shop);
 
-    // int selectMaxPIdx();
+    int selectMaxPIdx();
 
     int productInsert(ShopVo shop);
+
+    int insertPImage(PImageVo pImage);
 
     int productUpdate(ShopVo shop);
 

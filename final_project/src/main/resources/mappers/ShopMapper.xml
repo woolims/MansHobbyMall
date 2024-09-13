@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from shop_list_view order by pIdx desc
     </select>
 
- 
+
     <!-- 메인카테고리 번호만 조회 -->
     <!-- <select id="selectCategoryNo" resultType="int">
         select categoryNo from shop_list_view
@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProductMCategoryList" resultType="shop" parameterType="int">
         select * from shop_list_view where mcategoryNo = #{mCategoryNo} order by pIdx desc
     </select>
-    
+
     <!-- 상품 상세 페이지에 띄울 정보 -->
     <select id="selectProductInfoList" resultType="shop" parameterType="shop">
         select * from shop_list_view where categoryNo = #{categoryNo} and pIdx=#{pIdx}
@@ -87,9 +87,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <!-- 가장 큰 상품번호만 조회 -->
-    <!-- <select id="selectMaxPIdx" resultType="int">
+    <select id="selectMaxPIdx" resultType="int">
         select max(pIdx) from product
-    </select> -->
+    </select>
 
     <!-- 상품 등록 -->
     <insert id="productInsert" parameterType="shop">
@@ -104,7 +104,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                   )
     </insert>
 
-<!-- 여기부터 상품관리 카테고리 선택기능 ajax처리용 sql문 -->
+    <!-- 상품사진 등록 -->
+    <insert id="insertPImage" parameterType="pImage">
+        insert into productImage values( null,
+                                    #{pIdx},
+                                    #{fileName}
+                                  )
+    </insert>
+
+
+    <!-- 여기부터 상품관리 카테고리 선택기능 ajax처리용 sql문 -->
     <!-- categoryName 전체조회 -->
     <select id="selectCategoryNameList" resultType="shop">
         select categoryName from shop_list_view Group by categoryName
@@ -159,15 +168,3 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 여기까지 상품관리탭 검색기능 -->
 
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
