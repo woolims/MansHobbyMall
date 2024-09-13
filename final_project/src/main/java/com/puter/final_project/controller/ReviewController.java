@@ -79,13 +79,31 @@ public class ReviewController {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
 
-        
     }
 
     @RequestMapping("/reviewModify.do")
-    public String modifyReview(ReviewVo vo) {
-        reviewMapper.updateReview(vo);
-        return "redirect:review.do";
+    public String modifyReview(ReviewVo vo, String url, HttpSession session, Model model) {
+        
+        UserVo user = (UserVo) session.getAttribute("user");
+
+        // 사용자가 로그인했는지 확인
+        if (user == null) {
+            model.addAttribute("error", "로그인 후 수정할 수 있습니다.");
+            return "redirect:" + url; // 로그인 페이지로 리다이렉트
+        }
+
+        // 유저 정보 세팅
+        vo.setUserIdx(user.getUserIdx());
+
+        // 데이터 수정
+        int res = reviewMapper.updateReview(vo);
+
+        if (res > 0) {
+            return "redirect:" + url; // 수정 성공 시 원래 페이지로 리다이렉트
+        } else {
+            model.addAttribute("error", "리뷰 수정에 실패했습니다.");
+            return "redirect:" + url; // 실패 시 에러 메시지와 함께 폼으로 돌아감
+        }
     }
 
     @RequestMapping(value = "toggle.do", produces = "application/json; charset=utf-8;")

@@ -169,6 +169,7 @@
         }
 
         function send2(f) {
+            let url = new URL(window.location.href);
             if ("${ empty user }" == "true") {
                 alert('로그아웃되었습니다.\n로그인하세요.');
                 return;
@@ -181,6 +182,7 @@
                 f.rvContent.focus();
                 return;
             }
+            f.url.value = url.href;
 
             f.action = "${pageContext.request.contextPath}/review/reviewModify.do"; // 리뷰 수정 전송
             f.submit();
@@ -318,7 +320,8 @@
           <span class="close" onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
           <h2>리뷰 수정</h2>
           <form>
-            <input type="hidden" name="rvIdx" />
+            <input type="hidden" name="url" id="url" value="../home.do"/>
+            <input type="hidden" name="rvIdx"/>
             <input type="hidden" name="userIdx" value="${user.userIdx}" />
             <div class="form-group" style="color: black;">
                 <label for="content" style="color: white;">내용</label>
