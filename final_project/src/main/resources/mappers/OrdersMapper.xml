@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 전체조회 -->
   <select id="selectList" parameterType="int" resultType="orders">
-       select * from ShippingView order by oIdx
+       select * from ShippingView where userIdx=#{userIdx} order by oIdx
   </select>
 
 </mapper>

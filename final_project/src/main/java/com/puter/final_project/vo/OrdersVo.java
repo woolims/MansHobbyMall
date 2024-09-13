@@ -8,6 +8,8 @@ import lombok.Data;
 @Alias("orders")
 public class OrdersVo {
     
+    // Order, BuyList, DStatus, User, Product
+
     int oIdx;
     int dsIdx;
     int bIdx;
@@ -24,4 +26,5 @@ public class OrdersVo {
     String name;
 
     String pName;
+    int price;
 }
