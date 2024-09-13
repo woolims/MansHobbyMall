@@ -5,20 +5,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.puter.final_project.dao.BuyListMapper">
 
-    <!-- 전체조회 -->
-    <!-- <select id="selectList" resultType="buy">
-        select * from buyList order by bIdx
-    </select> -->
+    <!-- 부분 조회 -->
+    <select id="selectOne" resultType="user">
+        select * from user where userIdx=#{userIdx}
+    </select>
 
     <!-- 구매내역 -->
-    <!-- <insert>
+    <insert id="insert" parameterType="buy">
         insert into buyList values(
             null,
             #{userIdx},
-            #{pidx},
+            #{pIdx},
             #{bamount},
             now()
         )
-    </insert> -->
+    </insert>
 
 </mapper>
