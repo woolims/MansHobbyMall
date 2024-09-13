@@ -37,8 +37,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 pg: "uplus",
                 pay_method: 'uplus',
                 merchant_uid: merchant_uid,
-                name: '상품명',
-                amount: 100,
+                name: '${ shop.getPName() }',
+                amount: '${ shop.getPrice() }',
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
@@ -87,8 +87,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 pg: "tosspay",
                 pay_method: 'tosspay',
                 merchant_uid: merchant_uid,
-                name: '상품명',
-                amount: 100,
+                name: '${ shop.getPName() }',
+                amount: '${ shop.getPrice() }',
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
@@ -138,8 +138,8 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                 pg: "kakaopay",
                 pay_method: 'kakaopay',
                 merchant_uid: merchant_uid,
-                name: '상품명',
-                amount: 100,
+                name: '${ shop.getPName() }',
+                amount: '${ shop.getPrice() }',
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
@@ -186,42 +186,42 @@ uri="http://java.sun.com/jsp/jstl/core"%>
     <!-- 숨겨진 구매 섹션 -->
     <div id="purchaseSection" class="purchase-section">
         <div class="purchase-content">
-            <h2>구매 옵션</h2>
+            <h2>구매 정보</h2>
             <div class="purchase-options">
 
                 <!-- 색상 선택 -->
-                <div class="option">
+                <!-- <div class="option">
                     <label for="color">색상 *</label>
                     <select id="color">
                         <option value="white">흰색</option>
                         <option value="black">검정색</option>
                         <option value="blue">파랑색</option>
                     </select>
-                </div>
+                </div> -->
 
                 <!-- 사이즈 선택 -->
-                <div class="option">
+                <!-- <div class="option">
                     <label for="size">SIZE *</label>
                     <select id="size">
                         <option value="small">S</option>
                         <option value="medium">M</option>
                         <option value="large">L</option>
                     </select>
-                </div>
+                </div> -->
 
                 <!-- 배송 옵션 -->
-                <div class="option">
+                <!-- <div class="option">
                     <label for="delivery">배송 옵션</label>
                     <select id="delivery">
                         <option value="standard">택배</option>
                         <option value="pickup">방문수령</option>
                         <option value="express">퀵배송</option>
                     </select>
-                </div>
+                </div> -->
 
                 <!-- 가격 표시 -->
                 <div class="price">
-                    <p>판매가: <span id="price">100원</span></p>
+                    <p>판매가: <span id="price">${ shop.getPrice() }</span></p>
                 </div>
 
                 <!-- 구매 버튼 -->
