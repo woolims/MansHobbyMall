@@ -39,7 +39,11 @@ public class SecurityConfig {
                 exceptions
                     .accessDeniedPage("/accessDenied")
             )
-            .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
+            .csrf(csrf -> 
+                csrf
+                    .ignoringRequestMatchers("/admin/pInsert.do") // 파일 업로드 요청을 CSRF 보호에서 제외
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            );
         return http.build();
     }
 
