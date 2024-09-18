@@ -70,19 +70,6 @@ public class ReviewController {
         }
     }
 
-    @RequestMapping("delete.do")
-    public String delete(int rvIdx) {
-        int res = reviewMapper.deleteReview(rvIdx);
-
-        if (res > 0) {
-            session.setAttribute("alertMsg", "삭제되었습니다.");
-        } else {
-            session.setAttribute("alertMsg", "삭제 실패했습니다.");
-        }
-
-        return "redirect:review.do";
-    }
-
     @GetMapping("getReviewInfo.do")
     public ResponseEntity<ReviewVo> getReviewInfo(@RequestParam("rvIdx") int rvIdx) {
         ReviewVo reviewVo = reviewMapper.getReviewInfo(rvIdx);
@@ -91,12 +78,32 @@ public class ReviewController {
         } else {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
+
     }
 
     @RequestMapping("/reviewModify.do")
-    public String modifyReview(ReviewVo vo) {
-        reviewMapper.updateReview(vo);
-        return "redirect:review.do";
+    public String modifyReview(ReviewVo vo, String url, HttpSession session, Model model) {
+        
+        UserVo user = (UserVo) session.getAttribute("user");
+
+        // 사용자가 로그인했는지 확인
+        if (user == null) {
+            model.addAttribute("error", "로그인 후 수정할 수 있습니다.");
+            return "redirect:" + url; // 로그인 페이지로 리다이렉트
+        }
+
+        // 유저 정보 세팅
+        vo.setUserIdx(user.getUserIdx());
+
+        // 데이터 수정
+        int res = reviewMapper.updateReview(vo);
+
+        if (res > 0) {
+            return "redirect:" + url; // 수정 성공 시 원래 페이지로 리다이렉트
+        } else {
+            model.addAttribute("error", "리뷰 수정에 실패했습니다.");
+            return "redirect:" + url; // 실패 시 에러 메시지와 함께 폼으로 돌아감
+        }
     }
 
     @RequestMapping(value = "toggle.do", produces = "application/json; charset=utf-8;")
@@ -173,7 +180,9 @@ public class ReviewController {
     @RequestMapping(value = "deleteReview.do", produces = "application/json; charset=utf-8;")
     @ResponseBody
     public String deleteReview(@RequestParam("rvIdx") int rvIdx) {
+        System.out.println("=================== rvIdx ================="+rvIdx);
         int res = reviewMapper.deleteByReview(rvIdx);
+        System.out.println("=================== res ================="+res);
 
         JSONObject json = new JSONObject();
         json.put("result", res > 0 ? "success" : "failure");

@@ -18,7 +18,7 @@
         <table class="table table-striped" style="margin-top: 20px; table-layout: fixed;">
             <thead>
                 <tr>
-                    <th style="text-align: center;">상품번호</th>
+                    <th style="text-align: center;">상품명</th>
                     <th style="text-align: center;">구매자</th>
                     <th style="text-align: center;">배송상태</th>
                 </tr>

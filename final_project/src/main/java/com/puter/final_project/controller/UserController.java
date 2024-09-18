@@ -3,12 +3,8 @@ package com.puter.final_project.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -173,7 +169,13 @@ public class UserController {
 	}
 
 	@RequestMapping("purchaseHistory.do")
-	public String purchaseHistory(){
+	public String purchaseHistory(Model model){
+		UserVo user = (UserVo) session.getAttribute("user");
+
+		List<OrdersVo> buyList = ordersMapper.selectList(user.getUserIdx());
+
+		model.addAttribute("buyList", buyList);
+		
 		return "myPage/purchaseHistory";
 	}
 

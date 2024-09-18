@@ -321,6 +321,63 @@ SELECT
 FROM Inquiry i
 INNER JOIN User u ON i.userIdx = u.userIdx;
 
+CREATE OR REPLACE VIEW AnswerView AS
+SELECT
+    a.aIdx,
+    a.inIdx,
+    a.userIdx,
+    a.aContent,
+    a.aDate,
+    u.name,
+    u.adminAt
+FROM Answer a
+INNER JOIN User u ON a.userIdx = u.userIdx;
+
+CREATE OR REPLACE VIEW ShippingView AS
+SELECT
+    o.oIdx,
+    o.dsIdx,
+    o.bIdx,
+    o.daStartDate,
+    o.daEndDate,
+    b.userIdx,
+    b.pIdx,
+    b.bamount,
+    b.buyDate,
+    ds.dsContent,
+    u.name,
+    p.pName,
+    p.price
+FROM Orders o
+INNER JOIN Buylist b ON o.bIdx = b.bIdx
+INNER JOIN DStatus ds ON o.dsIdx = ds.dsIdx
+INNER JOIN User u ON b.userIdx = u.userIdx
+INNER JOIN Product p ON b.pIdx = p.pIdx;
+
+CREATE OR REPLACE VIEW ReviewView AS
+SELECT
+    r.rvIdx,
+    r.pIdx,
+    r.userIdx,
+    r.rvContent,
+    r.reviewPoint,
+    r.rvImg,
+    r.rvDate,
+    u.gIdx,
+    u.id,
+    u.password,
+    u.nickName,
+    u.name,
+    u.phone,
+    u.addr,
+    u.subAddr,
+    u.adminAt,
+    u.point,
+    u.createAt
+FROM review r
+INNER JOIN User u ON r.userIdx = u.userIdx;
+
+
 -- Grade 테이블에 샘플 데이터 삽입
 INSERT INTO Grade(gradeName, authority, discount)
 VALUES ('브론즈', 1, 0),
@@ -455,30 +512,28 @@ insert into product values(null, 2, 6, 15, '아동용 글러브', '아이들이 
 -- 소카테고리 하나당 상품 3개씩 
 insert into product values(null, 2, 6, 16, '기타', '모자?', 4, 100);
 
+-- Email 테이블 더미 데이터
 insert into email values(null, 3, 'bhj12674@gmail.com', 'google');
 
-CREATE OR REPLACE VIEW ReviewView AS
-SELECT
-    r.rvIdx,
-    r.pIdx,
-    r.userIdx,
-    r.rvContent,
-    r.reviewPoint,
-    r.rvImg,
-    r.rvDate,
-    u.gIdx,
-    u.id,
-    u.password,
-    u.nickName,
-    u.name,
-    u.phone,
-    u.addr,
-    u.subAddr,
-    u.adminAt,
-    u.point,
-    u.createAt
-FROM review r
-INNER JOIN User u ON r.userIdx = u.userIdx;
+-- DStatus 테이블 예시 데이터
+INSERT INTO DStatus (dsType, dsContent) VALUES ('pending', '주문 접수 완료');
+INSERT INTO DStatus (dsType, dsContent) VALUES ('preparing', '배송 준비중');
+INSERT INTO DStatus (dsType, dsContent) VALUES ('shipping', '배송중');
+INSERT INTO DStatus (dsType, dsContent) VALUES ('completed', '배송 완료');
+
+
+select * from product;
+-- BuyList 테이블 예시 데이터
+INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (2, 43, 1);
+INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (2, 4, 1);
+INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (2, 21, 1);
+INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (6, 43, 1);
+
+-- Orders 테이블에 주문 데이터 삽입
+INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),1, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
+INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),2, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
+INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),3, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
+INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),4, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
 
 drop procedure if exists update_order_status;
 
@@ -519,38 +574,3 @@ CREATE EVENT update_order_status_event
 ON SCHEDULE EVERY 1 MINUTE
 DO
     CALL update_order_status();
-    
--- DStatus 테이블 예시 데이터
-INSERT INTO DStatus (dsType, dsContent) VALUES ('pending', '주문 접수 완료');
-INSERT INTO DStatus (dsType, dsContent) VALUES ('preparing', '배송 준비중');
-INSERT INTO DStatus (dsType, dsContent) VALUES ('shipping', '배송중');
-INSERT INTO DStatus (dsType, dsContent) VALUES ('completed', '배송 완료');
-
--- BuyList 테이블 예시 데이터
-INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (2, 43, 1);
-
--- Orders 테이블에 주문 데이터 삽입
-INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES (
-    (SELECT dsIdx FROM DStatus WHERE dsType = 'pending'), 
-    1, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY)
-);
-
-CREATE OR REPLACE VIEW ShippingView AS
-SELECT
-    o.oIdx,
-    o.dsIdx,
-    o.bIdx,
-    o.daStartDate,
-    o.daEndDate,
-    b.userIdx,
-    b.pIdx,
-    b.bamount,
-    b.buyDate,
-    ds.dsContent,
-    u.name,
-    p.pName
-FROM Orders o
-INNER JOIN Buylist b ON o.bIdx = b.bIdx
-INNER JOIN DStatus ds ON o.dsIdx = ds.dsIdx
-INNER JOIN User u ON b.userIdx = u.userIdx
-INNER JOIN Product p ON b.pIdx = p.pIdx;
