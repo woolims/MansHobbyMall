@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.puter.final_project.dao.AdminMapper;
+import com.puter.final_project.dao.InquiryMapper;
 import com.puter.final_project.dao.ProductMapper;
 import com.puter.final_project.dao.ShopMapper;
+import com.puter.final_project.vo.InquiryVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
@@ -41,6 +43,9 @@ public class AdminController {
 
     @Autowired
     AdminMapper adminMapper;
+
+    @Autowired
+    InquiryMapper inquiryMapper;
 
     @Autowired
     ProductMapper productMapper;
@@ -66,6 +71,8 @@ public class AdminController {
 
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
 
+        List<InquiryVo> list2 = inquiryMapper.selectNoticeList();
+
         // // 상품 관리 불러오기
         // List<AboardVo> list2 = .selectListMySb(user.getUserNo());
         // // 주문 관리 불러오기
@@ -76,6 +83,7 @@ public class AdminController {
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("list", list);
         model.addAttribute("pList", pList);
+        model.addAttribute("list2", list2);
 
         // model.addAttribute("list2", list2);
         // model.addAttribute("list3", list3);
@@ -213,8 +221,7 @@ public class AdminController {
     }
 
     @PostMapping("pInsert.do")
-    public String pInsert(ShopVo shop, Model model, List<MultipartFile> photo) throws Exception
-             {
+    public String pInsert(ShopVo shop, Model model, List<MultipartFile> photo) throws Exception {
         int categoryNo = shopMapper.selectAdminCategoryNo(shop);
         int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
         int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
@@ -338,6 +345,38 @@ public class AdminController {
             shopMapper.insertPImage(pImageVo);
         }
 
+
+        return "redirect:admin.do";
+    }
+
+    @RequestMapping("nInsertForm.do")
+    public String nInsertForm() {
+
+        return "shopPage/nInsertForm";
+    }
+
+    @RequestMapping("nInsert.do")
+    public String nInsert(InquiryVo inquiry) throws Exception {
+
+        UserVo user = (UserVo) session.getAttribute("user");
+        inquiry.setUserIdx(user.getUserIdx());
+        int res = inquiryMapper.nInsert(inquiry);
+
+        return "redirect:admin.do";
+    }
+
+    @RequestMapping("nModifyForm.do")
+    public String nModifyForm() {
+
+        return "shopPage/nModifyForm";
+    }
+
+    @RequestMapping("nModify.do")
+    public String nModify(InquiryVo inquiry) throws Exception {
+
+        UserVo user = (UserVo) session.getAttribute("user");
+        inquiry.setUserIdx(user.getUserIdx());
+        int res = inquiryMapper.nInsert(inquiry);
 
         return "redirect:admin.do";
     }

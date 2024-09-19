@@ -379,10 +379,20 @@
                 });
                 return;
             }
-
+            function nModifyForm(f){
+                console.log(f);
+                f.action = "${pageContext.request.contextPath}/admin/nModifyForm.do"; // 전송대상
+                f.submit(); // 전송
+            }
             function pInsert(){
                 location.href = "/admin/pInsertForm.do";
             }
+
+            function nInsert(){
+                location.href = "${pageContext.request.contextPath}/admin/nInsertForm.do";
+            }
+ 
+
         </script>
 
     </head>
@@ -430,8 +440,7 @@
                                         <td>
                                             <form>
                                                 <input type="hidden" name="userIdx" value="${vo.getUserIdx()}">
-                                                <input type="button" value="삭제하기"
-                                                    onclick="confirmDelete(this.form);">
+                                                <input type="button" value="삭제하기" onclick="confirmDelete(this.form);">
                                             </form>
                                         </td>
                                     </tr>
@@ -524,33 +533,33 @@
                 <div id="menu4" class="tab-pane">
                     <div style="display: inline-block;">
                         <h2>공지사항 관리</h2>
-                        <input type="button" class="btn btn-success" value="공지사항 등록" onclick="">
+                        <input type="button" class="btn btn-success" name="nInsert" id="nInsert" onclick="nInsert();" value="공지사항 등록">
                     </div>
                     <c:choose>
-                        <c:when test="">
+                        <c:when test="${empty list2}">
                             <h1>공지사항이 없습니다.</h1>
                         </c:when>
                         <c:otherwise>
                             <table>
                                 <tr>
                                     <th>제목</th>
+                                    <th>내용</th>
                                     <th>작성일</th>
-                                    <th>수정</th>
-                                    <th>삭제</th>
                                 </tr>
-                                <c:forEach var="notice" items="">
+                                <c:forEach var="vo" items="${list2}">
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>${vo.inType}</td>
+                                        <td>${vo.inContent}</td>
+                                        <td>${vo.inDate}</td>
                                         <td>
-                                            <form method="post">
-                                                <input type="hidden" name="" value="">
-                                                <input type="button" class="btn btn-primary" value="수정" onclick="">
+                                            <form>
+                                                <input type="hidden" name="inType" value="${vo.inType}"/>
+                                                <input type="hidden" name="inContent" value="${vo.inContent}"/>
+                                                <input type="button" class="btn btn-success" name="nModify" id="nModify" onclick="nModifyForm(this.form);" value="수정"/>
                                             </form>
                                         </td>
                                         <td>
-                                            <form method="post">
+                                            <form>
                                                 <input type="hidden" name="" value="">
                                                 <input type="button" class="btn btn-danger" value="삭제" onclick="">
                                             </form>
