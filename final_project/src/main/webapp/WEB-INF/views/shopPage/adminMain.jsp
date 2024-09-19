@@ -431,7 +431,7 @@
                                             <form>
                                                 <input type="hidden" name="userIdx" value="${vo.getUserIdx()}">
                                                 <input type="button" value="삭제하기"
-                                                    onclick="confirmProductDelete(this.form);">
+                                                    onclick="confirmDelete(this.form);">
                                             </form>
                                         </td>
                                     </tr>
@@ -518,8 +518,48 @@
                             </div>
                         </c:otherwise>
                     </c:choose>
-
-
+                </div>
+                
+                <!-- 공지사항 관리 탭 -->
+                <div id="menu4" class="tab-pane">
+                    <div style="display: inline-block;">
+                        <h2>공지사항 관리</h2>
+                        <input type="button" class="btn btn-success" value="공지사항 등록" onclick="">
+                    </div>
+                    <c:choose>
+                        <c:when test="">
+                            <h1>공지사항이 없습니다.</h1>
+                        </c:when>
+                        <c:otherwise>
+                            <table>
+                                <tr>
+                                    <th>제목</th>
+                                    <th>작성일</th>
+                                    <th>수정</th>
+                                    <th>삭제</th>
+                                </tr>
+                                <c:forEach var="notice" items="">
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <form method="post">
+                                                <input type="hidden" name="" value="">
+                                                <input type="button" class="btn btn-primary" value="수정" onclick="">
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post">
+                                                <input type="hidden" name="" value="">
+                                                <input type="button" class="btn btn-danger" value="삭제" onclick="">
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
             <!-- 푸터 -->
