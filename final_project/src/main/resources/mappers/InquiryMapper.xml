@@ -25,7 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       #{inType}, 
       #{inContent}, 
       now(), 
-      null
+      null,
+      'N'
       )
   </insert>
 
@@ -55,5 +56,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   <select id="inquiryAList" resultType="answer">
 		select * from AnswerView where adminAt = 'Y'
   </select>
+
+  <select id="selectNoticeList" resultType="inquiry">
+    select * from inquiry where inAc = 'Y'
+  </select>
+
+  <insert id="nInsert" parameterType="inquiry">
+    insert into inquiry values(null, null, #{userIdx}, #{inType}, #{inContent}, default, null, 'Y')
+  </insert>
+
+  <update id="nModify" parameterType="inquiry">
+    update inquiry set inType=#{inType}, inContent=#{inContent} where inIdx=#{inIdx}
+  </update>
 
 </mapper>

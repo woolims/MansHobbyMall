@@ -30,4 +30,10 @@ public interface InquiryMapper {
 
     public List<AnswerVo> inquiryAList();
 
+    int nInsert(InquiryVo vo);
+
+    int nModify(InquiryVo vo);
+
+    List<InquiryVo> selectNoticeList();
+
 }
