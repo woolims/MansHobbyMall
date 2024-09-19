@@ -79,6 +79,9 @@
                 return;
             } else {
                 alert('장바구니에 추가되었습니다!');
+                const scAmount = document.getElementById("scamount").value;
+                console.log(scAmount);
+                location.href = `${pageContext.request.contextPath}/cartInsert.do?pIdx=${shop.getPIdx()}&scamount=`+scAmount;
             }
         }
 
@@ -250,6 +253,7 @@
             <div class="product-details">
                 <h1 id="product-name">${shop.getPName()}</h1>
                 <p class="price" id="product-price">${shop.getPrice()} 원</p>
+                수량 : <input type="number" id="scamount" name="scamount" value="1" min="1" style="width: 70px;"><br><br>
                 <button class="add-to-cart" onclick="addToCart()" style="margin-bottom: 20px;">장바구니에 추가</button>
                 <p id="product-description">${shop.getPEx()}</p>
             </div>

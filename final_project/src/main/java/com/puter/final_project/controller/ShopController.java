@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.puter.final_project.dao.CartMapper;
 import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
+import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
@@ -35,6 +37,9 @@ public class ShopController {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    CartMapper cartMapper;
 
     @Autowired
     ReviewMapper reviewMapper;
@@ -152,6 +157,17 @@ public class ShopController {
         model.addAttribute("reviewList", reviewList);
 
         return "shopPage/productOne";
+    }
+
+    @RequestMapping("/cartInsert.do")
+    public String cartInsert(CartVo vo){
+
+        UserVo user = (UserVo) session.getAttribute("user");
+        vo.setUserIdx(user.getUserIdx());
+        
+        int res = cartMapper.cartInsert(vo);
+
+        return "redirect:home.do";
     }
 
     // 게임카테고리 전체조회

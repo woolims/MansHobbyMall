@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.puter.final_project.dao.CartMapper;
 import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.UserMapper;
+import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.CouponBoxVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.UserVo;
@@ -33,6 +35,9 @@ public class UserController {
 	// 처음에 1회연결
 	@Autowired
 	UserMapper userMapper;
+
+	@Autowired
+	CartMapper cartMapper;
 
 	@Autowired
 	OrdersMapper ordersMapper;
@@ -191,7 +196,13 @@ public class UserController {
 	}
 
 	@RequestMapping("cart.do")
-	public String cart() {
+	public String cart(Model model) {
+
+		UserVo user = (UserVo) session.getAttribute("user");
+		List<CartVo> cartList = cartMapper.selectMyCart(user.getUserIdx());
+
+		model.addAttribute("cartList", cartList);
+
 		return "myPage/cart";
 	}
 
