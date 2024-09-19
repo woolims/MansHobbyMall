@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.UserMapper;
+import com.puter.final_project.vo.CouponBoxVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -67,11 +69,11 @@ public class UserController {
 		session.setAttribute("user", user);
 		model.addAttribute("showSignUpModal", false);
 
-		if(url != null) return "redirect:" + url;
+		if (url != null)
+			return "redirect:" + url;
 
 		return "redirect:../home.do";
 	}
-
 
 	// 로그아웃
 	@RequestMapping("logout.do")
@@ -99,10 +101,39 @@ public class UserController {
 		return json;
 	}// end:check_id()
 
+	@Autowired
+	private CouponBoxMapper couponBoxMapper; // CouponBoxMapper 인스턴스를 주입
+
+	// 회원가입 후 축하 쿠폰 발급 메서드
+	private void issueWelcomeCoupon(int userIdx) {
+		// cIdx 1번과 3번과 4번인 쿠폰을 발급
+		int[] welcomeCouponIdxs = { 1, 3, 4 }; // cIdx 쿠폰 ID 배열
+
+		for (int cIdx : welcomeCouponIdxs) {
+			CouponBoxVo couponBox = new CouponBoxVo();
+			couponBox.setUseridx(userIdx);
+			couponBox.setCidx(cIdx);
+
+			// CouponBoxMapper를 사용해 쿠폰 추가
+			int result = couponBoxMapper.insertCouponToBox(couponBox);
+			if (result > 0) {
+				System.out.println("쿠폰 " + cIdx + "번 추가 성공");
+			} else {
+				System.out.println("쿠폰 " + cIdx + "번 추가 실패");
+			}
+		}
+	}
+
 	@RequestMapping("insert.do")
 	public String insert(UserVo vo) {
 
 		int res = userMapper.insert(vo);
+
+		// 사용자 정보 가져오기 (mk)
+		UserVo user = userMapper.selectOneFromId(vo.getId());
+
+		// 쿠폰 발급 처리 (회원가입 축하 쿠폰)(mk)
+		issueWelcomeCoupon(user.getUserIdx());
 
 		return "redirect:../home.do";
 	}
@@ -124,14 +155,14 @@ public class UserController {
 	}
 
 	@RequestMapping("integration.do")
-	public String integration(UserVo vo, String url, RedirectAttributes ra){
+	public String integration(UserVo vo, String url, RedirectAttributes ra) {
 
 		UserVo user = userMapper.selectOneFromId(vo.getId());
-		if(user == null){
+		if (user == null) {
 			ra.addAttribute("reason", "fail_id");
 			return "redirect:../home.do";
 		}
-		if(user.getPassword().equals(vo.getPassword()) == false){
+		if (user.getPassword().equals(vo.getPassword()) == false) {
 			ra.addAttribute("reason", "fail_password");
 			return "redirect:../home.do";
 		}
@@ -140,12 +171,8 @@ public class UserController {
 
 		session.setAttribute("user", user);
 
-
-
 		return "redirect:../home.do";
 	}
-
-
 
 	@RequestMapping("admin.do")
 	public String adminPage(Model model) {
@@ -164,23 +191,23 @@ public class UserController {
 	}
 
 	@RequestMapping("cart.do")
-	public String cart(){
+	public String cart() {
 		return "myPage/cart";
 	}
 
 	@RequestMapping("purchaseHistory.do")
-	public String purchaseHistory(Model model){
+	public String purchaseHistory(Model model) {
 		UserVo user = (UserVo) session.getAttribute("user");
 
 		List<OrdersVo> buyList = ordersMapper.selectList(user.getUserIdx());
 
 		model.addAttribute("buyList", buyList);
-		
+
 		return "myPage/purchaseHistory";
 	}
 
 	@RequestMapping("shippingTracking.do")
-	public String shippingTracking(Model model){
+	public String shippingTracking(Model model) {
 		UserVo user = (UserVo) session.getAttribute("user");
 
 		List<OrdersVo> orderList = ordersMapper.selectList(user.getUserIdx());
@@ -191,12 +218,12 @@ public class UserController {
 	}
 
 	@RequestMapping("accountInfo.do")
-	public String accountInfo(){
+	public String accountInfo() {
 		return "myPage/accountInfo";
 	}
 
 	@RequestMapping("userModify.do")
-	public String userModify(UserVo vo){
+	public String userModify(UserVo vo) {
 
 		int res = userMapper.userModify(vo);
 

@@ -370,6 +370,23 @@
         <div class="logo col-sm-2" style="display: inline-block;"><a href="${pageContext.request.contextPath}/home.do">Logo</a></div>
         <div class="col-sm-10" style="display: inline-block; margin-top: 10px;">
           <ul class="menu" style="text-align: right !important;">
+
+           <!--쿠폰 추가 부분-->
+            <!-- 유저만 있어야 함 -->
+            <c:if test="${ not empty sessionScope.user }">
+              <!-- 쿠폰함 -->
+              <li id="coupon-box">
+                  <a href="${pageContext.request.contextPath}/coupon/myCoupons.do?useridx=${sessionScope.user.userIdx}">내 쿠폰함</a>
+              </li>
+          
+              <!-- 쿠폰 목록 보기 버튼 -->
+              <%--<li>
+                  <a href="${pageContext.request.contextPath}/coupon/list.do" class="btn btn-primary">쿠폰 목록 보기</a>
+              </li>--%>
+            </c:if>
+
+
+
             <li>
               <a href="${ pageContext.request.contextPath }/game.do?categoryNo=1">Gaming</a>
               <ul class="dropdown">

@@ -574,3 +574,30 @@ CREATE EVENT update_order_status_event
 ON SCHEDULE EVERY 1 MINUTE
 DO
     CALL update_order_status();
+
+
+-- Coupon 테이블 쿼리 추가
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('회원가입 축하 쿠폰', 5000, '-');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('오픈 기념 쿠폰', 10, '%');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('가을맞이 쿠폰', 5, '%');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('첫 이용기념', 1000, '-');
+
+
+-- CouponBox 테이블 쿼리 추가
+INSERT INTO CouponBox (userIdx, cIdx, useAt) VALUES
+(1, 1, 'N'),
+(1, 2, 'N'),
+(2, 1, 'N'),
+(2, 2, 'N'),
+(3, 1, 'N'),
+(3, 2, 'N'),
+(4, 1, 'N'),
+(4, 2, 'N'),
+(5, 1, 'N'),
+(5, 2, 'N'),
+(6, 1, 'N'),
+(6, 2, 'N');
