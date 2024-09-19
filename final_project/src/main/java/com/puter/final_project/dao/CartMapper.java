@@ -12,4 +12,6 @@ public interface CartMapper {
     List<CartVo> selectMyCart(int userIdx);
 
     int cartInsert(CartVo vo);
+
+    void updateQuantity(int scIdx, int scamount);
 }

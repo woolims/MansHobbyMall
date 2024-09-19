@@ -88,6 +88,35 @@
             background-color: #27ae60;
         }
     </style>
+    <script>
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const itemId = this.id.split('-')[1]; // ID에서 상품 ID 추출
+                const newQuantity = this.value;
+
+                console.log(itemId, newQuantity);
+    
+                // AJAX 요청 보내기
+                fetch(`updateQuantity?scIdx=` + itemId + `&scamount=` + newQuantity, {
+                        method: 'POST'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // 서버에서 JSON 응답을 받음
+                    }
+                    throw new Error('네트워크 오류 발생');
+                })
+                .then(data => {
+                    // 필요한 경우 UI 업데이트 (예: 총 합계)
+                    console.log(data.message);
+                    // totalPrice 업데이트를 위해 추가적인 코드 작성 가능
+                })
+                .catch(error => {
+                    console.error('오류:', error);
+                });
+            });
+        });
+    </script>
 
 </head>
 <body>
@@ -95,24 +124,26 @@
         <h1>장바구니</h1>
     </header>
     <main>
+        <c:set var="totalPrice" value="0" />
         <c:forEach var="item" items="${cartList}">
             <div class="cart-item">
                 <input type="checkbox" id="item-${item.getPIdx()}" class="item-checkbox">
                 <label for="item-${item.getPIdx()}" class="item-content">
                     <img src="" alt="상품 이미지"> <!-- 상품 이미지 URL -->
                     <div class="item-details">
-                        <h2>상품이름</h2> <!-- 상품 이름 -->
-                        <p>가격: <span class="price">21000원</span></p> <!-- 상품 가격 -->
+                        <h2>${item.getPName()}</h2> <!-- 상품 이름 -->
+                        <p>상품 가격: <span class="price">${item.getPrice()}</span></p> <!-- 상품 가격 -->
                         <label for="quantity-${item.getPIdx()}">수량:</label>
-                        <input type="number" id="scamount" name="scamount" value="1" min="1"> <!-- 수량 -->
+                        <input type="number" id="scamount-${item.getScIdx()}" name="scamount" value="${item.getScamount()}" min="1"> <!-- 수량 -->
                     </div>
                     <button class="remove-btn">삭제</button>
                 </label>
             </div>
+            <c:set var="totalPrice" value="${totalPrice + item.price * item.scamount}" />
         </c:forEach>
 
         <div class="cart-summary">
-            <p>총 합계: <span class="total-price">21000원</span></p> <!-- 총 합계 -->
+            <p>총 합계: <span class="total-price">${totalPrice}</span></p> <!-- 총 합계 -->
             <button class="checkout-btn">결제하기</button>
         </div>
     </main>
