@@ -89,6 +89,16 @@
         }
     </style>
     <script>
+        function updateTotalPrice() {
+            let totalPrice = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const price = parseFloat(item.querySelector('.price').innerText);
+                const quantity = parseInt(item.querySelector('input[type="number"]').value);
+                totalPrice += price * quantity;
+            });
+            document.querySelector('.total-price').innerText = totalPrice;
+        }
+
         document.querySelectorAll('input[type="number"]').forEach(input => {
             input.addEventListener('change', function() {
                 const itemId = this.id.split('-')[1]; // ID에서 상품 ID 추출
@@ -97,8 +107,8 @@
                 console.log(itemId, newQuantity);
     
                 // AJAX 요청 보내기
-                fetch(`updateQuantity?scIdx=` + itemId + `&scamount=` + newQuantity, {
-                        method: 'POST'
+                fetch(`/user/updateQuantity?scIdx=`+itemId+`&scamount=`+newQuantity, {
+                    method: 'POST'
                 })
                 .then(response => {
                     if (response.ok) {
@@ -107,15 +117,18 @@
                     throw new Error('네트워크 오류 발생');
                 })
                 .then(data => {
-                    // 필요한 경우 UI 업데이트 (예: 총 합계)
                     console.log(data.message);
-                    // totalPrice 업데이트를 위해 추가적인 코드 작성 가능
+                    // 총 금액 업데이트
+                    updateTotalPrice();
                 })
                 .catch(error => {
                     console.error('오류:', error);
                 });
             });
         });
+
+        // 페이지 로드 시 총 금액 초기 계산
+        document.addEventListener('DOMContentLoaded', updateTotalPrice);
     </script>
 
 </head>
