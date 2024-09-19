@@ -23,6 +23,7 @@
                         let mcategoryNameForm = $("#mcategorySearch").val();
                         let dcategoryNameForm = $("#dcategorySearch").val();
                         let amount = $("#amount").val();
+                        let photo = $("#photo");
 
                         const numberRegex = /^[0-9]+$/;
 
@@ -65,14 +66,17 @@
                             $("#price").focus();
                             return;
                         }
+                        
                         if (pEx == "") {
                             alert("상품설명을 입력하세요");
                             $("#pEx").focus();
                             return;
                         }
-                        if (confirm("등록하시겠습니까?") == false) return;
+                        if(photo[0].files.length == 0) {
+                            if(confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?") == false)
+                            return;
+                        }else if (confirm("등록하시겠습니까?") == false) return;
 
-                        // console.log(f, categoryNameForm, mcategoryName, dcategoryName);
                         f.method = "POST";
                         f.enctype = "multipart/form-data";
                         f.action = "/admin/pInsert.do";
@@ -216,7 +220,7 @@
                     <table>
                         <tr>
                             <th>상품사진</th>
-                            <td><input type="file" name="photo" id="pImg" multiple></td>
+                            <td><input type="file" name="photo" id="photo" multiple></td>
                         </tr>
                         <tr>
                             <th>상품설명</th>

@@ -76,4 +76,6 @@ public interface ShopMapper {
 
     List<ShopVo> selectDcategorySearchList(ShopVo shop);
 
+    List<PImageVo> selectPImageName(int pIdx);
+
 }

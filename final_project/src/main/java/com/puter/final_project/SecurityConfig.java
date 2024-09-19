@@ -42,6 +42,7 @@ public class SecurityConfig {
             .csrf(csrf -> 
                 csrf
                     .ignoringRequestMatchers("/admin/pInsert.do") // 파일 업로드 요청을 CSRF 보호에서 제외
+                    .ignoringRequestMatchers("/admin/pUpdate.do") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             );
         return http.build();

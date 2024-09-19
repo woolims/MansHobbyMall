@@ -112,6 +112,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                   )
     </insert>
 
+    <select id="selectPImageName" resultType="pImage" parameterType="int">
+        select fileName from productImage where pIdx=#{pIdx}
+    </select>
 
     <!-- 여기부터 상품관리 카테고리 선택기능 ajax처리용 sql문 -->
     <!-- categoryName 전체조회 -->

@@ -273,6 +273,9 @@ public class AdminController {
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
         List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
         List<ShopVo> dcategoryName = shopMapper.selectDcategoryNameList(shop.getMcategoryName());
+        List<PImageVo> pImageNameList = shopMapper.selectPImageName(shop.getPIdx());
+
+        model.addAttribute("pImageNameList", pImageNameList);
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("mcategoryName", mcategoryName);
         model.addAttribute("dcategoryName", dcategoryName);
@@ -283,7 +286,7 @@ public class AdminController {
     }
 
     @RequestMapping("pUpdate.do")
-    public String pUpdate(ShopVo shop, Model model) {
+    public String pUpdate(ShopVo shop, Model model, List<MultipartFile> photo) throws Exception {
 
         int categoryNo = shopMapper.selectAdminCategoryNo(shop);
         int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
@@ -294,6 +297,47 @@ public class AdminController {
         shop.setDcategoryNo(dcategoryNo);
 
         model.addAttribute(shopMapper.productUpdate(shop));
+
+        List<String> filename_list = new ArrayList<String>();
+
+        String absPath = application.getRealPath("/resources/images/");
+        System.out.println("absPath : " + absPath);
+
+        for (MultipartFile photoOne : photo) {
+            if (!photoOne.isEmpty()) {
+                String filename = photoOne.getOriginalFilename();
+
+                filename = photoOne.getOriginalFilename();
+
+                File f = new File(absPath, filename);
+
+                if (f.exists()) {// 동일한 파일이 존재하냐?
+
+                    // 시간_파일명 이름변경
+                    long tm = System.currentTimeMillis();
+                    filename = String.format("%d_%s", tm, filename);
+
+                    f = new File(absPath, filename);
+                }
+
+                // spring이 저장해놓은 임시파일을 복사한다.
+                photoOne.transferTo(f);
+
+                filename_list.add(filename);
+            }
+        }
+
+        int pIdx = shopMapper.selectMaxPIdx();
+
+        PImageVo pImageVo = new PImageVo();
+
+        for (int i = 0; i < filename_list.size(); i++) {
+            String filename = filename_list.get(i);
+            pImageVo.setPIdx(pIdx);
+            pImageVo.setFileName(filename);
+            shopMapper.insertPImage(pImageVo);
+        }
+
 
         return "redirect:admin.do";
     }

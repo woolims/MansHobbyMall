@@ -15,7 +15,7 @@
                 <title>상품수정</title>
 
                 <script>
-                    function pUpdate() {
+                    function pUpdate(f) {
 
                         let pName = $("#pName").val().trim();
                         let price = $("#price").val().trim();
@@ -75,13 +75,15 @@
                         }
                         if (confirm("등록하시겠습니까?") == false) {
                             return;
-                        }else{
-                            location.href = "pUpdate.do?amount=" + amount + "&pName=" + pName + "&price=" + price + "&pEx=" + pEx + "&pIdx=" + pIdx + "&categoryName=" + categoryName + "&mcategoryName=" + mcategoryName + "&dcategoryName=" + dcategoryName;
-                            alert("상품정보가 수정되었습니다.")
                         }
+
+                        f.method = "POST";
+                        f.enctype = "multipart/form-data";
+                        f.action = "/admin/pUpdate.do";
+                        f.submit();
                     }
 
-                    function mcategoryName(val){
+                    function mcategoryNameSearch(val){
                         if($("#categorySearch").val()=='대분류 선택') {
                             let categoryName = val;
                             $.ajax({
@@ -129,7 +131,7 @@
                         });
                     }
 
-                function dcategoryName(val){
+                function dcategoryNameSearch(val){
                     if($("#mcategorySearch").val()=='중분류 선택') {
                         let mcategoryName = val;
                         $.ajax({
@@ -193,18 +195,18 @@
                             </td>
                         </tr>
                         <tr>
-                            <select name="categorySearch" id="categorySearch" onchange="mcategoryName(this.value);">
+                            <select name="categoryName" id="categorySearch" onchange="mcategoryNameSearch(this.value);">
                                 <option value="${shop.categoryName}" hidden selected>${shop.categoryName}</option>
                                 <c:forEach var="vo" items="${categoryName}">
                                     <option value="${vo.categoryName}">${vo.categoryName}</option>
                                 </c:forEach>
                             </select>
                             <br>
-                            <select name="mcategorySearch" id="mcategorySearch" onchange="dcategoryName(this.value);">
+                            <select name="mcategoryName" id="mcategorySearch" onchange="dcategoryNameSearch(this.value);">
                                 <option value="${shop.mcategoryName}">${shop.mcategoryName}</option>
                             </select>
                             <br>
-                            <select name="dcategorySearch" id="dcategorySearch">
+                            <select name="dcategoryName" id="dcategorySearch">
                                 <option value="${shop.dcategoryName}">${shop.dcategoryName}</option>
                             </select>
                         </tr>
@@ -223,11 +225,28 @@
 
                     </table>
                     <table>
-                        <th>상품설명</th>
-                        <td><textarea name="pEx" id="pEx" cols="50" rows="20">${pEx}</textarea></td>
+                        <tr>
+                            <th>상품사진</th>
+                            <td><input type="file" name="photo" id="pImg" multiple></td>
+                        </tr>
+                        <tr>
+                            <th>현재등록된 상품사진</th>
+                            <c:if test="${empty pImageNameList}">
+                                <td>등록된 사진이 없습니다</td>
+                            </c:if>
+                            <c:if test="${not empty pImageNameList && pImageNameList.size() != 0}">
+                                <c:forEach var="vo" items="${pImageNameList}">
+                                    <td style="display: inline-block; width: 200px; height: 160px;"><img style="width: 100%; height: 100%;" src="${ pageContext.request.contextPath }/resources/images/${vo.fileName}"></td>
+                                </c:forEach>
+                            </c:if>
+                        </tr>
+                        <tr>
+                            <th>상품설명</th>
+                            <td><textarea name="pEx" id="pEx" cols="50" rows="20">${pEx}</textarea></td>
+                        </tr>
                     </table>
                     <input type="button" class="btn btn-default" id="updateBtn" value="수정하기"
-                        onclick="pUpdate();">
+                        onclick="pUpdate(this.form);">
                     <input type="button" class="btn btn-danger" id="canselBtn" value="수정취소" onclick="updateCancel();">
                 </form>
             </body>
