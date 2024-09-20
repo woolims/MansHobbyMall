@@ -29,6 +29,9 @@ public class BuyListController {
     public String buy(BuyListVo vo) {
         System.out.println(vo);
         int res = buyListMapper.insert(vo);
+        int bIdx = buyListMapper.selectBuyListOne(vo);
+
+        res = buyListMapper.orderInsert(bIdx);
 
         if(res > 0) {
 			session.setAttribute("alertMsg", "결제 완료 되었습니다!");

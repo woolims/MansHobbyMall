@@ -21,4 +21,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
     </insert>
 
+    <select id="selectBuyListOne" parameterType="buy" resultType="int">
+        select bIdx from BuyList 
+        where userIdx=#{userIdx} and pIdx=#{pIdx}
+        order by buyDate DESC
+        LIMIT 1
+    </select>
+
+    <insert id="orderInsert" parameterType="int">
+        insert into Orders (dsIdx, bIdx, daStartDate, daEndDate) values (
+            (select dsIdx from DStatus where dsType = 'pending'),
+            #{bIdx}, 
+            now(), 
+            DATE_ADD(NOW(), 
+            INTERVAL 2 DAY)
+        )
+    </insert>
+
 </mapper>

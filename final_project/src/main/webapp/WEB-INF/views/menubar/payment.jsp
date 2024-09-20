@@ -185,7 +185,7 @@ uri="http://java.sun.com/jsp/jstl/core"%>
                             imp_uid: rsp.imp_uid, // 결제 고유번호
                             merchant_uid: rsp.merchant_uid,// 주문번호
                             userIdx : "${ user.userIdx }",
-                            pIdx : "${ user.userIdx }",
+                            pIdx : "${ shop.getPIdx() }",
                             // 수정 필요
                             bamount : 1
                         },
