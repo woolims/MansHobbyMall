@@ -202,6 +202,7 @@ public class AdminController {
     @RequestMapping("pDelete.do")
     public String pDelete(int pIdx) {
         int res = productMapper.pDelete(pIdx);
+        int res2 = shopMapper.pImageDelete(pIdx);
         return "redirect:admin.do";
     }
 
@@ -233,7 +234,6 @@ public class AdminController {
         List<String> filename_list = new ArrayList<String>();
 
         String absPath = application.getRealPath("/resources/images/");
-        System.out.println("absPath : " + absPath);
 
         for (MultipartFile photoOne : photo) {
             if (!photoOne.isEmpty()) {
@@ -280,9 +280,9 @@ public class AdminController {
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
         List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
         List<ShopVo> dcategoryName = shopMapper.selectDcategoryNameList(shop.getMcategoryName());
-        List<PImageVo> pImageNameList = shopMapper.selectPImageName(shop.getPIdx());
+        List<PImageVo> pImageList = shopMapper.selectPImageList(shop.getPIdx());
 
-        model.addAttribute("pImageNameList", pImageNameList);
+        model.addAttribute("pImageList", pImageList);
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("mcategoryName", mcategoryName);
         model.addAttribute("dcategoryName", dcategoryName);
@@ -381,4 +381,14 @@ public class AdminController {
         return "redirect:admin.do";
     }
 
+    @RequestMapping("pImageDelete.do")
+    @ResponseBody
+    public List<PImageVo> pImageDelete(PImageVo pImage) {
+
+        int res = shopMapper.deletePImageOne(pImage.getFileIdx());
+        // 선택한 사진을 지운 후 남은 사진들의 리스트
+        List<PImageVo> deleteAfterList = shopMapper.selectPImageList(pImage.getPIdx());
+        System.out.println(pImage);
+        return deleteAfterList;
+    }
 }
