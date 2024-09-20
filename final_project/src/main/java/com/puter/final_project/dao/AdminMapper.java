@@ -17,4 +17,5 @@ public interface AdminMapper {
 
     List<UserVo> selectListUserView();
 
+    List<UserVo> selectUsersById(String id);
 }
