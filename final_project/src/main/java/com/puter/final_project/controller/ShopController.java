@@ -105,7 +105,7 @@ public class ShopController {
 
     // 스포츠카테고리 전체조회
     @RequestMapping("/sports.do")
-    public String sports(@RequestParam(name = "page", defaultValue = "1") int nowPage, Model model,
+    public String sports(Model model,
             @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo,
             @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo,
             @RequestParam(name = "mcategoryName", defaultValue = "emptyMcategoryName") String mcategoryName,
@@ -122,12 +122,12 @@ public class ShopController {
             shop.setMcategoryName(mcategoryName);
             int mCategoryNo = shopMapper.selectMCategoryNo(shop);
             List<ShopVo> dCategoryName = shopMapper.selectdCategoryNameList(mCategoryNo);
-            List<ShopVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
+            List<ProductVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
             model.addAttribute("dCategoryName", dCategoryName);
             model.addAttribute("productList", productMCategoryList);
             if (!dcategoryNameParam.equals("emptyDcategoryName")) {
                 int dCategoryNo = shopMapper.selectDCategoryNo(shop);
-                List<ShopVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
+                List<ProductVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
                 model.addAttribute("productList", productDCategoryList);
             }
         }
@@ -157,6 +157,9 @@ public class ShopController {
             model.addAttribute("error", "해당 상품이 존재하지 않습니다.");
             return "shopPage/productOne";
         }
+        List<PImageVo> product = shopMapper.selectPImageList(pIdx);
+        model.addAttribute("product", product);
+
 
         // 2. 리뷰 목록 가져오기
         List<ReviewVo> reviewList = reviewMapper.selectReviewsByProduct(pIdx);
