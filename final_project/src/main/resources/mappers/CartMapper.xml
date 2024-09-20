@@ -26,4 +26,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where scIdx = #{scIdx}
     </update>
 
+    <delete id="cartDelete" parameterType="int">
+        delete from scart
+        where scIdx = #{scIdx}
+    </delete>
 </mapper>
