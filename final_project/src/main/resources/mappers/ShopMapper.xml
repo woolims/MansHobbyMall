@@ -111,10 +111,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     #{fileName}
                                   )
     </insert>
-
-    <select id="selectPImageName" resultType="pImage" parameterType="int">
-        select fileName from productImage where pIdx=#{pIdx}
+    <!-- 상품사진리스트조회 -->
+    <select id="selectPImageList" resultType="pImage" parameterType="int">
+        select * from productImage where pIdx=#{pIdx}
     </select>
+
+    <!-- 상품정보 삭제시 이미지도 같이 삭제 -->
+    <delete id="pImageDelete" parameterType="int">
+        delete from productImage where pIdx=#{pIdx}
+    </delete>
+
+    <!-- 선택한 상품사진을 삭제 -->
+    <delete id="deletePImageOne" parameterType="int">
+        delete from productImage where fileIdx=#{fileIdx}
+    </delete>
 
     <!-- 여기부터 상품관리 카테고리 선택기능 ajax처리용 sql문 -->
     <!-- categoryName 전체조회 -->
