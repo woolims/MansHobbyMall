@@ -19,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.puter.final_project.dao.AdminMapper;
 import com.puter.final_project.dao.InquiryMapper;
+import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.ProductMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.vo.InquiryVo;
+import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
@@ -43,6 +45,9 @@ public class AdminController {
 
     @Autowired
     AdminMapper adminMapper;
+
+    @Autowired
+    OrdersMapper ordersMapper;
 
     @Autowired
     InquiryMapper inquiryMapper;
@@ -77,11 +82,13 @@ public class AdminController {
 
         List<ShopVo> pList = shopMapper.selectAdminList();
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
+        List<OrdersVo> buyList = ordersMapper.selectBuyList();
         List<InquiryVo> list2 = inquiryMapper.selectNoticeList();
 
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("list", list);
         model.addAttribute("pList", pList);
+        model.addAttribute("buyList", buyList);
         model.addAttribute("list2", list2);
 
         return "shopPage/adminMain";

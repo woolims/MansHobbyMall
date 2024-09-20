@@ -1,5 +1,7 @@
 package com.puter.final_project.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.puter.final_project.vo.BuyListVo;
@@ -15,5 +17,7 @@ public interface BuyListMapper {
     public int selectBuyListOne(BuyListVo vo);
 
     public int orderInsert(int bIdx);
+
+    public List<BuyListVo> selectBuyList();
 
 }

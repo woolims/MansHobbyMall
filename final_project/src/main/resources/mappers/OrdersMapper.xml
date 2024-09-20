@@ -10,4 +10,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select * from ShippingView where userIdx=#{userIdx} order by oIdx
   </select>
 
+  <select id="selectBuyList" resultType="orders">
+       select * from ShippingView order by oIdx
+  </select>
+
 </mapper>

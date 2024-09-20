@@ -10,5 +10,7 @@ import com.puter.final_project.vo.OrdersVo;
 public interface OrdersMapper {
 
     List<OrdersVo> selectList(int userIdx);
+
+    List<OrdersVo> selectBuyList();
     
 }
