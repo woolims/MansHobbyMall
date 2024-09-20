@@ -21,10 +21,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
+import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
+import com.puter.final_project.vo.CouponBoxVo;
+import com.puter.final_project.vo.CouponVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
@@ -52,6 +55,9 @@ public class ShopController {
 
     @Autowired
     HttpSession session;
+
+    @Autowired
+    CouponBoxMapper couponBoxMapper;
 
     // main 페이지 이동
     @RequestMapping("/home.do")
@@ -146,28 +152,61 @@ public class ShopController {
 
     // 스포츠 상품 클릭 시 이동하는 상세페이지
     @RequestMapping("/productOne.do")
-    public String sports_one(int categoryNo, int pIdx, Model model) {
+    public String sports_one(int categoryNo, int pIdx,
+            @RequestParam(value = "couponId", required = false) Integer couponId,
+            Model model) {
 
-        // 특정 상품에 대한 리뷰 목록 불러오기
+        // 1. 상품 정보 가져오기
+        ShopVo shop = shopMapper.selectProductInfoList(categoryNo, pIdx);
+        if (shop == null) {
+            model.addAttribute("error", "해당 상품이 존재하지 않습니다.");
+            return "shopPage/productOne";
+        }
+
+        // 2. 리뷰 목록 가져오기
         List<ReviewVo> reviewList = reviewMapper.selectReviewsByProduct(pIdx);
 
-        ShopVo shop = (ShopVo) shopMapper.selectProductInfoList(categoryNo, pIdx);
-        shop.setCategoryNo(categoryNo);
-        shop.setPIdx(pIdx);
+        // 3. 사용자 쿠폰 목록 가져오기
+        UserVo user = (UserVo) session.getAttribute("user");
+        if (user != null) {
+            List<CouponBoxVo> couponList = couponBoxMapper.selectCouponsByUserId(user.getUserIdx());
+            model.addAttribute("couponList", couponList);
+        }
 
+        // 4. 쿠폰이 있을 때만 할인 적용
+        double discount = 0;
+        if (couponId != null) {
+            CouponBoxVo coupon = couponBoxMapper.selectCouponById(couponId);
+            if (coupon != null && coupon.getCoupon() != null) {
+                if ("-".equals(coupon.getCoupon().getDctype())) { // 금액 할인
+                    discount = coupon.getCoupon().getDiscount();
+                } else if ("%".equals(coupon.getCoupon().getDctype())) { // 퍼센트 할인
+                    discount = shop.getPrice() * (coupon.getCoupon().getDiscount() / 100.0);
+                }
+            }
+        }
+
+        // 5. 최종 금액 계산
+        double finalPrice = shop.getPrice() - discount;
+        if (finalPrice < 0) {
+            finalPrice = 0;
+        }
+
+        // 6. 모델에 정보 추가
         model.addAttribute("shop", shop);
-        // 상품 정보와 함께 리뷰 목록 전달
         model.addAttribute("reviewList", reviewList);
+        model.addAttribute("discount", discount);
+        model.addAttribute("finalPrice", finalPrice);
 
         return "shopPage/productOne";
     }
 
     @RequestMapping("/cartInsert.do")
-    public String cartInsert(CartVo vo){
+    public String cartInsert(CartVo vo) {
 
         UserVo user = (UserVo) session.getAttribute("user");
         vo.setUserIdx(user.getUserIdx());
-        
+
         int res = cartMapper.cartInsert(vo);
 
         return "redirect:home.do";
@@ -179,8 +218,5 @@ public class ShopController {
 
         return "shopPage/gameMain";
     }
-
-
-
 
 }

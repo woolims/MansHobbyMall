@@ -60,10 +60,8 @@ public interface ShopMapper {
 
     List<ShopVo> selectDcategoryNameList(String mcategoryName);
 
-    
-
     List<ShopVo> selectSearchList(ShopVo shop);
-    
+
     List<ShopVo> selectCategoryList(ShopVo shop);
 
     List<ShopVo> selectCategorySearchList(ShopVo shop);
@@ -82,4 +80,6 @@ public interface ShopMapper {
 
     int pImageDelete(int pIdx);
 
+    // 추가: pIdx로만 상품 정보 조회
+    ShopVo selectProductInfoListById(int pIdx);
 }

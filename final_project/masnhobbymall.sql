@@ -618,6 +618,8 @@ INSERT INTO Coupon (cName, discount, dcType)
 VALUES ('가을맞이 쿠폰', 5, '%');
 INSERT INTO Coupon (cName, discount, dcType)
 VALUES ('첫 이용기념', 1000, '-');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('생일 축하합니다 :)', 10000, '-');
 
 
 -- CouponBox 테이블 쿼리 추가

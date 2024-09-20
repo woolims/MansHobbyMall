@@ -43,6 +43,7 @@ public class CouponBoxController {
         LocalDate today = LocalDate.now(); // 현재 날짜
 
         // 각 쿠폰에 대해 D-day 계산
+
         for (CouponBoxVo coupon : myCouponList) {
             Date signupDate = coupon.getCreateAt(); // 회원가입일 가져오기
             if (signupDate != null) {
@@ -99,22 +100,6 @@ public class CouponBoxController {
         model.addAttribute("pIdx", pIdx);
 
         return "menubar/payment";
-    }
-
-    // 쿠폰 목록을 처리하는 메서드 추가
-    @RequestMapping("productPage.do")
-    public String getCouponsForUser(@RequestParam("useridx") int useridx, Model model) {
-        // useridx에 따라 쿠폰 목록 결정
-        if (useridx >= 1 && useridx <= 6) {
-            model.addAttribute("couponList", List.of("5000원 할인 쿠폰", "10% 할인 쿠폰"));
-        } else {
-            model.addAttribute("couponList", List.of("5000원 할인 쿠폰", "1000원 할인 쿠폰", "5% 할인 쿠폰"));
-        }
-
-        // useridx와 쿠폰 목록을 JSP로 전달
-        model.addAttribute("useridx", useridx);
-
-        return "menubar/payment"; // payment.jsp로 이동
     }
 
 }
