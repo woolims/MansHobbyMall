@@ -377,6 +377,37 @@ SELECT
 FROM review r
 INNER JOIN User u ON r.userIdx = u.userIdx;
 
+CREATE OR REPLACE VIEW productListView AS
+SELECT DISTINCT
+    p.categoryNo,
+    p.mcategoryNo,
+    p.dcategoryNo,
+    p.pName,
+    p.pEx,
+    p.amount,
+    p.price,
+	i.pIdx,
+    i.fileIdx,
+    i.fileName
+FROM Product p
+INNER JOIN productimage i ON p.pIdx = i.pIdx;
+
+CREATE OR REPLACE VIEW CartView AS
+SELECT
+    c.scIdx,
+    c.userIdx,
+    c.pIdx,
+    c.scamount,
+    p.categoryNo,
+    p.dcategoryNo,
+    p.mcategoryNo,
+    p.pName,
+    p.pEx,
+    p.price
+FROM Scart c
+INNER JOIN Product p ON c.pIdx = p.pIdx
+INNER JOIN ProductImage i ON p.pIdx = i.pIdx;
+
 
 -- Grade 테이블에 샘플 데이터 삽입
 INSERT INTO Grade(gradeName, authority, discount)
