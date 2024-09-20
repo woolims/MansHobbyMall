@@ -88,6 +88,76 @@
             background-color: #27ae60;
         }
     </style>
+    <script>
+        function updateTotalPrice() {
+            let totalPrice = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const price = parseFloat(item.querySelector('.price').innerText);
+                const quantity = parseInt(item.querySelector('input[type="number"]').value);
+                totalPrice += price * quantity;
+            });
+            document.querySelector('.total-price').innerText = totalPrice;
+        }
+    
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const itemId = this.id.split('-')[1]; // ID에서 상품 ID 추출
+                const newQuantity = this.value;
+    
+                // AJAX 요청 보내기
+                fetch(`/user/updateQuantity?scIdx=` + itemId + `&scamount=` + newQuantity, {
+                    method: 'POST'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // 서버에서 JSON 응답을 받음
+                    }
+                    throw new Error('네트워크 오류 발생');
+                })
+                .then(data => {
+                    console.log(data.message);
+                    // 총 금액 업데이트
+                    updateTotalPrice();
+                })
+                .catch(error => {
+                    console.error('오류:', error);
+                });
+            });
+        });
+    
+        // 페이지 로드 시 총 금액 초기 계산
+        document.addEventListener('DOMContentLoaded', updateTotalPrice);
+    
+        function cartDelete(scIdx) {
+            if (confirm("장바구니에서 빼시겠습니까?") == false) return;
+    
+            // AJAX 요청 보내기
+            fetch(`/user/cartDelete.do?scIdx=` + scIdx, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // 서버에서 JSON 응답을 받음
+                }
+                throw new Error('네트워크 오류 발생');
+            })
+            .then(data => {
+                console.log(data.message);
+                const itemElement = document.getElementById(`item-`+scIdx);
+
+                if (itemElement) {
+                    itemElement.closest('.cart-item').remove(); // itemElement가 null이 아닐 경우에만 closest 호출
+                    // 총 금액 업데이트
+                    updateTotalPrice();
+                } else {
+                    console.error('아이템을 찾을 수 없습니다:', scIdx);
+                }
+            })
+            .catch(error => {
+                console.error('오류:', error);
+            });
+        }
+    </script>
 
 </head>
 <body>
@@ -95,24 +165,26 @@
         <h1>장바구니</h1>
     </header>
     <main>
+        <c:set var="totalPrice" value="0" />
         <c:forEach var="item" items="${cartList}">
             <div class="cart-item">
-                <input type="checkbox" id="item-${item.getPIdx()}" class="item-checkbox">
-                <label for="item-${item.getPIdx()}" class="item-content">
+                <input type="checkbox" id="item-${item.getScIdx()}" class="item-checkbox">
+                <label for="item-${item.getScIdx()}" class="item-content">
                     <img src="" alt="상품 이미지"> <!-- 상품 이미지 URL -->
                     <div class="item-details">
-                        <h2>상품이름</h2> <!-- 상품 이름 -->
-                        <p>가격: <span class="price">21000원</span></p> <!-- 상품 가격 -->
+                        <h2>${item.getPName()}</h2> <!-- 상품 이름 -->
+                        <p>상품 가격: <span class="price">${item.getPrice()}</span></p> <!-- 상품 가격 -->
                         <label for="quantity-${item.getPIdx()}">수량:</label>
-                        <input type="number" id="scamount" name="scamount" value="1" min="1"> <!-- 수량 -->
+                        <input type="number" id="scamount-${item.getScIdx()}" name="scamount" value="${item.getScamount()}" min="1"> <!-- 수량 -->
                     </div>
-                    <button class="remove-btn">삭제</button>
+                    <button class="remove-btn" onclick="cartDelete('${item.getScIdx()}')">삭제</button>
                 </label>
             </div>
+            <c:set var="totalPrice" value="${totalPrice + item.price * item.scamount}" />
         </c:forEach>
 
         <div class="cart-summary">
-            <p>총 합계: <span class="total-price">21000원</span></p> <!-- 총 합계 -->
+            <p>총 합계: <span class="total-price">${totalPrice}</span></p> <!-- 총 합계 -->
             <button class="checkout-btn">결제하기</button>
         </div>
     </main>

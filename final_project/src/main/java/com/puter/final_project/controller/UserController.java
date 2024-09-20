@@ -1,11 +1,17 @@
 package com.puter.final_project.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -244,4 +250,31 @@ public class UserController {
 
 		return "redirect:mypage.do";
 	}
+
+	@PostMapping("/updateQuantity")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> updateQuantity(@RequestParam int scIdx, @RequestParam int scamount) {
+        // DB에서 해당 상품의 수량을 업데이트하는 로직 추가
+        cartMapper.updateQuantity(scIdx, scamount); // 서비스 메서드 호출
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "수량이 성공적으로 업데이트되었습니다.");
+        return ResponseEntity.ok(response);
+    }
+
+	@DeleteMapping("cartDelete.do")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> cartDelete(@RequestParam int scIdx) {
+        // 장바구니에서 해당 항목 삭제 로직 추가
+        int result = cartMapper.cartDelete(scIdx); // DB에서 항목 삭제
+
+        Map<String, String> response = new HashMap<>();
+        if (result > 0) {
+            response.put("message", "항목이 성공적으로 삭제되었습니다.");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("message", "항목 삭제에 실패했습니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }

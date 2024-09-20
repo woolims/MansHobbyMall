@@ -12,4 +12,8 @@ public interface BuyListMapper {
 
     public UserVo selectOne(int userIdx);
 
+    public int selectBuyListOne(BuyListVo vo);
+
+    public int orderInsert(int bIdx);
+
 }

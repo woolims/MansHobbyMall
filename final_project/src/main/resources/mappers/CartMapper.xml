@@ -20,4 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
     </insert>
 
+    <update id="updateQuantity">
+        update scart
+        set scamount = #{scamount}
+        where scIdx = #{scIdx}
+    </update>
+
+    <delete id="cartDelete" parameterType="int">
+        delete from scart
+        where scIdx = #{scIdx}
+    </delete>
 </mapper>
