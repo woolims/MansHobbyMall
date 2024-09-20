@@ -14,10 +14,10 @@ public interface CouponBoxMapper {
     // 사용자의 쿠폰함에 새로운 쿠폰 추가
     int insertCouponToBox(CouponBoxVo couponBox);
 
-       // 특정 쿠폰 조회 (couponId 기준)
-       CouponBoxVo selectCouponById(int couponId);
+    // 특정 쿠폰 조회 (couponId 기준)
+    CouponBoxVo selectCouponById(int couponId);
 
-       // 쿠폰 사용 상태 업데이트
-       int updateCouponUsage(int couponId);
-   
+    // 쿠폰 사용 상태 업데이트
+    int updateCouponUsage(int couponId);
+
 }

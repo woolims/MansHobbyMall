@@ -118,7 +118,7 @@ public class UserController {
 	// 회원가입 후 축하 쿠폰 발급 메서드
 	private void issueWelcomeCoupon(int userIdx) {
 		// cIdx 1번과 3번과 4번인 쿠폰을 발급
-		int[] welcomeCouponIdxs = { 1, 2, 3, 4 }; // cIdx 쿠폰 ID 배열
+		int[] welcomeCouponIdxs = { 1, 2, 3, 4, 5 }; // cIdx 쿠폰 ID 배열
 
 		for (int cIdx : welcomeCouponIdxs) {
 			CouponBoxVo couponBox = new CouponBoxVo();
@@ -252,29 +252,29 @@ public class UserController {
 	}
 
 	@PostMapping("/updateQuantity")
-    @ResponseBody
-    public ResponseEntity<Map<String, String>> updateQuantity(@RequestParam int scIdx, @RequestParam int scamount) {
-        // DB에서 해당 상품의 수량을 업데이트하는 로직 추가
-        cartMapper.updateQuantity(scIdx, scamount); // 서비스 메서드 호출
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> updateQuantity(@RequestParam int scIdx, @RequestParam int scamount) {
+		// DB에서 해당 상품의 수량을 업데이트하는 로직 추가
+		cartMapper.updateQuantity(scIdx, scamount); // 서비스 메서드 호출
 
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "수량이 성공적으로 업데이트되었습니다.");
-        return ResponseEntity.ok(response);
-    }
+		Map<String, String> response = new HashMap<>();
+		response.put("message", "수량이 성공적으로 업데이트되었습니다.");
+		return ResponseEntity.ok(response);
+	}
 
 	@DeleteMapping("cartDelete.do")
-    @ResponseBody
-    public ResponseEntity<Map<String, String>> cartDelete(@RequestParam int scIdx) {
-        // 장바구니에서 해당 항목 삭제 로직 추가
-        int result = cartMapper.cartDelete(scIdx); // DB에서 항목 삭제
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> cartDelete(@RequestParam int scIdx) {
+		// 장바구니에서 해당 항목 삭제 로직 추가
+		int result = cartMapper.cartDelete(scIdx); // DB에서 항목 삭제
 
-        Map<String, String> response = new HashMap<>();
-        if (result > 0) {
-            response.put("message", "항목이 성공적으로 삭제되었습니다.");
-            return ResponseEntity.ok(response);
-        } else {
-            response.put("message", "항목 삭제에 실패했습니다.");
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
+		Map<String, String> response = new HashMap<>();
+		if (result > 0) {
+			response.put("message", "항목이 성공적으로 삭제되었습니다.");
+			return ResponseEntity.ok(response);
+		} else {
+			response.put("message", "항목 삭제에 실패했습니다.");
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
 }

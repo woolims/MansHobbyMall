@@ -186,4 +186,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <!-- 여기까지 상품관리탭 검색기능 -->
 
+    <!-- pIdx로만 상품 정보 조회 mk -->
+    <select id="selectProductInfoListById" resultType="shop" parameterType="int">
+    SELECT * FROM shop_list_view WHERE pIdx = #{pIdx}
+    </select>
+
 </mapper>

@@ -21,4 +21,5 @@ public class CouponBoxVo {
 
       // 포맷된 회원가입일
       String createAtStr;  // 포맷된 회원가입일
+
 }

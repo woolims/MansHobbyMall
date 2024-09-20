@@ -19,28 +19,40 @@
 
                 var merchant_uid = "O" + new Date().getTime(); // 고유한 주문번호 생성
 
+
                 var originalPrice = parseFloat("${shop.getPrice()}"); // 상품 원래 가격을 숫자로 변환
                 var couponDiscount = 0; // 처음에는 쿠폰 할인이 0으로 설정
                 var finalPrice = originalPrice - couponDiscount; // 쿠폰 적용 후 가격
 
-                // 쿠폰 선택에 따른 할인 적용
                 function applyCoupon() {
                     var couponSelect = document.getElementById('coupon');
-                    var selectedValue = couponSelect.value; // 선택한 쿠폰의 value 값
+                    var selectedOption = couponSelect.options[couponSelect.selectedIndex];
+                    var couponType = selectedOption.getAttribute("data-type"); // 쿠폰 타입 ('-' 또는 '%')
+                    var discountValue = parseFloat(selectedOption.getAttribute("data-discount")); // 쿠폰 할인 값
+                    var couponid = selectedOption.value; // cbidx (쿠폰 ID)
 
-                    if (selectedValue.includes('%')) { // 할인율 쿠폰일 경우
-                        var discountPercentage = parseFloat(selectedValue.replace('%', '')); // %를 제거하고 숫자로 변환
-                        couponDiscount = originalPrice * (discountPercentage / 100); // 퍼센트 할인 계산
-                    } else {
-                        couponDiscount = parseFloat(selectedValue); // 금액 할인일 경우
+                    var couponDiscount = 0;
+                    var finalPrice = originalPrice;
+
+                    // 할인 적용
+                    if (couponType === '-') { // 금액 할인일 경우
+                        couponDiscount = discountValue;
+                        finalPrice = originalPrice - couponDiscount;
+                    } else if (couponType === '%') { // 퍼센트 할인일 경우
+                        couponDiscount = originalPrice * (discountValue / 100);
+                        finalPrice = originalPrice - couponDiscount;
                     }
 
-                    finalPrice = originalPrice - couponDiscount; // 쿠폰 적용 후 최종 금액 계산
+                    // 최종 금액이 0원 이하일 경우 0원으로 설정
+                    if (finalPrice < 0) {
+                        finalPrice = 0;
+                    }
 
                     // 할인 금액 및 최종 결제 금액 표시 업데이트
-                    document.getElementById('discountAmount').textContent = couponDiscount.toLocaleString(); // 숫자를 콤마로 포맷
-                    document.getElementById('finalPrice').textContent = finalPrice.toLocaleString(); // 숫자를 콤마로 포맷
+                    document.getElementById('discountAmount').textContent = couponDiscount.toLocaleString(); // 할인 금액
+                    document.getElementById('finalPrice').textContent = finalPrice.toLocaleString(); // 최종 금액
 
+                    console.log("Selected couponid: " + couponid);
                     console.log("Updated Coupon Discount: " + couponDiscount);
                     console.log("Updated Final Price: " + finalPrice);
                 }
@@ -50,19 +62,42 @@
                     var couponOptions = document.querySelectorAll("#coupon option");
 
                     couponOptions.forEach(function (option) {
-                        var value = option.value;
+                        var discountValue = parseFloat(option.getAttribute("data-discount"));
+                        var couponType = option.getAttribute("data-type");
 
-                        // 금액 쿠폰일 때, 판매가보다 크면 비활성화
-                        if (!value.includes('%') && parseFloat(value) >= originalPrice && value !== "0") {
+                        var couponDiscount = 0;
+
+                        // 할인 계산
+                        if (couponType === '-') { // 금액 할인일 경우
+                            couponDiscount = discountValue;
+                        } else if (couponType === '%') { // 퍼센트 할인일 경우
+                            couponDiscount = originalPrice * (discountValue / 100);
+                        }
+
+                        // 금액이 상품 가격보다 크면 적용 불가로 표시
+                        if (couponDiscount >= originalPrice && option.value !== "0") {
                             option.disabled = true; // 비활성화
                             option.textContent += " (적용 불가)";
                         }
                     });
                 }
 
-                // 페이지 로드 후 쿠폰 비활성화 여부 체크
+                // 쿠폰이 없을 때 선택 박스 기본 메시지 설정
+                function setDefaultCouponMessage() {
+                    var couponSelect = document.getElementById('coupon');
+                    if (couponSelect.options.length <= 1) { // 쿠폰이 없을 때 기본 메시지
+                        var defaultOption = document.createElement('option');
+                        defaultOption.text = "사용 가능한 쿠폰이 없습니다";
+                        defaultOption.value = "0";
+                        couponSelect.add(defaultOption);
+                        couponSelect.disabled = true; // 선택 불가하게 만듦
+                    }
+                }
+
+                // 페이지 로드 후 쿠폰 비활성화 여부와 기본 메시지 설정
                 window.onload = function () {
                     checkCouponValidity();
+                    setDefaultCouponMessage();
                 };
 
                 function requestPay() {
@@ -155,13 +190,18 @@
                             // jQuery로 HTTP 요청
                             jQuery.ajax({
                                 url: "../buyList/buy.do",
-                                method: "POST",
+                                method: "GET",
                                 // headers: {
                                 //     "Content-Type": "application/json"
                                 // },
                                 data: {
                                     imp_uid: rsp.imp_uid, // 결제 고유번호
-                                    merchant_uid: rsp.merchant_uid // 주문번호
+                                    merchant_uid: rsp.merchant_uid, // 주문번호
+                                    userIdx: "${ user.userIdx }",
+                                    pIdx: "${ shop.getPIdx() }",
+                                    // 수정 필요
+                                    bamount: 1,
+                                    couponid: document.getElementById('coupon').value // 선택된 쿠폰 ID
                                 },
                                 dataType: "json",
                                 success: function (rsp) {
@@ -226,7 +266,8 @@
                                     imp_uid: rsp.imp_uid, // 결제 고유번호
                                     merchant_uid: rsp.merchant_uid,// 주문번호
                                     userIdx: "${ user.userIdx }",
-                                    pIdx: "${ user.userIdx }",
+                                    pIdx: "${ shop.getPIdx() }",
+                                    couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                                     // 수정 필요
                                     bamount: 1
                                 },
@@ -294,11 +335,29 @@
                         <div class="option">
                             <label for="coupon">쿠폰 선택</label>
                             <select id="coupon" onchange="applyCoupon()">
-                                <option value="0">쿠폰을 선택하세요</option>
-                                <option value="5000">회원가입 축하 쿠폰: 5000원 할인</option>
-                                <option value="10%">오픈 기념: 10% 할인</option>
-                                <option value="5%">가을맞이 쿠폰 : 5% 할인</option>
-                                <option value="1000">첫 이용 기념: 1000원 할인</option>
+                                <option value="0" data-type="" data-discount="0">쿠폰을 선택하세요</option>
+                                <c:choose>
+                                    <c:when test="${not empty couponList}">
+                                        <c:forEach var="coupon" items="${couponList}">
+                                            <!-- 사용하지 않은 쿠폰만 표시 -->
+                                            <c:if test="${coupon.useat == 'N'}">
+                                                <option value="${coupon.cbidx}" data-type="${coupon.coupon.dctype}"
+                                                    data-discount="${coupon.coupon.discount}">
+                                                    ${coupon.coupon.cname}:
+                                                    <c:if test="${coupon.coupon.dctype == '-'}">
+                                                        ${coupon.coupon.discount}원 할인
+                                                    </c:if>
+                                                    <c:if test="${coupon.coupon.dctype == '%'}">
+                                                        ${coupon.coupon.discount}% 할인
+                                                    </c:if>
+                                                </option>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="0" disabled>적용 가능한 쿠폰이 없습니다</option>
+                                    </c:otherwise>
+                                </c:choose>
                             </select>
                         </div>
 
