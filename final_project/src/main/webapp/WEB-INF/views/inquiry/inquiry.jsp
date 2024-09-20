@@ -105,9 +105,21 @@
                             <th style="width: 20%; text-align: center;">답변 여부</th>
                         </tr>
                     </thead>
-                    <tbody style="background-color: white;">
+                    <tbody style="background-color: white; border: 1px solid black;">
                         <c:if test="${not empty user}">
+                            <!-- 공지사항 먼저 출력 -->
                             <c:forEach var="vo" items="${list}">
+                                <c:if test="${vo.inAc eq 'Y'}">
+                                    <tr">
+                                        <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">공지사항</td>
+                                        <td style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030; ">${vo.inType}</td>
+                                        <td style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030; ">${vo.inDate}</td>
+                                        <td style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; "></td>
+                                    </tr>
+                                </c:if>
+                            </c:forEach>
+                            <c:forEach var="vo" items="${list}">
+                                <c:if test="${vo.inAc ne 'Y'}">
                                 <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
                                     <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
                                         ${vo.inIdx}</td>
@@ -126,6 +138,7 @@
                                         </c:choose>
                                     </td>
                                 </tr>
+                            </c:if>
                             </c:forEach>
                         </c:if>
                     </tbody>

@@ -57,37 +57,32 @@ public class AdminController {
     ServletContext application;
 
     @RequestMapping("admin.do")
-    public String list(Model model) {
+    public String list(@RequestParam(value = "searchType", required = false) String searchType,
+                    @RequestParam(value = "searchText", required = false) String searchText,
+                    Model model) {
 
         UserVo user = (UserVo) session.getAttribute("user");
         if (user == null || "N".equals(user.getAdminAt())) {
             return "redirect:../home.do";
         }
 
-        // 회원 관리 불러오기
-        List<UserVo> list = adminMapper.selectListUserView();
+        List<UserVo> list;
+        if ("id".equals(searchType) && searchText != null && !searchText.isEmpty()) {
+            // 아이디로 검색
+            list = adminMapper.selectUsersById(searchText);  // id로 검색
+        } else {
+            // 전체 보기
+            list = adminMapper.selectListUserView();
+        }
 
         List<ShopVo> pList = shopMapper.selectAdminList();
-
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
-
         List<InquiryVo> list2 = inquiryMapper.selectNoticeList();
-
-        // // 상품 관리 불러오기
-        // List<AboardVo> list2 = .selectListMySb(user.getUserNo());
-        // // 주문 관리 불러오기
-        // List<AboardVo> list3 = aboard_dao.selectListMyAuc(user.getUserNo());
-        // // 공지사항 관리 불러오기
-        // List<AboardVo> list4 = aboard_dao.selectListMySc(user.getUserNo());
 
         model.addAttribute("categoryName", categoryName);
         model.addAttribute("list", list);
         model.addAttribute("pList", pList);
         model.addAttribute("list2", list2);
-
-        // model.addAttribute("list2", list2);
-        // model.addAttribute("list3", list3);
-        // model.addAttribute("list4", list4);
 
         return "shopPage/adminMain";
     }

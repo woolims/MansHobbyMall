@@ -397,7 +397,26 @@
                 f.action = "nDelete.do";
                 f.submit();
             }
- 
+
+            function find() {
+                // 검색 조건과 검색어 가져오기
+                var searchType = document.getElementById('search').value;
+                var searchText = document.getElementById('search_text').value;
+
+                // URL에 검색 조건과 검색어를 쿼리 파라미터로 추가
+                var query = '';
+                if (searchType === 'name') {
+                    query = '?searchType=id&searchText=' + encodeURIComponent(searchText);  // 'id'로 검색
+                } else {
+                    query = '?searchType=all';
+                }
+
+                // 검색 요청을 보낼 URL 설정 (현재 페이지에서 검색)
+                var url = 'admin.do' + query;
+
+                // 페이지 이동
+                window.location.href = url;
+            }
 
         </script>
 
@@ -420,6 +439,18 @@
             <div class="tab-content">
                 <div id="menu1" class="tab-pane fade in active">
                     <h2>회원 관리</h2>
+                    <!-- 검색메뉴 -->
+                    <div style="text-align: right; margin-bottom: 5px;">
+                        <form action="" class="form-inline">
+                            <select id="search" class="form-control">
+                                <option value="all">전체보기</option>
+                                <option value="name">아이디</option>
+                            </select>
+
+                            <input id="search_text" class="form-control" value="${ param.search_text }">
+                            <input type="button" class="btn btn-primary" value="검색" onclick="find();">
+                        </form>
+                    </div>
 
                     <c:choose>
                         <c:when test="${empty list}">
