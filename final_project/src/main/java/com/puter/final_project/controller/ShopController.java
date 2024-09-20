@@ -18,6 +18,7 @@ import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
+import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.ShopVo;
@@ -146,9 +147,11 @@ public class ShopController {
         List<ReviewVo> reviewList = reviewMapper.selectReviewsByProduct(pIdx);
 
         ShopVo shop = (ShopVo) shopMapper.selectProductInfoList(categoryNo, pIdx);
+                List<PImageVo> product = shopMapper.selectPImageList(pIdx);
         shop.setCategoryNo(categoryNo);
         shop.setPIdx(pIdx);
 
+        model.addAttribute("product", product);
         model.addAttribute("shop", shop);
         // 상품 정보와 함께 리뷰 목록 전달
         model.addAttribute("reviewList", reviewList);
