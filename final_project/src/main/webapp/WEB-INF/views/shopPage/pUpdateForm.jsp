@@ -175,11 +175,57 @@
                     if(confirm("수정을 취소하시겠습니까?\n내용은 저장되지 않습니다.")==false) return;
                     location.href='/admin/admin.do'
                 }
+
+                function pImageDelete(fileName, fileIdx , pIdx){
+                    if(confirm("이미지를 삭제하시겠습니까?")==false) return;
+                    $.ajax({
+                        url: "/admin/pImageDelete.do",
+                        data: {"fileIdx" : fileIdx, "pIdx" : pIdx, "fileName" : fileName},
+                        dataType: "json",
+                        method: 'POST',
+                        success: function (res_data) {
+                            let pImgTable = $("#pImgTable");
+                            pImgTable.empty();
+                            let pImgTableHtml = `
+                                <tr>
+                                    <th>상품사진</th>
+                                    <td><input type="file" name="photo" id="pImg" multiple></td>
+                                </tr>
+                                <tr>
+                                    <th>현재등록된 상품사진</th>
+                                    `;
+
+                            if (res_data.length == 0 || res_data == null) {
+                                pImgTableHtml += `등록된 사진이 없습니다`;
+                            }else {
+                                $.each(res_data, function (i, photoList) {
+                                    pImgTableHtml += `
+                                    <td style="display: inline-block; width: 200px; height: 160px;"><img src="/resources/images/\${photoList.fileName}"
+                                    onclick="pImageDelete('\${photoList.fileName}', 
+                                    '\${photoList.fileIdx}', '\${photoList.pidx}')">
+                                    </td>`;
+                                });
+                            }
+                            pImgTableHtml += `
+                                </tr>`;
+
+                            // HTML을 특정 컨테이너에 추가
+                            $('#pImgTable').html(pImgTableHtml);
+                        },
+                        error: function (err) {
+                            console.log(err.responseText);
+                        }
+                    });
+                }
                 </script>
 
                 <style>
                     textarea {
                         resize: none;
+                    }
+                    img{
+                        width: 100%; 
+                        height: 100%;
                     }
                 </style>
 
@@ -224,22 +270,27 @@
                         </tr>
 
                     </table>
-                    <table>
+                    <table id="pImgTable">
                         <tr>
                             <th>상품사진</th>
                             <td><input type="file" name="photo" id="pImg" multiple></td>
                         </tr>
                         <tr>
                             <th>현재등록된 상품사진</th>
-                            <c:if test="${empty pImageNameList}">
+                            <c:if test="${empty pImageList}">
                                 <td>등록된 사진이 없습니다</td>
                             </c:if>
-                            <c:if test="${not empty pImageNameList && pImageNameList.size() != 0}">
-                                <c:forEach var="vo" items="${pImageNameList}">
-                                    <td style="display: inline-block; width: 200px; height: 160px;"><img style="width: 100%; height: 100%;" src="${ pageContext.request.contextPath }/resources/images/${vo.fileName}"></td>
+                            <c:if test="${not empty pImageList && pImageList.size() != 0}">
+                                <c:forEach var="vo" items="${pImageList}">
+                                    <td style="display: inline-block; width: 200px; height: 160px;">
+                                        <img style="width: 100%; height: 100%;" 
+                                        src="${ pageContext.request.contextPath }/resources/images/${vo.fileName}"
+                                        onclick="pImageDelete('${vo.fileName}', '${vo.fileIdx}', '${vo.getPIdx()}')"></td>
                                 </c:forEach>
                             </c:if>
                         </tr>
+                    </table>
+                    <table>
                         <tr>
                             <th>상품설명</th>
                             <td><textarea name="pEx" id="pEx" cols="50" rows="20">${pEx}</textarea></td>
