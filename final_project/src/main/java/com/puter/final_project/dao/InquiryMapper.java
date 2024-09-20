@@ -34,6 +34,8 @@ public interface InquiryMapper {
 
     int nModify(InquiryVo vo);
 
+    int nDelete(int inIdx);
+
     List<InquiryVo> selectNoticeList();
 
 }

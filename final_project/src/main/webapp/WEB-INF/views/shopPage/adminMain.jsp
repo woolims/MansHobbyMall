@@ -120,7 +120,6 @@
             function confirmDelete(f) {
                 if (confirm("정말 삭제하시겠습니까?") == false) return;
 
-
                 f.action = "delete.do";
                 f.submit();
             }
@@ -391,6 +390,13 @@
             function nInsert(){
                 location.href = "${pageContext.request.contextPath}/admin/nInsertForm.do";
             }
+
+            function confirmNoticeDelete(f) {
+                if (confirm("정말 삭제하시겠습니까?") == false) return;
+
+                f.action = "nDelete.do";
+                f.submit();
+            }
  
 
         </script>
@@ -543,7 +549,7 @@
                             <table>
                                 <tr>
                                     <th style="width: 300px; text-align: center;">제목</th>
-                                    <th style="width: 500px; text-align: center;">내용</th>
+                                    <th style="width: 1000px; text-align: center;">내용</th>
                                     <th style="width: 300px; text-align: center;">작성일</th>
                                 </tr>
                                 <c:forEach var="vo" items="${list2}">
@@ -552,7 +558,7 @@
                                         <td>${vo.inContent}</td>
                                         <td>${vo.inDate}</td>
                                         <td>
-                                            <form>
+                                            <form> 
                                                 <input type="hidden" name="inType" value="${vo.inType}"/>
                                                 <input type="hidden" name="inContent" value="${vo.inContent}"/>
                                                 <input type="button" class="btn btn-success" name="nModify" id="nModify" onclick="nModifyForm(this.form);" value="수정"/>
@@ -560,8 +566,8 @@
                                         </td>
                                         <td>
                                             <form>
-                                                <input type="hidden" name="" value="">
-                                                <input type="button" class="btn btn-danger" value="삭제" onclick="">
+                                                <input type="hidden" name="inIdx" value="${vo.getInIdx()}">
+                                                <input type="button" class="btn btn-danger" value="삭제하기" onclick="confirmNoticeDelete(this.form);">
                                             </form>
                                         </td>
                                     </tr>

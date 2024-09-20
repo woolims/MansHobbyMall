@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS SCart;
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS BuyList;
 DROP TABLE IF EXISTS DStatus;
+DROP TABLE IF EXISTS ProductImage;
 DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS DCategory;
 DROP TABLE IF EXISTS MCategory;
@@ -130,6 +131,13 @@ CREATE TABLE Product (
     FOREIGN KEY (dcategoryNo) REFERENCES DCategory (dcategoryNo) ON DELETE CASCADE
 );
 
+CREATE TABLE ProductImage (
+	fileIdx	int PRIMARY KEY AUTO_INCREMENT,
+    pIdx int NOT NULL,
+    fileName LONGTEXT,
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
+);
+
 -- DStatus 테이블
 CREATE TABLE DStatus (
     dsIdx int PRIMARY KEY AUTO_INCREMENT,
@@ -238,9 +246,6 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
-    ALGORITHM = UNDEFINED 
-    DEFINER = `final`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,

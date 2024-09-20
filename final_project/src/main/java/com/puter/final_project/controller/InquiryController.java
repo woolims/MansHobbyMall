@@ -138,4 +138,6 @@ public class InquiryController {
         return "redirect:inquiry.do";
     }
 
+    
+
 }

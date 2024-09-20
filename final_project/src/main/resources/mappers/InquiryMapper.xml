@@ -69,4 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     update inquiry set inType=#{inType}, inContent=#{inContent} where inIdx=#{inIdx}
   </update>
 
+  <delete id="nDelete" parameterType="int">
+    delete from inquiry where inIdx=#{inIdx}
+  </delete>
+
 </mapper>

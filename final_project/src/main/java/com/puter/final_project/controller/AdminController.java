@@ -381,6 +381,14 @@ public class AdminController {
         return "redirect:admin.do";
     }
 
+    @RequestMapping("nDelete.do")
+    public String confirmNoticeDelete(int inIdx) {
+
+        int res = inquiryMapper.nDelete(inIdx);
+
+        return "redirect:admin.do";
+    }
+
     @RequestMapping("pImageDelete.do")
     @ResponseBody
     public List<PImageVo> pImageDelete(PImageVo pImage) {
