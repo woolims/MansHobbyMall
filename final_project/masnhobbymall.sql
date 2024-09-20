@@ -130,14 +130,6 @@ CREATE TABLE Product (
     FOREIGN KEY (dcategoryNo) REFERENCES DCategory (dcategoryNo) ON DELETE CASCADE
 );
 
--- 상품이미지 테이블
-CREATE TABLE ProductImage (
-    fileIdx int PRIMARY KEY AUTO_INCREMENT,
-    pIdx int NOT NULL,
-    fileName LONGTEXT NOT NULL,
-    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
-);
-
 -- DStatus 테이블
 CREATE TABLE DStatus (
     dsIdx int PRIMARY KEY AUTO_INCREMENT,
@@ -203,12 +195,13 @@ CREATE TABLE Follow (
 -- Inquiry 테이블
 CREATE TABLE Inquiry (
     inIdx int PRIMARY KEY AUTO_INCREMENT,
-    pIdx int NOT NULL,
+    pIdx int,
     userIdx int NOT NULL,
     inType varchar(30) NOT NULL DEFAULT '기타',
     inContent LONGTEXT NOT NULL,
     inDate DATETIME NOT NULL DEFAULT now(),
     inPP LONGTEXT NULL,
+    inAc char(1) NOT NULL DEFAULT 'N',
     FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE,
     FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
@@ -245,6 +238,9 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
+    ALGORITHM = UNDEFINED 
+    DEFINER = `final`@`localhost` 
+    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,
@@ -304,8 +300,8 @@ SELECT DISTINCT
     g.gradeName,
     g.authority,
     g.discount
-FROM email e
-INNER JOIN User u ON e.userIdx = u.userIdx
+FROM Email e
+RIGHT JOIN User u ON e.userIdx = u.userIdx
 INNER JOIN Grade g ON u.gIdx = g.gIdx;
 
 CREATE OR REPLACE VIEW InquiryView AS
@@ -376,7 +372,6 @@ SELECT
     u.createAt
 FROM review r
 INNER JOIN User u ON r.userIdx = u.userIdx;
-
 
 -- Grade 테이블에 샘플 데이터 삽입
 INSERT INTO Grade(gradeName, authority, discount)
@@ -535,6 +530,30 @@ INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx F
 INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),3, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
 INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),4, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
 
+-- Coupon 테이블 쿼리 추가
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('회원가입 축하 쿠폰', 5000, '-');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('오픈 기념 쿠폰', 10, '%');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('가을맞이 쿠폰', 5, '%');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('첫 이용기념', 1000, '-');
+-- CouponBox 테이블 쿼리 추가
+INSERT INTO CouponBox (userIdx, cIdx, useAt) VALUES
+(1, 1, 'N'),
+(1, 2, 'N'),
+(2, 1, 'N'),
+(2, 2, 'N'),
+(3, 1, 'N'),
+(3, 2, 'N'),
+(4, 1, 'N'),
+(4, 2, 'N'),
+(5, 1, 'N'),
+(5, 2, 'N'),
+(6, 1, 'N'),
+(6, 2, 'N');
+
 drop procedure if exists update_order_status;
 
 DELIMITER //
@@ -574,30 +593,3 @@ CREATE EVENT update_order_status_event
 ON SCHEDULE EVERY 1 MINUTE
 DO
     CALL update_order_status();
-
-
--- Coupon 테이블 쿼리 추가
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('회원가입 축하 쿠폰', 5000, '-');
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('오픈 기념 쿠폰', 10, '%');
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('가을맞이 쿠폰', 5, '%');
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('첫 이용기념', 1000, '-');
-
-
--- CouponBox 테이블 쿼리 추가
-INSERT INTO CouponBox (userIdx, cIdx, useAt) VALUES
-(1, 1, 'N'),
-(1, 2, 'N'),
-(2, 1, 'N'),
-(2, 2, 'N'),
-(3, 1, 'N'),
-(3, 2, 'N'),
-(4, 1, 'N'),
-(4, 2, 'N'),
-(5, 1, 'N'),
-(5, 2, 'N'),
-(6, 1, 'N'),
-(6, 2, 'N');

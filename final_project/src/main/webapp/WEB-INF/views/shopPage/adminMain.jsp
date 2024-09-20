@@ -542,9 +542,9 @@
                         <c:otherwise>
                             <table>
                                 <tr>
-                                    <th>제목</th>
-                                    <th>내용</th>
-                                    <th>작성일</th>
+                                    <th style="width: 300px; text-align: center;">제목</th>
+                                    <th style="width: 500px; text-align: center;">내용</th>
+                                    <th style="width: 300px; text-align: center;">작성일</th>
                                 </tr>
                                 <c:forEach var="vo" items="${list2}">
                                     <tr>
