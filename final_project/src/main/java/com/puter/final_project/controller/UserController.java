@@ -107,7 +107,7 @@ public class UserController {
 	// 회원가입 후 축하 쿠폰 발급 메서드
 	private void issueWelcomeCoupon(int userIdx) {
 		// cIdx 1번과 3번과 4번인 쿠폰을 발급
-		int[] welcomeCouponIdxs = { 1, 3, 4 }; // cIdx 쿠폰 ID 배열
+		int[] welcomeCouponIdxs = { 1, 2, 3, 4 }; // cIdx 쿠폰 ID 배열
 
 		for (int cIdx : welcomeCouponIdxs) {
 			CouponBoxVo couponBox = new CouponBoxVo();
