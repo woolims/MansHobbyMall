@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.vo.CouponBoxVo;
@@ -38,28 +39,29 @@ public class CouponBoxController {
     public String myCoupons(int useridx, Model model) {
         List<CouponBoxVo> myCouponList = couponBoxMapper.selectCouponsByUserId(useridx);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");  // 날짜 포맷 지정
-        LocalDate today = LocalDate.now();  // 현재 날짜
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd"); // 날짜 포맷 지정
+        LocalDate today = LocalDate.now(); // 현재 날짜
 
         // 각 쿠폰에 대해 D-day 계산
         for (CouponBoxVo coupon : myCouponList) {
-            Date signupDate = coupon.getCreateAt();  // 회원가입일 가져오기
+            Date signupDate = coupon.getCreateAt(); // 회원가입일 가져오기
             if (signupDate != null) {
                 // Date -> LocalDate 변환
                 LocalDate signupLocalDate = Instant.ofEpochMilli(signupDate.getTime())
-                                                   .atZone(ZoneId.systemDefault())
-                                                   .toLocalDate();
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
 
                 // 회원가입일을 포맷하여 createAtStr에 설정
                 String formattedSignupDate = signupLocalDate.format(formatter);
-                coupon.setCreateAtStr(formattedSignupDate);  // 포맷된 회원가입일 설정
+                coupon.setCreateAtStr(formattedSignupDate); // 포맷된 회원가입일 설정
 
                 // 유효기간 계산
                 String expirationDate = calculateExpirationDate(signupLocalDate);
                 coupon.getCoupon().setExpirationDate(expirationDate);
 
                 // D-day 계산
-                LocalDate expirationLocalDate = LocalDate.parse(expirationDate, DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+                LocalDate expirationLocalDate = LocalDate.parse(expirationDate,
+                        DateTimeFormatter.ofPattern("yyyy.MM.dd"));
                 long daysLeft = ChronoUnit.DAYS.between(today, expirationLocalDate);
 
                 // D-day 값 설정 (예: D-100, D-99 등)
@@ -75,12 +77,44 @@ public class CouponBoxController {
     private String calculateExpirationDate(LocalDate signupLocalDate) {
         // 가입일로부터 100일 더함
         LocalDate expirationDate = signupLocalDate.plusDays(100);
-        
+
         // 포맷 지정 (yyyy.MM.dd)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
         // 계산된 만료일 반환
         return expirationDate.format(formatter);
+    }
+
+    @RequestMapping("applyCouponToProduct.do")
+    public String applyCouponToProduct(@RequestParam("useridx") int useridx,
+            @RequestParam("pIdx") int pIdx,
+            Model model) {
+        // 사용자의 쿠폰 리스트를 가져옴
+        List<CouponBoxVo> couponList = couponBoxMapper.selectCouponsByUserId(useridx);
+
+        // 로그 추가
+        System.out.println("쿠폰 리스트: " + couponList);
+
+        model.addAttribute("couponList", couponList);
+        model.addAttribute("pIdx", pIdx);
+
+        return "menubar/payment";
+    }
+
+    // 쿠폰 목록을 처리하는 메서드 추가
+    @RequestMapping("productPage.do")
+    public String getCouponsForUser(@RequestParam("useridx") int useridx, Model model) {
+        // useridx에 따라 쿠폰 목록 결정
+        if (useridx >= 1 && useridx <= 6) {
+            model.addAttribute("couponList", List.of("5000원 할인 쿠폰", "10% 할인 쿠폰"));
+        } else {
+            model.addAttribute("couponList", List.of("5000원 할인 쿠폰", "1000원 할인 쿠폰", "5% 할인 쿠폰"));
+        }
+
+        // useridx와 쿠폰 목록을 JSP로 전달
+        model.addAttribute("useridx", useridx);
+
+        return "menubar/payment"; // payment.jsp로 이동
     }
 
 }
