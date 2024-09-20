@@ -1,23 +1,16 @@
 package com.puter.final_project.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
@@ -25,6 +18,7 @@ import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
+import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
@@ -132,7 +126,7 @@ public class ShopController {
         }
         if (mcategoryName.equals("emptyMcategoryName") && dcategoryNameParam.equals("emptyDcategoryName")) {
 
-            List<ShopVo> productList = shopMapper.selectListSports(categoryNo);
+            List<ProductVo> productList = shopMapper.selectListSports(categoryNo);
             model.addAttribute("productList", productList);
         }
         if (mcategoryName.equals("emptyMcategoryName")) {
