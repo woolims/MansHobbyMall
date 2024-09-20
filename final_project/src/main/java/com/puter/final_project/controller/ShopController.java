@@ -1,5 +1,6 @@
 package com.puter.final_project.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
+import com.puter.final_project.vo.PImageVo;
+import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
@@ -101,7 +104,7 @@ public class ShopController {
 
     // 스포츠카테고리 전체조회
     @RequestMapping("/sports.do")
-    public String sports(@RequestParam(name = "page", defaultValue = "1") int nowPage, Model model,
+    public String sports(Model model,
             @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo,
             @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo,
             @RequestParam(name = "mcategoryName", defaultValue = "emptyMcategoryName") String mcategoryName,
@@ -129,7 +132,7 @@ public class ShopController {
         }
         if (mcategoryName.equals("emptyMcategoryName") && dcategoryNameParam.equals("emptyDcategoryName")) {
 
-            List<ShopVo> productList = shopMapper.selectListSports(categoryNo);
+            List<ProductVo> productList = shopMapper.selectListSports(categoryNo);
             model.addAttribute("productList", productList);
         }
         if (mcategoryName.equals("emptyMcategoryName")) {
@@ -149,9 +152,11 @@ public class ShopController {
         List<ReviewVo> reviewList = reviewMapper.selectReviewsByProduct(pIdx);
 
         ShopVo shop = (ShopVo) shopMapper.selectProductInfoList(categoryNo, pIdx);
+        List<PImageVo> product = shopMapper.selectPImageList(pIdx);
         shop.setCategoryNo(categoryNo);
         shop.setPIdx(pIdx);
 
+        model.addAttribute("product", product);
         model.addAttribute("shop", shop);
         // 상품 정보와 함께 리뷰 목록 전달
         model.addAttribute("reviewList", reviewList);

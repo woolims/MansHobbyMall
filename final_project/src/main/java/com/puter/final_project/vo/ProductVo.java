@@ -17,4 +17,7 @@ public class ProductVo {
     int amount;
     int price;
 
+    int fileIdx;
+    String fileName;
+
 }
