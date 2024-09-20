@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS SCart;
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS BuyList;
 DROP TABLE IF EXISTS DStatus;
+DROP TABLE IF EXISTS ProductImage;
 DROP TABLE IF EXISTS Product;
 DROP TABLE IF EXISTS DCategory;
 DROP TABLE IF EXISTS MCategory;
@@ -129,6 +130,12 @@ CREATE TABLE Product (
     FOREIGN KEY (mcategoryNo) REFERENCES MCategory (mcategoryNo) ON DELETE CASCADE,
     FOREIGN KEY (dcategoryNo) REFERENCES DCategory (dcategoryNo) ON DELETE CASCADE
 );
+CREATE TABLE ProductImage (
+	fileIdx	int PRIMARY KEY AUTO_INCREMENT,
+    pIdx int NOT NULL,
+    fileName LONGTEXT,
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
+);
 
 -- DStatus 테이블
 CREATE TABLE DStatus (
@@ -238,9 +245,6 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
-    ALGORITHM = UNDEFINED 
-    DEFINER = `final`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,
@@ -260,6 +264,43 @@ VIEW `shop_list_view` AS
         JOIN `mcategory` `m` ON ((`p`.`mcategoryNo` = `m`.`mcategoryNo`)))
         JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)));
 
+CREATE OR REPLACE VIEW productListView AS
+SELECT
+    p.categoryNo,
+    p.mcategoryNo,
+    p.dcategoryNo,
+    p.pName,
+    p.pEx,
+    p.amount,
+    p.price,
+    p.pIdx,
+    i.fileIdx,
+    i.fileName
+FROM Product p
+LEFT JOIN (
+    SELECT pIdx, MIN(fileIdx) AS minFileIdx
+    FROM productimage
+    GROUP BY pIdx
+) AS minImages ON p.pIdx = minImages.pIdx
+LEFT JOIN productimage i ON minImages.pIdx = i.pIdx AND minImages.minFileIdx = i.fileIdx;
+
+CREATE OR REPLACE VIEW productOneView AS
+SELECT DISTINCT
+    p.categoryNo,
+    p.mcategoryNo,
+    p.dcategoryNo,
+    p.pName,
+    p.pEx,
+    p.amount,
+    p.price,
+	i.pIdx,
+    i.fileIdx,
+    i.fileName
+FROM Product p
+LEFT JOIN productimage i ON p.pIdx = i.pIdx;
+select * from productListView;
+
+    
 CREATE OR REPLACE VIEW LoginUserView AS
 SELECT DISTINCT
     u.userIdx,
