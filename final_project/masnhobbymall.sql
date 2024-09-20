@@ -130,18 +130,11 @@ CREATE TABLE Product (
     FOREIGN KEY (mcategoryNo) REFERENCES MCategory (mcategoryNo) ON DELETE CASCADE,
     FOREIGN KEY (dcategoryNo) REFERENCES DCategory (dcategoryNo) ON DELETE CASCADE
 );
+
 CREATE TABLE ProductImage (
 	fileIdx	int PRIMARY KEY AUTO_INCREMENT,
     pIdx int NOT NULL,
     fileName LONGTEXT,
-    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
-);
-
--- 상품이미지 테이블
-CREATE TABLE ProductImage (
-    fileIdx int PRIMARY KEY AUTO_INCREMENT,
-    pIdx int NOT NULL,
-    fileName LONGTEXT NOT NULL,
     FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
 );
 
@@ -210,7 +203,7 @@ CREATE TABLE Follow (
 -- Inquiry 테이블
 CREATE TABLE Inquiry (
     inIdx int PRIMARY KEY AUTO_INCREMENT,
-    pIdx int NOT NULL,
+    pIdx int,
     userIdx int NOT NULL,
     inType varchar(30) NOT NULL DEFAULT '기타',
     inContent LONGTEXT NOT NULL,
@@ -253,6 +246,9 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
+    ALGORITHM = UNDEFINED 
+    DEFINER = `final`@`localhost` 
+    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,
@@ -272,43 +268,6 @@ VIEW `shop_list_view` AS
         JOIN `mcategory` `m` ON ((`p`.`mcategoryNo` = `m`.`mcategoryNo`)))
         JOIN `dcategory` `d` ON ((`p`.`dcategoryNo` = `d`.`dcategoryNo`)));
 
-CREATE OR REPLACE VIEW productListView AS
-SELECT
-    p.categoryNo,
-    p.mcategoryNo,
-    p.dcategoryNo,
-    p.pName,
-    p.pEx,
-    p.amount,
-    p.price,
-    p.pIdx,
-    i.fileIdx,
-    i.fileName
-FROM Product p
-LEFT JOIN (
-    SELECT pIdx, MIN(fileIdx) AS minFileIdx
-    FROM productimage
-    GROUP BY pIdx
-) AS minImages ON p.pIdx = minImages.pIdx
-LEFT JOIN productimage i ON minImages.pIdx = i.pIdx AND minImages.minFileIdx = i.fileIdx;
-
-CREATE OR REPLACE VIEW productOneView AS
-SELECT DISTINCT
-    p.categoryNo,
-    p.mcategoryNo,
-    p.dcategoryNo,
-    p.pName,
-    p.pEx,
-    p.amount,
-    p.price,
-	i.pIdx,
-    i.fileIdx,
-    i.fileName
-FROM Product p
-LEFT JOIN productimage i ON p.pIdx = i.pIdx;
-select * from productListView;
-
-    
 CREATE OR REPLACE VIEW LoginUserView AS
 SELECT DISTINCT
     u.userIdx,
@@ -349,8 +308,8 @@ SELECT DISTINCT
     g.gradeName,
     g.authority,
     g.discount
-FROM email e
-INNER JOIN User u ON e.userIdx = u.userIdx
+FROM Email e
+RIGHT JOIN User u ON e.userIdx = u.userIdx
 INNER JOIN Grade g ON u.gIdx = g.gIdx;
 
 CREATE OR REPLACE VIEW InquiryView AS
@@ -423,6 +382,26 @@ FROM review r
 INNER JOIN User u ON r.userIdx = u.userIdx;
 
 CREATE OR REPLACE VIEW productListView AS
+SELECT
+    p.categoryNo,
+    p.mcategoryNo,
+    p.dcategoryNo,
+    p.pName,
+    p.pEx,
+    p.amount,
+    p.price,
+    p.pIdx,
+    i.fileIdx,
+    i.fileName
+FROM Product p
+LEFT JOIN (
+    SELECT pIdx, MIN(fileIdx) AS minFileIdx
+    FROM productimage
+    GROUP BY pIdx
+) AS minImages ON p.pIdx = minImages.pIdx
+LEFT JOIN productimage i ON minImages.pIdx = i.pIdx AND minImages.minFileIdx = i.fileIdx;
+
+CREATE OR REPLACE VIEW productOneView AS
 SELECT DISTINCT
     p.categoryNo,
     p.mcategoryNo,
@@ -435,24 +414,7 @@ SELECT DISTINCT
     i.fileIdx,
     i.fileName
 FROM Product p
-INNER JOIN productimage i ON p.pIdx = i.pIdx;
-
-CREATE OR REPLACE VIEW CartView AS
-SELECT
-    c.scIdx,
-    c.userIdx,
-    c.pIdx,
-    c.scamount,
-    p.categoryNo,
-    p.dcategoryNo,
-    p.mcategoryNo,
-    p.pName,
-    p.pEx,
-    p.price
-FROM Scart c
-INNER JOIN Product p ON c.pIdx = p.pIdx
-INNER JOIN ProductImage i ON p.pIdx = i.pIdx;
-
+LEFT JOIN productimage i ON p.pIdx = i.pIdx;
 
 -- Grade 테이블에 샘플 데이터 삽입
 INSERT INTO Grade(gradeName, authority, discount)
@@ -611,6 +573,30 @@ INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx F
 INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),3, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
 INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),4, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
 
+-- Coupon 테이블 쿼리 추가
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('회원가입 축하 쿠폰', 5000, '-');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('오픈 기념 쿠폰', 10, '%');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('가을맞이 쿠폰', 5, '%');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('첫 이용기념', 1000, '-');
+-- CouponBox 테이블 쿼리 추가
+INSERT INTO CouponBox (userIdx, cIdx, useAt) VALUES
+(1, 1, 'N'),
+(1, 2, 'N'),
+(2, 1, 'N'),
+(2, 2, 'N'),
+(3, 1, 'N'),
+(3, 2, 'N'),
+(4, 1, 'N'),
+(4, 2, 'N'),
+(5, 1, 'N'),
+(5, 2, 'N'),
+(6, 1, 'N'),
+(6, 2, 'N');
+
 drop procedure if exists update_order_status;
 
 DELIMITER //
@@ -652,42 +638,33 @@ DO
     CALL update_order_status();
 
 
--- Coupon 테이블 쿼리 추가
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('회원가입 축하 쿠폰', 5000, '-');
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('오픈 기념 쿠폰', 10, '%');
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('가을맞이 쿠폰', 5, '%');
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('첫 이용기념', 1000, '-');
-INSERT INTO Coupon (cName, discount, dcType)
-VALUES ('생일 축하합니다 :)', 10000, '-');
+select * from userstatusview;
+
+select * from scart where userIdx=6;
+
+CREATE OR REPLACE VIEW CartView AS
+SELECT
+    c.scIdx,
+    c.userIdx,
+    c.pIdx,
+    c.scamount,
+    p.categoryNo,
+    p.dcategoryNo,
+    p.mcategoryNo,
+    p.pName,
+    p.pEx,
+    p.price
+FROM Scart c
+INNER JOIN Product p ON c.pIdx = p.pIdx
+LEFT JOIN ProductImage i ON p.pIdx = i.pIdx;
+
+select * from scart;
+select * from CartView;
+
+select * from buylist;
+
+select * from ShippingView;
 
 
--- CouponBox 테이블 쿼리 추가
-INSERT INTO CouponBox (userIdx, cIdx, useAt) VALUES
-(1, 1, 'N'),
-(1, 2, 'N'),
-(1, 3, 'N'),
-(1, 4, 'N'),
-(2, 1, 'N'),
-(2, 2, 'N'),
-(2, 3, 'N'),
-(2, 4, 'N'),
-(3, 1, 'N'),
-(3, 2, 'N'),
-(3, 3, 'N'),
-(3, 4, 'N'),
-(4, 1, 'N'),
-(4, 2, 'N'),
-(4, 3, 'N'),
-(4, 4, 'N'),
-(5, 1, 'N'),
-(5, 2, 'N'),
-(5, 3, 'N'),
-(5, 4, 'N'),
-(6, 1, 'N'),
-(6, 2, 'N'),
-(6, 3, 'N'),
-(6, 4, 'N');
+
+

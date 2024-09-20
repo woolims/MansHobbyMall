@@ -30,9 +30,9 @@ public interface ShopMapper {
 
     int selectDCategoryNo(ShopVo shop);
 
-    List<ShopVo> selectProductMCategoryList(int mCategoryNo);
+    List<ProductVo> selectProductMCategoryList(int mCategoryNo);
 
-    List<ShopVo> selectProductDCategoryList(int dCategoryNo);
+    List<ProductVo> selectProductDCategoryList(int dCategoryNo);
 
     ShopVo selectProductInfoList(int categoryNo, int pIdx);
 
@@ -84,4 +84,5 @@ public interface ShopMapper {
 
     // 추가: pIdx로만 상품 정보 조회
     ShopVo selectProductInfoListById(int pIdx);
+    
 }
