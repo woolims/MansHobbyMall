@@ -107,6 +107,7 @@
                     style="margin: auto; border: 1px solid black; width: 280px; height: 350px; display: inline-block;  margin-bottom: 10px; text-align: center;"
                     onclick="location.href='${ pageContext.request.contextPath }/productOne.do?categoryNo=${shopP.categoryNo}&pIdx=${shopP.getPIdx()}'">
                     <div style="text-align: center;"> ${shopP.getPName()} </div>
+                    <img src="${ pageContext.request.contextPath }/resources/images/${shopP.getFileName()}" alt="상품이미지" style="width: 200px; height: 200px; margin-top: 5px;">
                   </div>
                 </c:forEach>
               </div>

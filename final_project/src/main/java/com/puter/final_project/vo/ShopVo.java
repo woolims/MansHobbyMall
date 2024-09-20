@@ -29,6 +29,10 @@ public class ShopVo {
     // 소분류
     String dcategoryName;
 
+    // 상품사진
+    String fileName;
+    int fileIdx;
+
     // 장바구니
     int scIdx; // 뷰에 미포함
     int userIdx; // 뷰에 미포함

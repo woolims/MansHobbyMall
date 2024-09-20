@@ -247,9 +247,12 @@
     <%@ include file="../menubar/navbar.jsp" %>
     <div class="container">
         <div class="product-container">
-            <div class="product-image">
-                <img id="product-image" src="" alt="상품 이미지">
-            </div>
+            <c:forEach var="product" items="${product}">
+                <div class="product-image">
+                    <img id="product-image" src="${ pageContext.request.contextPath }/resources/images/${product.getFileName()}" alt="상품 이미지">
+                </div>
+            </c:forEach>
+            
             <div class="product-details">
                 <h1 id="product-name">${shop.getPName()}</h1>
                 <p class="price" id="product-price">${shop.getPrice()} 원</p>

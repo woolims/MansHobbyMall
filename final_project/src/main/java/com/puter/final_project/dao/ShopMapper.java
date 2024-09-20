@@ -15,7 +15,7 @@ public interface ShopMapper {
     List<ShopVo> selectListGame(int categoryNo);
 
     // 스포츠카테고리 전체조회
-    List<ShopVo> selectListSports(int categoryNo);
+    List<ProductVo> selectListSports(int categoryNo);
 
     // 메인카테고리 번호만 조회
     int selectRowTotalSports(int categoryNo);
@@ -81,5 +81,7 @@ public interface ShopMapper {
     int deletePImageOne(int fileIdx);
 
     int pImageDelete(int pIdx);
+
+    List<PImageVo> selectMaxPImageList(int pIdx);
 
 }

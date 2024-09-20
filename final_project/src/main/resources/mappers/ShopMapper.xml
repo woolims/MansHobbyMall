@@ -12,8 +12,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- 스포츠카테고리 전체조회 -->
-    <select id="selectListSports" resultType="shop" parameterType="int">
-        select * from shop_list_view where categoryNo = #{categoryNo} order by pIdx desc
+    <select id="selectListSports" resultType="product" parameterType="int">
+        select * from productListView where categoryNo = #{categoryNo} order by pIdx desc
     </select>
 
     <!-- 관리자페이지 상품 전체조회 -->
@@ -48,12 +48,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <!-- dcategoryNo을 이용해 product 검색 -->
-    <select id="selectProductDCategoryList" resultType="shop" parameterType="int">
-        select * from shop_list_view where dcategoryNo = #{dCategoryNo} order by pIdx desc
+    <select id="selectProductDCategoryList" resultType="product" parameterType="int">
+        select * from productListView where dcategoryNo = #{dCategoryNo} order by pIdx desc
     </select>
     <!-- 중카테고리를 이용해 상품검색 -->
-    <select id="selectProductMCategoryList" resultType="shop" parameterType="int">
-        select * from shop_list_view where mcategoryNo = #{mCategoryNo} order by pIdx desc
+    <select id="selectProductMCategoryList" resultType="product" parameterType="int">
+        select * from productListView where mcategoryNo = #{mCategoryNo} order by pIdx desc
     </select>
 
     <!-- 상품 상세 페이지에 띄울 정보 -->
@@ -113,10 +113,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
     <!-- 상품사진리스트조회 -->
     <select id="selectPImageList" resultType="pImage" parameterType="int">
-        select * from productImage where pIdx=#{pIdx}
+        select * from productImage where pIdx=#{pIdx} order by pIdx desc
     </select>
 
-    <!-- 상품정보 삭제시 이미지도 같이 삭제 -->
+    <!-- 가장 먼저 보일 사진 조회 -->
+    <select id="selectMaxPImageList" resultType="pImage" parameterType="int">
+        select max(fileIdx) from productImage where pIdx=#{pIdx} order by fileIdx
+    </select>
+    
+
+        <!-- 상품정보 삭제시 이미지도 같이 삭제 -->
     <delete id="pImageDelete" parameterType="int">
         delete from productImage where pIdx=#{pIdx}
     </delete>
