@@ -82,7 +82,6 @@
                         </div>
                     </div>
                 </section>
-                <a href="${ pageContext.request.contextPath }/review/review.do">리뷰작성</a>
                 <!-- 푸터 -->
                 <%@ include file="menubar/footer.jsp" %>
                 

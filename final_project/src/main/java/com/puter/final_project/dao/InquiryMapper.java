@@ -32,7 +32,7 @@ public interface InquiryMapper {
 
     int nInsert(InquiryVo vo);
 
-    int nModify(InquiryVo vo);
+    public int nModify(InquiryVo vo);
 
     int nDelete(int inIdx);
 
