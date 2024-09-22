@@ -592,6 +592,7 @@
                                             <form> 
                                                 <input type="hidden" name="inType" value="${vo.inType}"/>
                                                 <input type="hidden" name="inContent" value="${vo.inContent}"/>
+                                                <input type="hidden" name="inIdx" value="${vo.inIdx}"/>
                                                 <input type="button" class="btn btn-success" name="nModify" id="nModify" onclick="nModifyForm(this.form);" value="수정"/>
                                             </form>
                                         </td>

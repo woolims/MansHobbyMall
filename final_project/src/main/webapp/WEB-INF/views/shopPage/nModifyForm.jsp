@@ -56,6 +56,7 @@
             <div class="col-md-12 col-md-offset-0">
                 <h2>공지사항 수정</h2>
                 <form>
+                    <input type="hidden" name="inIdx" value="${vo.inIdx}">
                     <tr>
                         <th>제목</th>
                         <td><input type="text" class="form-control" value="" name="inType" id="inType" placeholder="제목을 입력하세요"></td>

@@ -361,17 +361,19 @@ public class AdminController {
     }
 
     @RequestMapping("nModifyForm.do")
-    public String nModifyForm() {
+    public String nModifyForm(int inIdx, Model model) {
+
+        InquiryVo vo = inquiryMapper.selectOne(inIdx);
+
+        model.addAttribute("vo", vo);
 
         return "shopPage/nModifyForm";
     }
 
     @RequestMapping("nModify.do")
-    public String nModify(InquiryVo inquiry) throws Exception {
-
-        UserVo user = (UserVo) session.getAttribute("user");
-        inquiry.setUserIdx(user.getUserIdx());
-        int res = inquiryMapper.nInsert(inquiry);
+    public String nModify(InquiryVo vo) {
+        
+        int res = inquiryMapper.nModify(vo);
 
         return "redirect:admin.do";
     }
