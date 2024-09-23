@@ -27,4 +27,7 @@ public class OrdersVo {
 
     String pName;
     int price;
+    String categoryName;
+    String mcategoryName;
+    String dcategoryName;
 }

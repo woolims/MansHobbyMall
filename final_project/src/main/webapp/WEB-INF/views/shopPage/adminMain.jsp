@@ -82,9 +82,6 @@
                 /* 예시로 전체 열 너비를 12.5%로 설정 */
             }
 
-            td {
-                /* 필요에 따라 추가적인 스타일을 설정할 수 있습니다 */
-            }
 
             #menu2 {
                 margin: auto;
@@ -98,6 +95,15 @@
 
             #menu2 th {
 
+                text-align: center;
+            }
+
+            #menu3 td {
+                text-align: center;
+            }
+
+            #menu3 th {
+                width: 100px;
                 text-align: center;
             }
 
@@ -555,6 +561,72 @@
                                                 <input type="hidden" name="pIdx" value="${pVo.getPIdx()}">
                                                 <input type="button" class="btn btn-danger" value="삭제"
                                                     onclick="confirmProductDelete(this.form);">
+                                            </form>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <br>
+                                </c:forEach>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+                <div id="menu3" class="tab-pane">
+                    <div style="display: inline-block;">
+                        <h2>주문 관리</h2>  
+                    </div>
+                    <div style="display: inline-block; width: 100%; text-align: center;">
+                        <form id="searchs">
+                            <input type="text" name="searchParam" id="searchParam" style="width: 500px;" placeholder="구매자명을 입력하세요" autofocus>
+                            <input type="button" class="btn btn-default" name="searchBtn" id="searchBtn" value="검색" onclick="">
+                        </form>
+                    </div>
+                    
+                    <c:choose>
+                        <c:when test="${empty buyList}">
+                            <h1>주문 받은 내역이 없습니다.</h1>
+                        </c:when>
+                        <c:otherwise>
+                            <div id="buyList">
+                                <c:forEach var="bVo" items="${buyList}">
+                                    <table>
+                                        <tr id="b_th">
+                                            <th>상품번호</th>
+                                            <th>대분류</th>
+                                            <th>중분류</th>
+                                            <th>소분류</th>
+                                            <th>상품이름</th>
+                                            <th>구매갯수</th>
+                                            <th>구매금액</th>
+                                            <th>구매자</th>
+                                            <th>구매일자</th>
+                                        </tr>
+                                        <tr>
+                                            <td>${bVo.getPIdx()}</td>
+                                            <td>${bVo.getCategoryName()}</td>
+                                            <td>${bVo.getMcategoryName()}</td>
+                                            <td>${bVo.getDcategoryName()}</td>
+                                            <td>${bVo.getPName()}</td>
+                                            <td>${bVo.getBamount()}</td>
+                                            <td>${bVo.getPrice()}</td>
+                                            <td>${bVo.getName()}</td>
+                                            <td>${bVo.getBuyDate()}</td>
+                                            <form>
+                                                <input type="hidden" name="pIdx" value="">
+                                                <input type="hidden" name="categoryName" value="">
+                                                <input type="hidden" name="mcategoryName" value="">
+                                                <input type="hidden" name="dcategoryName" value="">
+                                                <input type="hidden" name="pName" value="">
+                                                <input type="hidden" name="amount" value="">
+                                                <input type="hidden" name="price" value="">
+                                                <input type="button" class="btn btn-danger" value="환불"
+                                                    onclick="">
+                                            </form>
+                                            <form>
+                                                <input type="hidden" name="pIdx" value="">
+                                                <input type="button" class="btn btn-danger" value="교환"
+                                                    onclick="">
                                             </form>
                                         </tr>
                                     </table>
