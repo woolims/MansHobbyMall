@@ -382,6 +382,23 @@ SELECT
 FROM review r
 INNER JOIN User u ON r.userIdx = u.userIdx;
 
+CREATE OR REPLACE VIEW CartView AS
+SELECT
+    c.scIdx,
+    c.userIdx,
+    c.pIdx,
+    c.scamount,
+    p.categoryNo,
+    p.dcategoryNo,
+    p.mcategoryNo,
+    p.pName,
+    p.pEx,
+    p.price,
+    i.fileName
+FROM Scart c
+INNER JOIN Product p ON c.pIdx = p.pIdx
+INNER JOIN ProductImage i ON p.pIdx = i.pIdx;
+
 CREATE OR REPLACE VIEW productListView AS
 SELECT
     p.categoryNo,
@@ -416,6 +433,24 @@ SELECT DISTINCT
     i.fileName
 FROM Product p
 LEFT JOIN productimage i ON p.pIdx = i.pIdx;
+
+CREATE OR REPLACE VIEW BuyListView AS
+SELECT
+    p.pIdx,
+    c.categoryName,
+    m.mcategoryName,
+    d.dcategoryName,
+    p.pName,
+    b.bamount,
+    (p.price*bamount) as price,
+    u.name,
+    b.buyDate
+FROM BuyList b
+INNER JOIN Product p ON b.pIdx = p.pIdx
+INNER JOIN User u ON b.userIdx = u.userIdx
+INNER JOIN Category c ON p.categoryNo = c.categoryNo
+INNER JOIN MCategory m ON p.mcategoryNo = m.mcategoryNo
+INNER JOIN DCategory d ON p.dcategoryNo = d.dcategoryNo;
 
 -- Grade 테이블에 샘플 데이터 삽입
 INSERT INTO Grade(gradeName, authority, discount)
@@ -638,33 +673,6 @@ ON SCHEDULE EVERY 1 MINUTE
 DO
     CALL update_order_status();
 
-
-select * from userstatusview;
-
-select * from scart where userIdx=6;
-
-CREATE OR REPLACE VIEW CartView AS
-SELECT
-    c.scIdx,
-    c.userIdx,
-    c.pIdx,
-    c.scamount,
-    p.categoryNo,
-    p.dcategoryNo,
-    p.mcategoryNo,
-    p.pName,
-    p.pEx,
-    p.price
-FROM Scart c
-INNER JOIN Product p ON c.pIdx = p.pIdx
-LEFT JOIN ProductImage i ON p.pIdx = i.pIdx;
-
-select * from scart;
-select * from CartView;
-
-select * from buylist;
-
-select * from ShippingView;
 
 
 
