@@ -150,23 +150,28 @@
 
 
         function send1(f) {
+
             let url = new URL(window.location.href);
-            if ("${ empty user }" == "true") {
+            if ("${empty user}" == "true") {
                 alert('로그아웃되었습니다.\n로그인하세요.');
                 return;
             }
 
             let rvContent = f.rvContent.value;
 
-            if (rvContent.trim() == '') {
+            if (rvContent.trim() === '') {
                 alert("내용을 입력하세요");
                 f.rvContent.focus();
                 return;
             }
-            
-            f.url.value = url.href;
-            console.log(url.href);
 
+            if (f.rvImg.files.length === 0) {
+                if (!confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?")) return;
+            } else if (!confirm("등록하시겠습니까?")) return;
+
+            f.url.value = url.href;
+            f.method = "POST";
+            f.enctype = "multipart/form-data";
             f.action = "${pageContext.request.contextPath}/review/reviewWrite.do";
             f.submit();
         }
@@ -275,11 +280,12 @@
                 <div class="container" style="margin-top: 0px;">
                     <!-- 리뷰 목록 출력 -->
                     <div class="review-item">
-                        <p><strong>작성자:</strong> ${review.nickName}</p>
-                        <p><strong>평점:</strong> ${review.reviewPoint}</p>
-                        <p><strong>리뷰 내용:</strong> ${review.rvContent}</p>
-                        <p><strong>리뷰 이미지:</strong> <img src="${review.rvImg}" alt="리뷰 이미지"></p>
-            
+                        <p><strong>작성자&nbsp;&nbsp;&nbsp;:</strong> ${review.nickName}님</p>
+                        <p><strong>평점&nbsp;&nbsp;&nbsp;&nbsp;:</strong> ${review.reviewPoint}점</p>
+                        <p><strong>리뷰 내용&nbsp;:</strong> ${review.rvContent}</p>
+                        <hr>
+                        <p><strong>리뷰 이미지:</strong> <img src="${ pageContext.request.contextPath }/resources/images/review/${review.rvImg}" alt="리뷰 이미지"></p>
+                        
                         <!-- 좋아요 버튼과 좋아요 수 -->
                         <button id="like-btn-${review.rvIdx}" class="like-button" data-rvIdx="${review.rvIdx}" onclick="toggleLike('${review.rvIdx}', this)">
                             좋아요
@@ -314,7 +320,11 @@
                 상품번호 : <input type="text" name="pIdx" value="${shop.getPIdx()}" readonly/><br>
                 <div class="form-group" style="color: black;">
                     <label for="content" style="color: black;">내용</label>
-                    <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
+                    <textarea name="rvContent" required style="width: 100%; min-height: 200px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="reviewImage">리뷰 이미지 업로드</label>
+                    <input type="file" name="reviewImg" id="rvImg">
                 </div>
                 <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
             </form>
@@ -324,18 +334,22 @@
     <!-- 리뷰 수정 모달 -->
     <div id="reviewModifyModal" class="modal">
         <div class="modal-content">
-          <span class="close" onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
-          <h2>리뷰 수정</h2>
-          <form>
-            <input type="hidden" name="url" id="url" value="../home.do"/>
-            <input type="hidden" name="rvIdx"/>
-            <input type="hidden" name="userIdx" value="${user.userIdx}" />
-            <div class="form-group" style="color: black;">
-                <label for="content" style="color: white;">내용</label>
-                <textarea name="rvContent" required style="width: 100%; min-height: 400px;"></textarea>
-            </div>
-            <button type="button" class="btn btn-primary" onclick="send2(this.form)">등록</button>
-          </form>
+            <span class="close" onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
+            <h2>리뷰 수정</h2>
+            <form enctype="multipart/form-data">
+                <input type="hidden" name="url" id="url" value="../home.do"/>
+                <input type="hidden" name="rvIdx"/>
+                <input type="hidden" name="userIdx" value="${user.userIdx}" />
+                <div class="form-group" style="color: black;">
+                    <label for="content" style="color: white;">내용</label>
+                    <textarea name="rvContent" required style="width: 100%; min-height: 200px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="reviewImage">리뷰 이미지 업로드</label>
+                    <input type="file" name="rvImg" id="rvImg">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="send2(this.form)">수정</button>
+            </form>
         </div>
     </div>
 
