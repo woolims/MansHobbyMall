@@ -25,6 +25,7 @@
         var originalPrice = parseFloat("${shop.getPrice()}"); // 상품 원래 가격을 숫자로 변환
         var couponDiscount = 0; // 처음에는 쿠폰 할인이 0으로 설정
         var finalPrice = originalPrice - couponDiscount; // 쿠폰 적용 후 가격
+        var price = parseFloat("${shop.getPrice()}");
 
         function applyCoupon() {
             var couponSelect = document.getElementById('coupon');
@@ -33,16 +34,15 @@
             var discountValue = parseFloat(selectedOption.getAttribute("data-discount")); // 쿠폰 할인 값
             var couponid = selectedOption.value; // cbidx (쿠폰 ID)
 
-            var couponDiscount = 0;
-            var finalPrice = originalPrice;
+            var finalPrice = price;
 
             // 할인 적용
             if (couponType === '-') { // 금액 할인일 경우
                 couponDiscount = discountValue;
-                finalPrice = originalPrice - couponDiscount;
+                finalPrice = price - couponDiscount;
             } else if (couponType === '%') { // 퍼센트 할인일 경우
-                couponDiscount = originalPrice * (discountValue / 100);
-                finalPrice = originalPrice - couponDiscount;
+                couponDiscount = price * (discountValue / 100);
+                finalPrice = price - couponDiscount;
             }
 
             // 최종 금액이 0원 이하일 경우 0원으로 설정
@@ -73,11 +73,12 @@
                 if (couponType === '-') { // 금액 할인일 경우
                     couponDiscount = discountValue;
                 } else if (couponType === '%') { // 퍼센트 할인일 경우
-                    couponDiscount = originalPrice * (discountValue / 100);
+                    couponDiscount = price * (discountValue / 100);
+                    console.log("checkCouponValidity에서 couponDiscount : " + couponDiscount);
                 }
 
                 // 금액이 상품 가격보다 크면 적용 불가로 표시
-                if (couponDiscount >= originalPrice && option.value !== "0") {
+                if (couponDiscount >= price && option.value !== "0") {
                     option.disabled = true; // 비활성화
                     option.textContent += " (적용 불가)";
                 }
@@ -111,6 +112,8 @@
                 return;
             }
 
+            console.log("결제하려할 때 finalPrice : " + finalPrice);
+
             IMP.request_pay({
                 pg: "uplus",
                 pay_method: 'uplus',
@@ -142,7 +145,7 @@
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                             // 수정 필요
-                            bamount: 1
+                            bamount: bamount
                         },
                         dataType: "json",
 
@@ -168,6 +171,8 @@
                 }
                 return;
             }
+
+            console.log("결제하려할 때 finalPrice : " + finalPrice);
 
             IMP.request_pay({
                 pg: "tosspay",
@@ -200,7 +205,7 @@
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                             // 수정 필요
-                            bamount: 1
+                            bamount: bamount
                         },
                         dataType: "json",
 
@@ -227,6 +232,8 @@
                 }
                 return;
             }
+
+            console.log("결제하려할 때 finalPrice : " + finalPrice);
 
             IMP.request_pay({
                 pg: "kakaopay",
@@ -259,7 +266,7 @@
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                             // 수정 필요
-                            bamount: 1
+                            bamount: bamount
                         },
                         dataType: "json",
 
@@ -275,11 +282,22 @@
 
         function updateTotalPrice() {
             document.querySelectorAll('.product-container').forEach(item => {
-                const price = parseFloat(item.querySelector('.price').innerText);
+                price = parseFloat(item.querySelector('.price').innerText);
                 const quantity = parseInt(item.querySelector('input[type="number"]').value);
-                finalPrice = price * quantity;
+                applyCoupon();
+                console.log("finalPrice를 계산하기 전의 price : "+price+" / quantity : "+quantity+" / couponDiscount : "+couponDiscount);
+                finalPrice = price * quantity - couponDiscount;
+                price = originalPrice * quantity;
+                bamount = quantity;
+                
+                console.log("updateTotalPrice를 진행한 후 finalPrice : "+finalPrice);
+                console.log("updateTotalPrice를 진행한 후 quantity : "+quantity);
+                console.log("updateTotalPrice를 진행한 후 couponDiscount : "+couponDiscount);
+                
             });
             document.getElementById('finalPrice').textContent = finalPrice.toLocaleString();
+            document.getElementById('price').textContent = price.toLocaleString();
+            
         }
 
         document.querySelectorAll('input[type="number"]').forEach(input => {
