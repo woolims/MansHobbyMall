@@ -397,7 +397,7 @@ SELECT
     i.fileName
 FROM Scart c
 INNER JOIN Product p ON c.pIdx = p.pIdx
-INNER JOIN ProductImage i ON p.pIdx = i.pIdx;
+LEFT JOIN ProductImage i ON p.pIdx = i.pIdx;
 
 CREATE OR REPLACE VIEW productListView AS
 SELECT
@@ -618,20 +618,34 @@ INSERT INTO Coupon (cName, discount, dcType)
 VALUES ('가을맞이 쿠폰', 5, '%');
 INSERT INTO Coupon (cName, discount, dcType)
 VALUES ('첫 이용기념', 1000, '-');
+INSERT INTO Coupon (cName, discount, dcType)
+VALUES ('생일 축하합니다:)', 10000, '-');
 -- CouponBox 테이블 쿼리 추가
 INSERT INTO CouponBox (userIdx, cIdx, useAt) VALUES
 (1, 1, 'N'),
 (1, 2, 'N'),
+(1, 3, 'N'),
+(1, 4, 'N'),
 (2, 1, 'N'),
 (2, 2, 'N'),
+(2, 3, 'N'),
+(2, 4, 'N'),
 (3, 1, 'N'),
 (3, 2, 'N'),
+(3, 3, 'N'),
+(3, 4, 'N'),
 (4, 1, 'N'),
 (4, 2, 'N'),
+(4, 3, 'N'),
+(4, 4, 'N'),
 (5, 1, 'N'),
 (5, 2, 'N'),
+(5, 3, 'N'),
+(5, 4, 'N'),
 (6, 1, 'N'),
-(6, 2, 'N');
+(6, 2, 'N'),
+(6, 3, 'N'),
+(6, 4, 'N');
 
 drop procedure if exists update_order_status;
 
