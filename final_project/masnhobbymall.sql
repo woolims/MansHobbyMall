@@ -152,6 +152,7 @@ CREATE TABLE BuyList (
     pIdx int NOT NULL,
     bamount int NOT NULL,
     buyDate DATETIME NOT NULL DEFAULT now(),
+    orderNumber bigint NOT NULL,
     FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE,
     FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
 );
@@ -562,10 +563,10 @@ INSERT INTO DStatus (dsType, dsContent) VALUES ('completed', '배송 완료');
 
 select * from product;
 -- BuyList 테이블 예시 데이터
-INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (2, 43, 1);
-INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (2, 4, 1);
-INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (2, 21, 1);
-INSERT INTO BuyList (userIdx, pIdx, bamount) VALUES (6, 43, 1);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (2, 43, 1, 1234);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (2, 4, 1, 2345);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (2, 21, 1, 3456);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (6, 43, 1, 4567);
 
 -- Orders 테이블에 주문 데이터 삽입
 INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),1, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));

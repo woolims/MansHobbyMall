@@ -13,5 +13,7 @@ public class BuyListVo {
     int pIdx;
     int bamount;
     String buyDate;
+    long orderNumber;
+
 
 }

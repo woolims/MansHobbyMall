@@ -17,7 +17,7 @@
         var IMP = window.IMP;
         IMP.init("imp33361271");
 
-        var merchant_uid = "O" + new Date().getTime(); // 고유한 주문번호 생성
+        var merchant_uid = new Date().getTime() + 0; // 고유한 주문번호 생성
 
         var bamount = document.getElementById('scamount').value || 1; // 수량 받아오기
         console.log("1"+bamount);
@@ -131,24 +131,21 @@
                     // jQuery로 HTTP 요청
                     jQuery.ajax({
                         url: "../buyList/buy.do",
-                        method: "POST",
+                        method: "GET",
                         // headers: {
                         //     "Content-Type": "application/json"
                         // },
                         data: {
                             imp_uid: rsp.imp_uid, // 결제 고유번호
-                            merchant_uid: rsp.merchant_uid // 주문번호
+                            merchant_uid: rsp.merchant_uid, // 주문번호
+                            userIdx: "${ user.userIdx }",
+                            pIdx: "${ shop.getPIdx() }",
+                            couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
+                            // 수정 필요
+                            bamount: 1
                         },
                         dataType: "json",
-                        success: function (rsp) {
 
-                            if (res.result > 0) {
-
-                                location.href = "home.do";
-
-                                return;
-                            }
-                        }
                     }).done(function (data) {
                         // 가맹점 서버 결제 API 성공시 로직
                     })
@@ -201,23 +198,14 @@
                             merchant_uid: rsp.merchant_uid, // 주문번호
                             userIdx: "${ user.userIdx }",
                             pIdx: "${ shop.getPIdx() }",
+                            couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                             // 수정 필요
-                            bamount: 1,
-                            couponid: document.getElementById('coupon').value // 선택된 쿠폰 ID
+                            bamount: 1
                         },
                         dataType: "json",
-                        success: function (rsp) {
 
-                            if (res.result > 0) {
-
-                                location.href = "home.do";
-
-                                return;
-                            }
-                        }
                     }).done(function (data) {
                         // 가맹점 서버 결제 API 성공시 로직
-
                     })
                 } else {
                     alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
@@ -266,7 +254,7 @@
                         // },
                         data: {
                             imp_uid: rsp.imp_uid, // 결제 고유번호
-                            merchant_uid: rsp.merchant_uid, // 주문번호
+                            orderNumber: rsp.merchant_uid, // 주문번호
                             userIdx: "${ user.userIdx }",
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
