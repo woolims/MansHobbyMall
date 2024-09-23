@@ -30,5 +30,5 @@ public class ReviewVo {
     String createAt;
 
     int rfIdx;
-
+    
 }

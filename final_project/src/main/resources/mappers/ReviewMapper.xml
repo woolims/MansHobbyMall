@@ -79,5 +79,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     DELETE FROM Review WHERE rvIdx = #{rvIdx}
   </delete>
 
+  <!-- 리뷰 이미지 추가 -->
+  <update id="updateReviewImg" parameterType="map">
+    UPDATE review
+    SET rvImg = #{rvImg}
+    WHERE rvIdx = #{rvIdx}
+  </update>
+
+  <!-- 최근 작성된 리뷰의 rvIdx 가져오기 -->
+  <select id="selectMaxRvIdx" resultType="int">
+      SELECT MAX(rvIdx) FROM review
+  </select>
+
 
 </mapper>

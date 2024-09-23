@@ -18,6 +18,8 @@ public interface ReviewMapper {
 
     ReviewVo getReviewByLike(ReviewLikeVo like);
 
+    int selectMaxRvIdx();
+
     // 리뷰 작성
     int insertReview(ReviewVo review);
 
@@ -47,4 +49,6 @@ public interface ReviewMapper {
     // 리뷰 삭제 시 해당 리뷰의 좋아요 삭제
     int deleteByReview(int rvIdx);
 
+    // 리뷰 이미지 업로드
+    int updateReviewImg(ReviewVo review);
 }

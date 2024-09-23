@@ -1,5 +1,7 @@
 package com.puter.final_project.controller;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.vo.ReviewLikeVo;
@@ -44,29 +47,64 @@ public class ReviewController {
         return "shopPage/review";
     }
 
-    // 리뷰 작성
-    @RequestMapping("reviewWriteForm.do")
-    public String reviewWriteForm() {
-
-        return "shopPage/reviewWriteForm";
-    }
-
     @RequestMapping("reviewWrite.do")
-    public String reviewWrite(ReviewVo vo, String url, HttpSession session, Model model) {
-
+    public String reviewWrite(ReviewVo vo, String url, HttpSession session, Model model, 
+                            @RequestParam("reviewImg") List<MultipartFile> rvImg, 
+                            HttpServletRequest request) {
         UserVo user = (UserVo) session.getAttribute("user");
 
         // 유저 정보 세팅
         vo.setUserIdx(user.getUserIdx());
 
-        // 데이터 삽입
+        // 리뷰 데이터 삽입
         int res = reviewMapper.insertReview(vo);
 
         if (res > 0) {
-            return "redirect:"+url;
+            // 저장된 리뷰의 ID 가져오기
+            int rvIdx = reviewMapper.selectMaxRvIdx();
+            vo.setRvIdx(rvIdx);  // vo 객체에 rvIdx 설정
+
+            // 이미지 저장 경로 설정
+            String absPath = request.getServletContext().getRealPath("/resources/images/review/");
+            List<String> filenameList = new ArrayList<>();
+
+            for (MultipartFile file : rvImg) {
+                if (!file.isEmpty()) {
+                    String filename = file.getOriginalFilename();
+                    File f = new File(absPath, filename);
+
+                    // 동일한 파일이 존재할 경우 파일명 변경
+                    if (f.exists()) {
+                        long tm = System.currentTimeMillis();
+                        filename = String.format("%d_%s", tm, filename);
+                        f = new File(absPath, filename);
+                    }
+
+                    // 파일 저장
+                    try {
+                        file.transferTo(f);
+                        filenameList.add(filename);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        model.addAttribute("error", "이미지 업로드에 실패했습니다.");
+                        return "redirect:" + url;
+                    }
+                }
+            }
+
+            // 모든 이미지 파일명을 ReviewVo에 저장 (여러 이미지를 처리)
+            if (!filenameList.isEmpty()) {
+                for (String filename : filenameList) {
+                    // 이미지 정보를 DB에 저장하는 로직 추가
+                    vo.setRvImg(filename); // 각 이미지 파일명을 설정
+                    reviewMapper.updateReviewImg(vo); // vo 객체로 업데이트
+                }
+            }
+
+            return "redirect:" + url;  // 성공적으로 처리 후 리다이렉트
         } else {
             model.addAttribute("error", "리뷰 작성에 실패했습니다.");
-            return "redirect:"+url; // 실패 시 에러 메시지와 함께 폼으로 돌아감
+            return "redirect:" + url;  // 실패 시 리다이렉트
         }
     }
 
