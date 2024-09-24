@@ -201,6 +201,14 @@ public class UserController {
 		return "shopPage/mypage";
 	}
 
+	@RequestMapping("deliveryAddress.do")
+	public String deliveryAddress(Model model) {
+
+
+
+		return "myPage/deliveryAddress";
+	}
+
 	@RequestMapping("cart.do")
 	public String cart(Model model) {
 

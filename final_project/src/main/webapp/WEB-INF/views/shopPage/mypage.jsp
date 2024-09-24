@@ -86,7 +86,7 @@
             // 기본 콘텐츠로 환영 메시지를 추가합니다.
             $("#content").html('<div class="welcome-message">환영합니다! 여기는 마이페이지입니다.</div>');
             $.ajax({
-                url: "cart.do",
+                url: "deliveryAddress.do",
                 method: 'GET',
                 success: function (data) {
                     $("#content").html(data);
