@@ -34,15 +34,19 @@
             var discountValue = parseFloat(selectedOption.getAttribute("data-discount")); // 쿠폰 할인 값
             var couponid = selectedOption.value; // cbidx (쿠폰 ID)
 
+            var quantity = parseInt(document.querySelector('input[type="number"]').value);
+            bamount = quantity;
+
             var finalPrice = price;
 
             // 할인 적용
             if (couponType === '-') { // 금액 할인일 경우
                 couponDiscount = discountValue;
-                finalPrice = price - couponDiscount;
+                finalPrice = originalPrice*bamount - couponDiscount;
             } else if (couponType === '%') { // 퍼센트 할인일 경우
-                couponDiscount = price * (discountValue / 100);
-                finalPrice = price - couponDiscount;
+                couponDiscount = originalPrice*bamount * (discountValue / 100);
+                console.log("applyCoupon에서 price : "+price);
+                finalPrice = originalPrice*bamount - couponDiscount;
             }
 
             // 최종 금액이 0원 이하일 경우 0원으로 설정
@@ -73,7 +77,7 @@
                 if (couponType === '-') { // 금액 할인일 경우
                     couponDiscount = discountValue;
                 } else if (couponType === '%') { // 퍼센트 할인일 경우
-                    couponDiscount = price * (discountValue / 100);
+                    couponDiscount = bamount * price * (discountValue / 100);
                     console.log("checkCouponValidity에서 couponDiscount : " + couponDiscount);
                 }
 
