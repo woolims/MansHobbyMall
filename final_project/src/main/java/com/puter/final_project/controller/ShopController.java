@@ -1,5 +1,6 @@
 package com.puter.final_project.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,40 +72,34 @@ public class ShopController {
             // 대분류가 게임인 경우
             if(c==1){
                 // String categoryName = shopMapper.selectCategoryName(c);
-                System.out.println("c 게임첫번째이프문 통과" + c);
                 List<ShopVo> gameMcategory = shopMapper.DBMcategoryName(c);
-                System.out.println("게임중분류리스트 사이즈체크"+gameMcategory.size());
                 for(int gm = 0; gm<gameMcategory.size(); gm++){
-                    System.out.println("게임중분류포문돌아가는중");
                     String gameMcategoryName = gameMcategory.get(gm).getMcategoryName();
                     shop.setMcategoryName(gameMcategoryName);
                     shop.setCategoryNo(c);
                     int gameMcategoryNo = shopMapper.selectMCategoryNo(shop);
                     List<ShopVo> gameDcategory = shopMapper.selectdCategoryNameList(gameMcategoryNo);
-                    System.out.println(gameDcategory+"=========================================");
                     for(int gd = 0; gd<gameDcategory.size(); gd++){
-                        System.out.println("게임소분류포문돌아가는중");
                         String gameDcategoryName = gameDcategory.get(gd).getDcategoryName();
                         searchService.searchAndSave(1, gameMcategoryName, gameDcategoryName);
                     }
                 }
+                System.out.println("================게임추가 끝===============");
+                // 대분류가 스포츠인 경우
             }else if(c==2){
-                System.out.println("c 스포츠첫번째이프문 통과" + c);
                 List<ShopVo> sportsMcategory = shopMapper.DBMcategoryName(c);
-                System.out.println("스포츠중분류리스트 사이즈체크"+sportsMcategory.size());
-                for(int sm = 4; sm<sportsMcategory.size(); sm++){
-                    System.out.println("스포츠중분류포문돌아가는중");
+                for(int sm = 0; sm<sportsMcategory.size(); sm++){
                     String sportsMcategoryName = sportsMcategory.get(sm).getMcategoryName();
                     shop.setMcategoryName(sportsMcategoryName);
                     shop.setCategoryNo(c);
-                    int sportsMcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
+                    int sportsMcategoryNo = shopMapper.selectMCategoryNo(shop);
                     List<ShopVo> sportsDcategory = shopMapper.selectdCategoryNameList(sportsMcategoryNo);
                     for(int sd = 0; sd<sportsDcategory.size(); sd++){
-                        System.out.println("스포츠소분류포문돌아가는중");
                         String sportsDcategoryName = sportsDcategory.get(sd).getDcategoryName();
                         searchService.searchAndSave(2, sportsMcategoryName, sportsDcategoryName);
                     }
                 }
+                System.out.println("================스포츠추가 끝===============");
             }
         }
 
@@ -176,17 +171,33 @@ public class ShopController {
         shop.setCategoryNo(categoryNo);
         shop.setMcategoryNo(mcategoryNo);
         shop.setDcategoryName(dcategoryNameParam);
-
         if (!mcategoryName.equals("emptyMcategoryName")) {
             shop.setMcategoryName(mcategoryName);
             int mCategoryNo = shopMapper.selectMCategoryNo(shop);
             List<ShopVo> dCategoryName = shopMapper.selectdCategoryNameList(mCategoryNo);
             List<ProductVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
+
+            List<PImageVo> fileNameList = new ArrayList<PImageVo>();
+                for(int i = 0; i<productMCategoryList.size(); i++){
+                    int pIdx = productMCategoryList.get(i).getPIdx();
+                    String fileName = shopMapper.selectFileName(pIdx);
+                    String fileNameLink = shopMapper.selectFileLinkList(pIdx);
+                    fileNameList.add(new PImageVo(fileName, fileNameLink));
+                }
+            model.addAttribute("fileNameList", fileNameList);
             model.addAttribute("dCategoryName", dCategoryName);
+            
             model.addAttribute("productList", productMCategoryList);
             if (!dcategoryNameParam.equals("emptyDcategoryName")) {
                 int dCategoryNo = shopMapper.selectDCategoryNo(shop);
                 List<ProductVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
+                for(int i = 0; i<productDCategoryList.size(); i++){
+                    int pIdx = productDCategoryList.get(i).getPIdx();
+                    String fileName = shopMapper.selectFileName(pIdx);
+                    String fileNameLink = shopMapper.selectFileLinkList(pIdx);
+                    fileNameList.add(new PImageVo(fileName, fileNameLink));
+                }
+            model.addAttribute("fileNameList", fileNameList);
                 model.addAttribute("productList", productDCategoryList);
             }
         }

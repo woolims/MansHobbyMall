@@ -275,7 +275,7 @@ public class AdminController {
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
         List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
         List<ShopVo> dcategoryName = shopMapper.selectDcategoryNameList(shop.getMcategoryName());
-        List<PImageVo> pImageList = shopMapper.selectPImageList(shop.getPIdx());
+        List<PImageVo> pImageList = shopMapper.selectAdminPImageList(shop.getPIdx());
 
         model.addAttribute("pImageList", pImageList);
         model.addAttribute("categoryName", categoryName);
@@ -337,6 +337,7 @@ public class AdminController {
             String filename = filename_list.get(i);
             pImageVo.setPIdx(pIdx);
             pImageVo.setFileName(filename);
+            pImageVo.setFileNameLink("N");
             shopMapper.insertPImage(pImageVo);
         }
 
@@ -390,7 +391,7 @@ public class AdminController {
 
         int res = shopMapper.deletePImageOne(pImage.getFileIdx());
         // 선택한 사진을 지운 후 남은 사진들의 리스트
-        List<PImageVo> deleteAfterList = shopMapper.selectPImageList(pImage.getPIdx());
+        List<PImageVo> deleteAfterList = shopMapper.selectAdminPImageList(pImage.getPIdx());
         System.out.println(pImage);
         return deleteAfterList;
     }

@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.puter.final_project.dao.ShopMapper;
+import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ShopVo;
 
 @Service
@@ -32,7 +33,7 @@ public class NaverSearchService {
 
     public void searchAndSave( int categoryNo, String mcategoryName, String dcategoryName) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "https://openapi.naver.com/v1/search/shop.json?query=" + dcategoryName;
+        String url = "https://openapi.naver.com/v1/search/shop.json?&query=" + dcategoryName + "&category3=" + dcategoryName;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", clientId);
@@ -48,6 +49,7 @@ public class NaverSearchService {
             while (elements.hasNext()) {
                 JsonNode item = elements.next();
                 ShopVo shopVo = new ShopVo();
+                PImageVo pImageVo = new PImageVo();
                 shopVo.setPName(item.get("title").asText());
                 shopVo.setPrice(item.get("lprice").asInt());
                 shopVo.setCategoryNo(categoryNo);
@@ -59,8 +61,13 @@ public class NaverSearchService {
                 shopVo.setDcategoryNo(dcategoryNo);
                 shopVo.setAmount(1);
                 shopVo.setPEx("상품설명");
-                // DTO를 Mapper를 통해 DB에 저장
+                
                 shopMapper.productInsert(shopVo);
+
+                pImageVo.setPIdx(shopMapper.selectMaxPIdx());
+                pImageVo.setFileNameLink("Y");
+                pImageVo.setFileName(item.get("image").asText());
+                shopMapper.insertPImage(pImageVo);
             }
         } catch (Exception e) {
             e.printStackTrace();
