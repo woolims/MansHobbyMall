@@ -35,16 +35,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select mcategoryName from shop_list_view where categoryNo = #{categoryNo} Group by mcategoryName
     </select>
     <!-- mcategoryName을 이용해 mcategoryNo 조회 -->
-    <select id="selectMCategoryNo" resultType="int" parameterType="shop">
+    <!-- <select id="selectMCategoryNo" resultType="int" parameterType="shop">
         select mcategoryNo from shop_list_view where categoryNo = #{categoryNo} and mcategoryName=#{mcategoryName} Group by mcategoryNo
+    </select> -->
+    <!-- mcategoryName을 이용해 mcategoryNo 조회 -->
+    <select id="selectMCategoryNo" resultType="int" parameterType="shop">
+        select mcategoryNo from mcategory where categoryNo = #{categoryNo} and mcategoryName=#{mcategoryName} Group by mcategoryNo
     </select>
     <!-- mcategoryNo을 이용해 dcategoryName 검색 -->
     <select id="selectdCategoryNameList" resultType="shop" parameterType="int">
-        select dcategoryName from shop_list_view where mcategoryNo = #{mCategoryNo} Group by dcategoryName
+        select dcategoryName from dcategory where mcategoryNo = #{mCategoryNo} Group by dcategoryName
     </select>
     <!-- dcategoryNo 검색 -->
     <select id="selectDCategoryNo" resultType="int" parameterType="shop">
         select dcategoryNo from shop_list_view where mcategoryName = #{mcategoryName} and dcategoryName = #{dcategoryName} Group by dcategoryNo
+    </select>
+
+    <!-- DB 데이터넣는용도 -->
+    <select id="selectdCategoryNo" resultType="int" parameterType="shop">
+        select dcategoryNo from dcategory where mcategoryNo = #{mcategoryNo} and dcategoryName = #{dcategoryName} Group by dcategoryNo
     </select>
 
     <!-- dcategoryNo을 이용해 product 검색 -->
@@ -68,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- categoryName을 이용해서 categoryNo 얻기 -->
     <select id="selectAdminCategoryNo" resultType="int" parameterType="shop">
-        select categoryNo from shop_list_view where categoryName=#{categoryName} Group by categoryNo
+        select categoryNo from category where categoryName=#{categoryName} Group by categoryNo
     </select>
 
     <!-- mcategoryName을 이용해서 mcategoryNo 얻기 -->
@@ -138,6 +147,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select categoryName from shop_list_view Group by categoryName
     </select>
 
+    
+    <select id="selectCategoryName" resultType="String" parameterType="int">
+        select categoryName from category where categoryNo=#{categoryNo}
+    </select>
+
     <!-- categoryName을 이용해 전체mcategoryName조회 -->
     <select id="selectMcategoryNameList" resultType="shop" parameterType="String">
         select mcategoryName from shop_list_view where categoryName=#{categoryName} Group by mcategoryName 
@@ -188,7 +202,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- pIdx로만 상품 정보 조회 mk -->
     <select id="selectProductInfoListById" resultType="shop" parameterType="int">
-    SELECT * FROM shop_list_view WHERE pIdx = #{pIdx}
+        SELECT * FROM shop_list_view WHERE pIdx = #{pIdx}
     </select>
+
+    <!-- DB에 추가하는용도의 sql문 -->
+    <select id="DBMcategoryName" resultType="shop" parameterType="int">
+        SELECT mcategoryName FROM mcategory where categoryNo=#{categoryNo}
+    </select>
+
 
 </mapper>

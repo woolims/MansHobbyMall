@@ -84,5 +84,12 @@ public interface ShopMapper {
 
     // 추가: pIdx로만 상품 정보 조회
     ShopVo selectProductInfoListById(int pIdx);
-    
+
+
+    // DB데이터추가용 
+    List<ShopVo> DBMcategoryName(int categoryNo);
+
+    String selectCategoryName(int categoryNo);
+
+    int selectdCategoryNo(ShopVo shopVo);
 }

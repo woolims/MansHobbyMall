@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
@@ -18,6 +19,7 @@ import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
+import com.puter.final_project.service.NaverSearchService;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ProductVo;
@@ -29,6 +31,8 @@ import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 
 @Controller
 public class ShopController {
@@ -53,6 +57,61 @@ public class ShopController {
 
     @Autowired
     CouponBoxMapper couponBoxMapper;
+
+    @Autowired
+    NaverSearchService searchService;
+
+    // DB에 데이터삽입
+    @RequestMapping("DBData.do")
+    @ResponseBody
+    public void DBData() {
+        ShopVo shop = new ShopVo();
+        // 1=게임 2=스포츠
+        for(int c = 1; c<=2 ; c++){
+            // 대분류가 게임인 경우
+            if(c==1){
+                // String categoryName = shopMapper.selectCategoryName(c);
+                System.out.println("c 게임첫번째이프문 통과" + c);
+                List<ShopVo> gameMcategory = shopMapper.DBMcategoryName(c);
+                System.out.println("게임중분류리스트 사이즈체크"+gameMcategory.size());
+                for(int gm = 0; gm<gameMcategory.size(); gm++){
+                    System.out.println("게임중분류포문돌아가는중");
+                    String gameMcategoryName = gameMcategory.get(gm).getMcategoryName();
+                    shop.setMcategoryName(gameMcategoryName);
+                    shop.setCategoryNo(c);
+                    int gameMcategoryNo = shopMapper.selectMCategoryNo(shop);
+                    List<ShopVo> gameDcategory = shopMapper.selectdCategoryNameList(gameMcategoryNo);
+                    System.out.println(gameDcategory+"=========================================");
+                    for(int gd = 0; gd<gameDcategory.size(); gd++){
+                        System.out.println("게임소분류포문돌아가는중");
+                        String gameDcategoryName = gameDcategory.get(gd).getDcategoryName();
+                        searchService.searchAndSave(1, gameMcategoryName, gameDcategoryName);
+                    }
+                }
+            }else if(c==2){
+                System.out.println("c 스포츠첫번째이프문 통과" + c);
+                List<ShopVo> sportsMcategory = shopMapper.DBMcategoryName(c);
+                System.out.println("스포츠중분류리스트 사이즈체크"+sportsMcategory.size());
+                for(int sm = 4; sm<sportsMcategory.size(); sm++){
+                    System.out.println("스포츠중분류포문돌아가는중");
+                    String sportsMcategoryName = sportsMcategory.get(sm).getMcategoryName();
+                    shop.setMcategoryName(sportsMcategoryName);
+                    shop.setCategoryNo(c);
+                    int sportsMcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
+                    List<ShopVo> sportsDcategory = shopMapper.selectdCategoryNameList(sportsMcategoryNo);
+                    for(int sd = 0; sd<sportsDcategory.size(); sd++){
+                        System.out.println("스포츠소분류포문돌아가는중");
+                        String sportsDcategoryName = sportsDcategory.get(sd).getDcategoryName();
+                        searchService.searchAndSave(2, sportsMcategoryName, sportsDcategoryName);
+                    }
+                }
+            }
+        }
+
+
+        // searchService.searchAndSave(query);
+    }
+    
 
     // main 페이지 이동
     @RequestMapping("/home.do")
