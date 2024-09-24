@@ -18,7 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{pIdx},
             #{bamount},
             now(),
-            #{orderNumber}
+            #{orderNumber},
+            #{buyPrice}
         )
     </insert>
 
@@ -38,5 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             INTERVAL 2 DAY)
         )
     </insert>
+
+    <!-- <update>
+        update buyList set status = 'canceled' where orderNumber = #{orderNumber}
+    </update> -->
 
 </mapper>
