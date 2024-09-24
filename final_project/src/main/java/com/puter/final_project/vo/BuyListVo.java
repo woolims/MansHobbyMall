@@ -14,6 +14,6 @@ public class BuyListVo {
     int bamount;
     String buyDate;
     long orderNumber;
-    long buyPrice;
+
 
 }

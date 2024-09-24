@@ -145,8 +145,7 @@
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                             // 수정 필요
-                            bamount: bamount,
-                            buyPrice: rsp.paid_amount
+                            bamount: bamount
                         },
                         dataType: "json",
 
@@ -206,8 +205,7 @@
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                             // 수정 필요
-                            bamount: bamount,
-                            buyPrice: rsp.paid_amount
+                            bamount: bamount
                         },
                         dataType: "json",
 
@@ -268,8 +266,7 @@
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                             // 수정 필요
-                            bamount: bamount,
-                            buyPrice: rsp.paid_amount
+                            bamount: bamount
                         },
                         dataType: "json",
 
