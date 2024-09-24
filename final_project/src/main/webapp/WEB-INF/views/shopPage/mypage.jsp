@@ -106,6 +106,7 @@
         <div>
             <h1>My Page</h1>
             <ul>
+                <li data-page="deliveryAddress.do">배송지관리</li>
                 <li data-page="cart.do">장바구니</li>
                 <li data-page="purchaseHistory.do">구매내역</li>
                 <li data-page="shippingTracking.do">배송조회</li>
