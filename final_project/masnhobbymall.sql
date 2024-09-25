@@ -478,13 +478,11 @@ INSERT INTO category values(null,'스포츠');
 INSERT INTO mcategory values(null,1,'키보드');
 INSERT INTO mcategory values(null,1,'마우스');
 INSERT INTO mcategory values(null,1,'노트북');
-INSERT INTO mcategory values(null,1,'기타');
 
 -- 중 카테고리 데이터 추가 스포츠
 INSERT INTO mcategory values(null,2,'축구');
 INSERT INTO mcategory values(null,2,'야구');
 INSERT INTO mcategory values(null,2,'농구');
-INSERT INTO mcategory values(null,2,'기타');
 
 -- 소 카테고리 데이터 추가  
 -- 키보드
@@ -499,17 +497,29 @@ INSERT INTO dcategory values(null,2,'마우스패드');
 INSERT INTO dcategory values(null,2,'손목보호마우스');
 INSERT INTO dcategory values(null,2,'게이밍마우스');
 
+-- 노트북
+INSERT INTO dcategory values(null,3,'게이밍노트북');
+INSERT INTO dcategory values(null,3,'사무용노트북');
+INSERT INTO dcategory values(null,3,'노트북거치대');
+INSERT INTO dcategory values(null,3,'노트북가방');
+
 -- 스포츠 축구
-INSERT INTO dcategory values(null,5,'축구화');
-INSERT INTO dcategory values(null,5,'축구공');
-INSERT INTO dcategory values(null,5,'의상');
-INSERT INTO dcategory values(null,5,'기타');
+INSERT INTO dcategory values(null,4,'축구화');
+INSERT INTO dcategory values(null,4,'축구공');
+INSERT INTO dcategory values(null,4,'축구용품');
+INSERT INTO dcategory values(null,4,'축구의상');
 
 -- 스포츠 야구
-INSERT INTO dcategory values(null,6,'야구배트');
-INSERT INTO dcategory values(null,6,'야구공');
-INSERT INTO dcategory values(null,6,'글러브');
-INSERT INTO dcategory values(null,6,'기타');
+INSERT INTO dcategory values(null,5,'야구배트');
+INSERT INTO dcategory values(null,5,'야구공');
+INSERT INTO dcategory values(null,5,'글러브');
+INSERT INTO dcategory values(null,5,'야구의상');
+
+-- 스포츠 농구
+INSERT INTO dcategory values(null,6,'농구공');
+INSERT INTO dcategory values(null,6,'농구화');
+INSERT INTO dcategory values(null,6,'농구의상');
+INSERT INTO dcategory values(null,6,'무릎보호대');
 
 -- 상품 데이터 추가 대 1=게임 2=스포츠 / 중 1=키보드 2=마우스 5=축구 6=야구 / 소 1~8까지 게임카테고리 9~16까지 스포츠카테고리
 -- 소카테고리 하나당 상품 3개씩 키보드패드
