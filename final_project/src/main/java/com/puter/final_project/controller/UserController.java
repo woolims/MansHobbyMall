@@ -17,10 +17,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
 import com.puter.final_project.dao.CouponBoxMapper;
+import com.puter.final_project.dao.GradeMapper;
 import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.CouponBoxVo;
+import com.puter.final_project.vo.GradeVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -47,6 +49,9 @@ public class UserController {
 
 	@Autowired
 	OrdersMapper ordersMapper;
+
+	@Autowired
+	GradeMapper gradeMapper;
 
 	// 회원전체목록
 	@RequestMapping("list.do")
@@ -285,4 +290,16 @@ public class UserController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+
+	@RequestMapping("grade.do")
+    public String Grade(Model model) {
+
+		List<GradeVo> list = gradeMapper.selectList();
+
+		model.addAttribute("list", list);
+
+        return "myPage/grade";  // grade.jsp로 이동
+    }
+
+
 }

@@ -61,7 +61,6 @@ CREATE TABLE Email (
 CREATE TABLE DAddress (
     daIdx int PRIMARY KEY AUTO_INCREMENT,
     userIdx int NOT NULL,
-    daPhone varchar(20) NOT NULL,
     daAddr LONGTEXT NOT NULL,
     FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
@@ -135,6 +134,7 @@ CREATE TABLE ProductImage (
 	fileIdx	int PRIMARY KEY AUTO_INCREMENT,
     pIdx int NOT NULL,
     fileName LONGTEXT,
+    fileNameLink char(1) default 'Y',
     FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
 );
 
@@ -153,7 +153,6 @@ CREATE TABLE BuyList (
     bamount int NOT NULL,
     buyDate DATETIME NOT NULL DEFAULT now(),
     orderNumber bigint NOT NULL,
-    buyPrice bigint NOT NULL,
     FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE,
     FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
 );
@@ -248,6 +247,9 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
+    ALGORITHM = UNDEFINED 
+    DEFINER = `final`@`localhost` 
+    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,
@@ -408,7 +410,8 @@ SELECT
     p.price,
     p.pIdx,
     i.fileIdx,
-    i.fileName
+    i.fileName,
+    i.fileNameLink
 FROM Product p
 LEFT JOIN (
     SELECT pIdx, MIN(fileIdx) AS minFileIdx
@@ -596,10 +599,10 @@ INSERT INTO DStatus (dsType, dsContent) VALUES ('completed', '배송 완료');
 
 select * from product;
 -- BuyList 테이블 예시 데이터
-INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber, buyPrice) VALUES (2, 43, 1, 1234, 10000);
-INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber, buyPrice) VALUES (2, 4, 1, 2345, 20000);
-INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber, buyPrice) VALUES (2, 21, 1, 3456, 1000);
-INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber, buyPrice) VALUES (6, 43, 1, 4567, 2000);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (2, 43, 1, 1234);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (2, 4, 1, 2345);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (2, 21, 1, 3456);
+INSERT INTO BuyList (userIdx, pIdx, bamount, orderNumber) VALUES (6, 43, 1, 4567);
 
 -- Orders 테이블에 주문 데이터 삽입
 INSERT INTO Orders (dsIdx, bIdx, daStartDate, daEndDate) VALUES ((SELECT dsIdx FROM DStatus WHERE dsType = 'pending'),1, NOW(), DATE_ADD(NOW(), INTERVAL 2 DAY));
