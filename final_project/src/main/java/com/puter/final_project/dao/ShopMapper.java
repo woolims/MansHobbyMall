@@ -10,40 +10,42 @@ import com.puter.final_project.vo.ShopVo;
 
 @Mapper
 public interface ShopMapper {
-
+    
     // 게임카테고리 전체조회
     List<ShopVo> selectListGame(int categoryNo);
-
+    
     // 스포츠카테고리 전체조회
     List<ProductVo> selectListSports(int categoryNo);
-
+    
     // 메인카테고리 번호만 조회
     int selectRowTotalSports(int categoryNo);
-
+    
     List<ShopVo> selectMCategoryNameList(int categoryNo);
-
+    
     List<ShopVo> selectMCategoryNoList(int categoryNo);
-
+    
     int selectMCategoryNo(ShopVo shop);
-
+    
     List<ShopVo> selectdCategoryNameList(int mCategoryNo);
-
+    
     int selectDCategoryNo(ShopVo shop);
-
+    
     List<ProductVo> selectProductMCategoryList(int mCategoryNo);
-
+    
     List<ProductVo> selectProductDCategoryList(int dCategoryNo);
-
+    
     ShopVo selectProductInfoList(int categoryNo, int pIdx);
 
+    List<PImageVo> selectAdminPImageList(int pIdx);
+    
     List<ShopVo> selectAdminList();
-
+    
     String selectPEx(int pIdx);
 
     int selectAdminCategoryNo(ShopVo shop);
-
+    
     int selectAdminMcategoryNo(ShopVo shop);
-
+    
     int selectAdminDcategoryNo(ShopVo shop);
 
     int selectMaxPIdx();
@@ -84,5 +86,19 @@ public interface ShopMapper {
 
     // 추가: pIdx로만 상품 정보 조회
     ShopVo selectProductInfoListById(int pIdx);
-    
+
+
+    // DB데이터추가용 
+    List<ShopVo> DBMcategoryName(int categoryNo);
+
+    String selectCategoryName(int categoryNo);
+
+    int selectdCategoryNo(ShopVo shopVo);
+
+    ProductVo selectFileName(int pIdx);
+
+    // int selectFileIdx(int pIdx);
+
+    // String selectFileLinkList(int pIdx);
+
 }

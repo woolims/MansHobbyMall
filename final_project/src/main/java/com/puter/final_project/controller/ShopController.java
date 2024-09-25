@@ -1,5 +1,7 @@
 package com.puter.final_project.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
@@ -18,6 +21,7 @@ import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
+import com.puter.final_project.service.NaverSearchService;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ProductVo;
@@ -29,6 +33,8 @@ import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 
 @Controller
 public class ShopController {
@@ -53,6 +59,55 @@ public class ShopController {
 
     @Autowired
     CouponBoxMapper couponBoxMapper;
+
+    @Autowired
+    NaverSearchService searchService;
+
+    // DB에 데이터삽입
+    @RequestMapping("DBData.do")
+    @ResponseBody
+    public void DBData() {
+        ShopVo shop = new ShopVo();
+        // 1=게임 2=스포츠
+        for(int c = 1; c<=2 ; c++){
+            // 대분류가 게임인 경우
+            if(c==1){
+                // String categoryName = shopMapper.selectCategoryName(c);
+                List<ShopVo> gameMcategory = shopMapper.DBMcategoryName(c);
+                for(int gm = 0; gm<gameMcategory.size(); gm++){
+                    String gameMcategoryName = gameMcategory.get(gm).getMcategoryName();
+                    shop.setMcategoryName(gameMcategoryName);
+                    shop.setCategoryNo(c);
+                    int gameMcategoryNo = shopMapper.selectMCategoryNo(shop);
+                    List<ShopVo> gameDcategory = shopMapper.selectdCategoryNameList(gameMcategoryNo);
+                    for(int gd = 0; gd<gameDcategory.size(); gd++){
+                        String gameDcategoryName = gameDcategory.get(gd).getDcategoryName();
+                        searchService.searchAndSave(1, gameMcategoryName, gameDcategoryName);
+                    }
+                }
+                System.out.println("================게임추가 끝===============");
+                // 대분류가 스포츠인 경우
+            }else if(c==2){
+                List<ShopVo> sportsMcategory = shopMapper.DBMcategoryName(c);
+                for(int sm = 0; sm<sportsMcategory.size(); sm++){
+                    String sportsMcategoryName = sportsMcategory.get(sm).getMcategoryName();
+                    shop.setMcategoryName(sportsMcategoryName);
+                    shop.setCategoryNo(c);
+                    int sportsMcategoryNo = shopMapper.selectMCategoryNo(shop);
+                    List<ShopVo> sportsDcategory = shopMapper.selectdCategoryNameList(sportsMcategoryNo);
+                    for(int sd = 0; sd<sportsDcategory.size(); sd++){
+                        String sportsDcategoryName = sportsDcategory.get(sd).getDcategoryName();
+                        searchService.searchAndSave(2, sportsMcategoryName, sportsDcategoryName);
+                    }
+                }
+                System.out.println("================스포츠추가 끝===============");
+            }
+        }
+
+
+        // searchService.searchAndSave(query);
+    }
+    
 
     // main 페이지 이동
     @RequestMapping("/home.do")
@@ -117,17 +172,34 @@ public class ShopController {
         shop.setCategoryNo(categoryNo);
         shop.setMcategoryNo(mcategoryNo);
         shop.setDcategoryName(dcategoryNameParam);
-
         if (!mcategoryName.equals("emptyMcategoryName")) {
             shop.setMcategoryName(mcategoryName);
             int mCategoryNo = shopMapper.selectMCategoryNo(shop);
             List<ShopVo> dCategoryName = shopMapper.selectdCategoryNameList(mCategoryNo);
             List<ProductVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
+            for(int i = 0; i<productMCategoryList.size(); i++){
+                int pIdx = productMCategoryList.get(i).getPIdx();
+                ProductVo fileName = shopMapper.selectFileName(pIdx);
+                // duplicate  중복제거
+                HashSet<String> duplicate = new HashSet<>();
+                if(duplicate.contains(productMCategoryList.get(i).getFileName())){
+                    productMCategoryList.add(fileName);
+                } 
+            }
             model.addAttribute("dCategoryName", dCategoryName);
             model.addAttribute("productList", productMCategoryList);
             if (!dcategoryNameParam.equals("emptyDcategoryName")) {
                 int dCategoryNo = shopMapper.selectDCategoryNo(shop);
                 List<ProductVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
+                for(int i = 0; i<productDCategoryList.size(); i++){
+                    int pIdx = productMCategoryList.get(i).getPIdx();
+                    ProductVo fileName = shopMapper.selectFileName(pIdx);
+                    // duplicate  중복제거
+                    HashSet<String> duplicate = new HashSet<>();
+                    if(duplicate.contains(productDCategoryList.get(i).getFileName())){
+                        productDCategoryList.add(fileName);
+                    }
+                }
                 model.addAttribute("productList", productDCategoryList);
             }
         }

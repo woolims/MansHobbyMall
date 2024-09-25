@@ -248,9 +248,6 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
-    ALGORITHM = UNDEFINED 
-    DEFINER = `final`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,

@@ -30,8 +30,9 @@ public class ShopVo {
     String dcategoryName;
 
     // 상품사진
-    String fileName;
-    int fileIdx;
+    // String fileName;
+    // String fileNameLink;
+    // int fileIdx;
 
     // 장바구니
     int scIdx; // 뷰에 미포함
