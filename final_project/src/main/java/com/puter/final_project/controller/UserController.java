@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,10 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
 import com.puter.final_project.dao.CouponBoxMapper;
+import com.puter.final_project.dao.DaddressMapper;
 import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.CouponBoxVo;
+import com.puter.final_project.vo.DaddressVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -41,6 +45,9 @@ public class UserController {
 	// 처음에 1회연결
 	@Autowired
 	UserMapper userMapper;
+
+	@Autowired
+	DaddressMapper daddressMapper;
 
 	@Autowired
 	CartMapper cartMapper;
@@ -204,7 +211,11 @@ public class UserController {
 	@RequestMapping("deliveryAddress.do")
 	public String deliveryAddress(Model model) {
 
+		UserVo user = (UserVo) session.getAttribute("user");
 
+		List<DaddressVo> addressList = daddressMapper.selectDaddressUser(user.getUserIdx());
+
+		model.addAttribute("addressList", addressList);
 
 		return "myPage/deliveryAddress";
 	}
@@ -285,4 +296,53 @@ public class UserController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
+
+	@GetMapping("addAddress.do")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> addAddress(@RequestBody DaddressVo daddress) {
+		int result = daddressMapper.insertDaddress(daddress);
+
+		Map<String, String> response = new HashMap<>();
+		if (result > 0) {
+			response.put("message", "주소가 성공적으로 추가되었습니다.");
+			return ResponseEntity.ok(response);
+		} else {
+			response.put("message", "주소 추가에 실패했습니다."+daddress.getUserIdx());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
+	@PostMapping("updateAddress.do")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> updateAddress(@RequestBody DaddressVo daddress) {
+		int result = daddressMapper.updateDaddress(daddress);
+
+		Map<String, String> response = new HashMap<>();
+		if (result > 0) {
+			response.put("message", "주소가 성공적으로 수정되었습니다.");
+			return ResponseEntity.ok(response);
+		} else {
+			response.put("message", "주소 수정에 실패했습니다."+daddress.getUserIdx());
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
+	@DeleteMapping("deleteAddress.do")
+	@ResponseBody
+	public ResponseEntity<Map<String, String>> deleteAddress(@RequestParam int daIdx) {
+		System.out.println(daIdx);
+		int result = daddressMapper.deleteDaddress(daIdx);
+
+		Map<String, String> response = new HashMap<>();
+		if (result > 0) {
+			response.put("message", "주소가 성공적으로 삭제되었습니다.");
+			return ResponseEntity.ok(response);
+		} else {
+			response.put("message", "주소 삭제에 실패했습니다.");
+			return ResponseEntity.badRequest().body(response);
+		}
+	}
+
+
+
 }

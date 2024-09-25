@@ -295,7 +295,7 @@
                                         // 모달을 열고 데이터를 채웁니다.
                                         $('#reviewModifyModal').show();
                                         //    $('#reviewModifyModal').css('display', 'flex');로 대체
-                                        $('textarea[name="rvContent"]').val(data.rvContent);
+                                        $('textarea[id="reviewModifyContent"]').val(data.rvContent);
                                         $('input[name="rvIdx"]').val(data.rvIdx);
                                     },
                                     error: function () {
@@ -481,7 +481,7 @@
                                 <input type="hidden" name="userIdx" value="${user.userIdx}" />
                                 <div class="form-group" style="color: black;">
                                     <label for="content" style="color: white;">내용</label>
-                                    <textarea name="rvContent" required
+                                    <textarea id="reviewModifyContent" name="rvContent" required
                                         style="width: 100%; min-height: 200px;"></textarea>
                                 </div>
                                 <div class="form-group">
