@@ -14,6 +14,7 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
       <link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/navbar.css" />
+      <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
       <script type="text/javascript">
         //javascript 초기화
         //window.onload = function(){}
@@ -360,6 +361,16 @@
           f.submit();
         }
 
+        // 주소검색 API
+        function find_addr(){
+	   
+            new daum.Postcode({
+                  oncomplete: function(data) {
+                      $("#addr").val(data.address); 	  //선택한 정보의 주소 넣기
+                  }
+              }).open();
+        }//end:find_addr()
+
       </script>
 
     </head>
@@ -462,7 +473,8 @@
             <input type="text" id="name" name="name" placeholder="이름" required />
             <input type="text" id="phone" name="phone" placeholder="전화번호(ex.010-1234-1234)" required />
             <input type="text" id="addr" name="addr" placeholder="주소" required />
-            <input type="text" id="subAddr" name="subAddr" placeholder="상세주소" required />
+            <input type="text" id="subAddr"name="subAddr" placeholder="상세주소">
+						<input class="btn btn-info" type="button" value="주소검색" onclick="find_addr()">
             <input type="button" id="btn_register" class="login-btn" value="회원가입" disabled="disabled"
               onclick="registerUser(this.form);" />
             <!-- <input type="button" class="login-btn" value="회원가입" onclick="registerUser(this.form);" /> -->
