@@ -111,6 +111,7 @@
                 <li data-page="purchaseHistory.do">구매내역</li>
                 <li data-page="shippingTracking.do">배송조회</li>
                 <li data-page="accountInfo.do">정보수정</li>
+                <li data-page="grade.do">등급</li>
             </ul>
         </div>
     </header>
