@@ -127,16 +127,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <!-- 고객용 상품사진 리스트 조회 -->
     <select id="selectPImageList" resultType="pImage" parameterType="int">
-        select fileName from productImage where pIdx=#{pIdx} order by pIdx desc
+        select * from productImage where pIdx=#{pIdx} order by pIdx desc
     </select>
+    <!-- DB용 상품사진 조회 -->
+    <!-- <select id="selectFileLinkList" resultType="pImage" parameterType="int">
+        select * from productImage where pIdx=#{pIdx} order by pIdx desc
+    </select> -->
     <!-- DB용 상품사진링크여부 조회 -->
-    <select id="selectFileLinkList" resultType="String" parameterType="int">
-        select fileNameLink from productImage where pIdx=#{pIdx} order by pIdx desc
+    <select id="selectFileName" resultType="product" parameterType="int">
+        select *, (select min(fileIdx) from productImage where pIdx=#{pIdx}) from productImage where fileIdx=#{fileIdx}
     </select>
-    <!-- DB용 상품사진링크여부 조회 -->
-    <select id="selectFileName" resultType="String" parameterType="int">
-        select fileName from productImage where pIdx=#{pIdx} order by pIdx desc
-    </select>
+<!-- 
+    <select id="selectFileIdx" resultType="int" parameterType="int">
+        select min(fileIdx) from productImage where pIdx=#{pIdx}
+    </select> -->
 
     
 

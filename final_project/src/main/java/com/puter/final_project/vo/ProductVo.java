@@ -19,5 +19,6 @@ public class ProductVo {
 
     int fileIdx;
     String fileName;
+    String fileNameLink;
 
 }

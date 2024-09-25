@@ -262,6 +262,7 @@ public class AdminController {
             String filename = filename_list.get(i);
             pImageVo.setPIdx(pIdx);
             pImageVo.setFileName(filename);
+            pImageVo.setFileNameLink("N");
             shopMapper.insertPImage(pImageVo);
         }
         return "redirect:admin.do";

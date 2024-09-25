@@ -1,6 +1,7 @@
 package com.puter.final_project.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,28 +177,29 @@ public class ShopController {
             int mCategoryNo = shopMapper.selectMCategoryNo(shop);
             List<ShopVo> dCategoryName = shopMapper.selectdCategoryNameList(mCategoryNo);
             List<ProductVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
-
-            List<PImageVo> fileNameList = new ArrayList<PImageVo>();
-                for(int i = 0; i<productMCategoryList.size(); i++){
-                    int pIdx = productMCategoryList.get(i).getPIdx();
-                    String fileName = shopMapper.selectFileName(pIdx);
-                    String fileNameLink = shopMapper.selectFileLinkList(pIdx);
-                    fileNameList.add(new PImageVo(fileName, fileNameLink));
-                }
-            model.addAttribute("fileNameList", fileNameList);
+            for(int i = 0; i<productMCategoryList.size(); i++){
+                int pIdx = productMCategoryList.get(i).getPIdx();
+                ProductVo fileName = shopMapper.selectFileName(pIdx);
+                // duplicate  중복제거
+                HashSet<String> duplicate = new HashSet<>();
+                if(duplicate.contains(productMCategoryList.get(i).getFileName())){
+                    productMCategoryList.add(fileName);
+                } 
+            }
             model.addAttribute("dCategoryName", dCategoryName);
-            
             model.addAttribute("productList", productMCategoryList);
             if (!dcategoryNameParam.equals("emptyDcategoryName")) {
                 int dCategoryNo = shopMapper.selectDCategoryNo(shop);
                 List<ProductVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
                 for(int i = 0; i<productDCategoryList.size(); i++){
-                    int pIdx = productDCategoryList.get(i).getPIdx();
-                    String fileName = shopMapper.selectFileName(pIdx);
-                    String fileNameLink = shopMapper.selectFileLinkList(pIdx);
-                    fileNameList.add(new PImageVo(fileName, fileNameLink));
+                    int pIdx = productMCategoryList.get(i).getPIdx();
+                    ProductVo fileName = shopMapper.selectFileName(pIdx);
+                    // duplicate  중복제거
+                    HashSet<String> duplicate = new HashSet<>();
+                    if(duplicate.contains(productDCategoryList.get(i).getFileName())){
+                        productDCategoryList.add(fileName);
+                    }
                 }
-            model.addAttribute("fileNameList", fileNameList);
                 model.addAttribute("productList", productDCategoryList);
             }
         }

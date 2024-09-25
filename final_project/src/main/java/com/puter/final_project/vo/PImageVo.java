@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Alias("pImage")
 public class PImageVo {
-    public PImageVo(String fileName2, String fileNameLink2) {
+    public PImageVo(String fileName) {
         //TODO Auto-generated constructor stub
     }
 
