@@ -136,14 +136,6 @@
 
           <script>
 
-
-
-
-
-
-
-            // 여기부터 ajax처리하기
-
             function product(categoryNo, mcategoryName) {
               $.ajax({
                 url: "/productAjax.do",
@@ -179,7 +171,6 @@
                 }
               });
             }
-// 중분류 눌렀을때@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             function mCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
               let mcategoryName_param = id.value;
@@ -212,24 +203,23 @@
 
             function dCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
-              let dcategoryName_param = id.value;
-              console.log(categoryNo_param, dcategoryName_param);
-              // location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param + "&dcategoryName=" + dcategoryName_param;
+              let dcategoryNo_param = id.id;
+              
               $.ajax({
                 url: "/productAjax.do",
-                data: { "categoryNo": categoryNo_param, "dcategoryName": dcategoryName_param },
+                data: { "categoryNo": categoryNo_param, "dcategoryNo": dcategoryNo_param },
                 datatype: "json",
                 method: 'GET',
                 success: function (res_data) {
-
+                  console.log(res_data);
                   let product = $("#product");
                   product.empty();
                   productHtml = ``;
 
                   $.each(res_data, function (index, pVo) {
                     productHtml += `<div class="col-sm-3">
-                      <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${shopP.getCategoryNo()}&pIdx=\${shopP.getPIdx()}';">`
-                    if (res_data.length == 'Y') {
+                      <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`
+                    if (pVo.fileNameLink == 'Y') {
                       productHtml += `<div>
                                         <img src="\${pVo.fileName}" alt="상품이미지">
                                       </div>
@@ -237,7 +227,7 @@
                          <div class="product-price">\${pVo.price} 원</div>
                        </div>
                      </div>`
-                    } else if (res_data.length == 'N') {
+                    } else if (pVo.fileNameLink == 'N') {
                       productHtml += `<div>
                                         <img src="/resources/images/\${pVo.fileName}" alt="상품이미지">
                                       </div>
