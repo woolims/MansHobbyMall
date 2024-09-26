@@ -44,15 +44,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <!-- mcategoryNo을 이용해 dcategoryName 검색 -->
     <select id="selectdCategoryNameList" resultType="shop" parameterType="int">
-        select dcategoryName from dcategory where mcategoryNo = #{mCategoryNo} Group by dcategoryName
+        select * from dcategory where mcategoryNo = #{mCategoryNo}
     </select>
     <!-- dcategoryNo 검색 -->
-    <select id="selectDCategoryNo" resultType="int" parameterType="shop">
+    <!-- <select id="selectDCategoryNo" resultType="int" parameterType="shop">
         select dcategoryNo from shop_list_view where mcategoryName = #{mcategoryName} and dcategoryName = #{dcategoryName} Group by dcategoryNo
-    </select>
+    </select> -->
 
-    <!-- DB 데이터넣는용도 -->
-    <select id="selectdCategoryNo" resultType="int" parameterType="shop">
+    <!-- dcategoryNo 검색 -->
+    <select id="selectDcategoryNo" resultType="int" parameterType="shop">
         select dcategoryNo from dcategory where mcategoryNo = #{mcategoryNo} and dcategoryName = #{dcategoryName} Group by dcategoryNo
     </select>
 

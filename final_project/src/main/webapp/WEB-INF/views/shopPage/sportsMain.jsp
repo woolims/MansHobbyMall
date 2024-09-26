@@ -144,64 +144,66 @@
 
             // 여기부터 ajax처리하기
 
-            function mCategoryProduct() {
-              let categoryNo_param = '${shop.categoryNo}';
-              let mcategoryName_param = id.value;
-
+            function product(categoryNo, mcategoryName) {
               $.ajax({
                 url: "/productAjax.do",
-                data: { "categoryNo": categoryNo_param, "mcategoryName": mcategoryName_param },
+                data: { "categoryNo": categoryNo, "mcategoryName": mcategoryName},
                 datatype: "json",
                 method: 'GET',
                 success: function (res_data) {
-                  product.empty();
+                  console.log(res_data);
+                  $("#product").empty();
                   productHtml = ``;
                   $.each(res_data, function (index, pVo) {
                     productHtml += `<div class="col-sm-3">
-                       <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">
-                         <c:if test="\${pVo.fileNameLink == 'Y'}">
-                           <div>
+                       <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`
+                    if (pVo.fileNameLink == 'Y') {
+                      productHtml +=
+                      `<div>
                              <img src="\${pVo.fileName}" alt="상품이미지">
-                           </div>
-                         </c:if>
-                         <c:if test="\${pVo.fileNameLink == 'N'}">
-                           <div>
+                           </div>`
+                    } else if (pVo.fileNameLink == 'Y') {
+                      productHtml +=
+                      `<div>
                              <img src="/resources/images/\${pVo.fileName}"
                                alt="상품이미지">
-                           </div>
-                         </c:if>
+                           </div>`
+                    }
+                    productHtml +=`
                          <div class="product-name">\${pVo.pname}</div>
                          <div class="product-price">\${pVo.price} 원</div>
                        </div>
                      </div>`
                   });
-                  product.html(productHtml);
+                  $("#product").html(productHtml);
                 }
               });
-
-              // location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param;
             }
-// 밑에 에이젝스 싹다 수정해야댐@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// 중분류 눌렀을때@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             function mCategoryNoParam(id) {
+              let categoryNo_param = '${shop.categoryNo}';
+              let mcategoryName_param = id.value;
               $.ajax({
-                url: "/shopAjax.do",
+                url: "/categoryAjax.do",
                 data: { "categoryNo": categoryNo_param, "mcategoryName": mcategoryName_param },
                 datatype: "json",
                 method: 'GET',
                 success: function (res_data) {
-              let categoryNo_param = '${shop.categoryNo}';
-              let mcategoryName_param = id.value;
-              
-              let dcategory = $("#dcategory");
-                  dcategory.empty();
-                  dcategoryHtml = ``;
-                  $.each(res_data, function (index, pVo) {
-                    `<input type="button" id="\${pVo.dcategoryNo}" class="btn btn-default"
-                      value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);">`
-                  });
-                  dcategory.html(dcategoryHtml);
+                  console.log(res_data);
+                  let dcategory = $("#dcategory");
+                    dcategory.empty();
+                    dcategoryHtml = ``;
+                    $.each(res_data, function (index, pVo) {
+                      dcategoryHtml +=
+                      `<input type="button" id="\${pVo.dcategoryNo}" class="btn btn-default"
+                        value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);">`;
+                    });
+                    dcategory.html(dcategoryHtml);
 
-                  let product = $("#product");
+                  product(categoryNo_param, mcategoryName_param);
+                },
+                error: function () {
+                  alert("error");
                 }
               });
             }
@@ -210,12 +212,12 @@
 
             function dCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
-              let mcategoryName_param = '${shop.mcategoryName}';
               let dcategoryName_param = id.value;
+              console.log(categoryNo_param, dcategoryName_param);
               // location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param + "&dcategoryName=" + dcategoryName_param;
               $.ajax({
                 url: "/productAjax.do",
-                data: { "categoryNo": categoryNo_param, "mcategoryName": mcategoryName_param, "dcategoryName": dcategoryName_param },
+                data: { "categoryNo": categoryNo_param, "dcategoryName": dcategoryName_param },
                 datatype: "json",
                 method: 'GET',
                 success: function (res_data) {
@@ -253,9 +255,6 @@
 
 
             //  ajax 처리하기 여기까지
-
-
-
 
 
             // 스크롤 위치를 로컬 스토리지에 저장
@@ -353,16 +352,8 @@
               </div>
 
               <hr>
-
-              <c:if test="${mcategoryName != 'emptyMcategoryName'}">
                 <div id="dcategory">
-                  <c:forEach var="shopD" items="${dCategoryName}">
-                    <input type="button" id="${shopD.dcategoryNo}" class="btn btn-default"
-                      value="${shopD.dcategoryName}" onclick="dCategoryNoParam(this);">
-                  </c:forEach>
                 </div>
-              </c:if>
-
               <hr>
 
               <div id="product" class="row">
