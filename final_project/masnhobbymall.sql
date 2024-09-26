@@ -323,7 +323,8 @@ SELECT
     i.inContent,
     i.inDate,
     i.inPP,
-    u.name
+    u.name,
+    u.id
 FROM Inquiry i
 INNER JOIN User u ON i.userIdx = u.userIdx;
 

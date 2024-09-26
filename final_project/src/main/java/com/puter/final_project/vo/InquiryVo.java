@@ -19,5 +19,6 @@ public class InquiryVo {
     String inAc;
 
     String name;
+    String id;
 
 }
