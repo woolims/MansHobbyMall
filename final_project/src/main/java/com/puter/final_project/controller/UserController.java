@@ -297,7 +297,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("addAddress.do")
+	@PostMapping("addAddress.do")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> addAddress(@RequestBody DaddressVo daddress) {
 		int result = daddressMapper.insertDaddress(daddress);
@@ -327,11 +327,11 @@ public class UserController {
 		}
 	}
 
-	@DeleteMapping("deleteAddress.do")
+	@PostMapping("deleteAddress.do")
 	@ResponseBody
-	public ResponseEntity<Map<String, String>> deleteAddress(@RequestParam int daIdx) {
-		System.out.println(daIdx);
-		int result = daddressMapper.deleteDaddress(daIdx);
+	public ResponseEntity<Map<String, String>> deleteAddress(@RequestBody DaddressVo daddress) {
+		System.out.println(daddress.getDaIdx());
+		int result = daddressMapper.deleteDaddress(daddress.getDaIdx());
 
 		Map<String, String> response = new HashMap<>();
 		if (result > 0) {

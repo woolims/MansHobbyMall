@@ -18,7 +18,7 @@
     </update>
 
     <delete id="deleteDaddress" parameterType="int">
-        DELETE FROM Daddress WHERE daAddr = #{daIdx}
+        DELETE FROM Daddress WHERE daIdx = #{daIdx}
     </delete>
 
 </mapper>

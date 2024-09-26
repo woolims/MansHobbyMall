@@ -255,7 +255,7 @@
 
             // AJAX 요청을 통해 새 주소 정보를 서버에 전송
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", "addAddress.do", true); // 서버의 추가 API 호출
+            xhr.open("POST", "addAddress.do", true); // 서버의 추가 API 호출
             xhr.setRequestHeader("Content-Type", "application/json");
 
             xhr.onload = function () {
@@ -271,6 +271,7 @@
 
             // 서버에 새 주소 정보를 JSON 형식으로 전송
             const data = JSON.stringify({
+                userIdx: "${user.getUserIdx()}",
                 daAddr: newAddress,
                 subDaAddr: newSubAddress
             });
