@@ -161,7 +161,6 @@ public class ShopController {
     public String sports(Model model,
             @RequestParam(name = "categoryNo", defaultValue = "2") int categoryNo,
             @RequestParam(name = "mcategoryNo", defaultValue = "1") int mcategoryNo,
-            @RequestParam(name = "mcategoryName", defaultValue = "emptyMcategoryName") String mcategoryName,
             @RequestParam(name = "dcategoryName", defaultValue = "emptyDcategoryName") String dcategoryNameParam) {
 
         List<ShopVo> mCategoryNameList = shopMapper.selectMCategoryNameList(categoryNo);
@@ -205,7 +204,6 @@ public class ShopController {
         // }
         List<ProductVo> productList = shopMapper.selectListSports(shop.getCategoryNo());
         model.addAttribute("productList", productList);
-        model.addAttribute("mcategoryName", mcategoryName);
         model.addAttribute("shop", shop);
         model.addAttribute("mCategoryNameList", mCategoryNameList);
 
@@ -228,7 +226,7 @@ public class ShopController {
     @RequestMapping("productAjax.do")
     @ResponseBody
     public List<ProductVo> productAjax(int categoryNo,
-            @RequestParam(name = "mcategoryName", defaultValue = "emptyMcategoryName") String mcategoryName,
+            @RequestParam(defaultValue = "emptyMcategoryName") String mcategoryName,
             Integer dcategoryNo) {
 
         ShopVo shop = new ShopVo();

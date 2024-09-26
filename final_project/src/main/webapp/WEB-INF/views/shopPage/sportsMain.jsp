@@ -132,6 +132,27 @@
               font-weight: bolder;
               color: #333;
             }
+
+            #category-box {
+              position: fixed;
+              /* 고정 위치 설정 */
+              top: 20px;
+              /* 상단에서의 거리 조정 */
+              left: 50%;
+              /* 중앙 정렬 */
+              transform: translateX(-50%);
+              /* 중앙 정렬 보정 */
+              width: 73%;
+              /* 너비 설정 */
+              z-index: 1000;
+              /* 다른 요소 위에 보이도록 설정 */
+              background-color: #fff;
+              /* 배경색 설정 (투명도 조절 가능) */
+              padding: 10px 0;
+              /* 여백 추가 */
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+              /* 그림자 추가 */
+            }
           </style>
 
           <script>
@@ -139,7 +160,7 @@
             function product(categoryNo, mcategoryName) {
               $.ajax({
                 url: "/productAjax.do",
-                data: { "categoryNo": categoryNo, "mcategoryName": mcategoryName},
+                data: { "categoryNo": categoryNo, "mcategoryName": mcategoryName },
                 datatype: "json",
                 method: 'GET',
                 success: function (res_data) {
@@ -151,17 +172,17 @@
                        <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`
                     if (pVo.fileNameLink == 'Y') {
                       productHtml +=
-                      `<div>
+                        `<div>
                              <img src="\${pVo.fileName}" alt="상품이미지">
                            </div>`
                     } else if (pVo.fileNameLink == 'Y') {
                       productHtml +=
-                      `<div>
+                        `<div>
                              <img src="/resources/images/\${pVo.fileName}"
                                alt="상품이미지">
                            </div>`
                     }
-                    productHtml +=`
+                    productHtml += `
                          <div class="product-name">\${pVo.pname}</div>
                          <div class="product-price">\${pVo.price} 원</div>
                        </div>
@@ -182,16 +203,38 @@
                 success: function (res_data) {
                   console.log(res_data);
                   let dcategory = $("#dcategory");
-                    dcategory.empty();
-                    dcategoryHtml = ``;
-                    $.each(res_data, function (index, pVo) {
-                      dcategoryHtml +=
+                  dcategory.empty();
+                  dcategoryHtml = ``;
+                  $.each(res_data, function (index, pVo) {
+                    dcategoryHtml +=
                       `<input type="button" id="\${pVo.dcategoryNo}" class="btn btn-default"
                         value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);">`;
+                  });
+                  dcategory.html(dcategoryHtml);
+                  const mcategoryHighlight = mcategoryName_param; // 사용자가 선택한 중분류
+                  const dcategoryHighlight = dcategory; // 사용자가 선택한 소분류
+
+                  $('#mcategory input').removeClass('highlight');
+                  // 중분류 input에 highlight 클래스 추가
+                  if (mcategoryHighlight) {
+                    $('#mcategory input').each(function () {
+                      if ($(this).val() === mcategoryHighlight) {
+                        $(this).addClass('highlight');
+                      }
                     });
-                    dcategory.html(dcategoryHtml);
+                  }
+
+                  // 소분류 input에 highlight 클래스 추가
+                  if (dcategoryHighlight) {
+                    $('#dcategory input').each(function () {
+                      if ($(this).val() === dcategoryHighlight) {
+                        $(this).addClass('highlight');
+                      }
+                    });
+                  }
 
                   product(categoryNo_param, mcategoryName_param);
+
                 },
                 error: function () {
                   alert("error");
@@ -199,12 +242,18 @@
               });
             }
 
-            
+
 
             function dCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
               let dcategoryNo_param = id.id;
-              
+
+              // 모든 소분류의 highlight 클래스 제거
+              $('#dcategory input').removeClass('highlight');
+
+              // 클릭된 소분류에 highlight 클래스 추가z
+              $(id).addClass('highlight');
+
               $.ajax({
                 url: "/productAjax.do",
                 data: { "categoryNo": categoryNo_param, "dcategoryNo": dcategoryNo_param },
@@ -332,18 +381,18 @@
                 </div>
               </div>
 
-              <hr>
-
-              <div id="mcategory">
-                <c:forEach var="shopM" items="${mCategoryNameList}">
-                  <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
-                    value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);">
-                </c:forEach>
-              </div>
-
-              <hr>
+              <div id="category-box">
+                <hr>
+                <div id="mcategory">
+                  <c:forEach var="shopM" items="${mCategoryNameList}">
+                    <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
+                      value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);">
+                  </c:forEach>
+                </div>
+                <hr>
                 <div id="dcategory">
                 </div>
+              </div>
               <hr>
 
               <div id="product" class="row">
