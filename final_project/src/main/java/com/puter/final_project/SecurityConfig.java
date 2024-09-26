@@ -41,6 +41,7 @@ public class SecurityConfig {
                     .ignoringRequestMatchers("/admin/**") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .ignoringRequestMatchers("/user/**") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .ignoringRequestMatchers("/review/**") // 파일 업로드 요청을 CSRF 보호에서 제외
+                    .ignoringRequestMatchers("/buyList/**") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             );
         return http.build();
