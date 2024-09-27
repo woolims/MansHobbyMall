@@ -23,13 +23,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <!-- 메인카테고리 번호만 조회 -->
-    <!-- <select id="selectCategoryNo" resultType="int">
-        select categoryNo from shop_list_view
-    </select> -->
-    <!-- dcategoryName 조회 -->
-    <select id="selectDCategoryNameList" resultType="shop" parameterType="shop">
-        select dcategoryName from shop_list_view where categoryNo = #{categoryNo} and mcategoryName = #{mcategoryName} Group by dcategoryName
+    <select id="selectCategoryNo" resultType="int" parameterType="String">
+        select categoryNo from category where categoryName = #{categoryName}
     </select>
+    <!-- dcategoryName 조회 -->
+    <!-- <select id="selectDCategoryNameList" resultType="shop" parameterType="shop">
+        select dcategoryName from shop_list_view where categoryNo = #{categoryNo} and mcategoryName = #{mcategoryName} Group by dcategoryName
+    </select> -->
     <!--mcategoryName 조회 -->
     <select id="selectMCategoryNameList" resultType="shop" parameterType="int">
         select mcategoryName from shop_list_view where categoryNo = #{categoryNo} Group by mcategoryName

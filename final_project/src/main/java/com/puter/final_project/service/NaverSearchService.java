@@ -50,7 +50,9 @@ public class NaverSearchService {
                 JsonNode item = elements.next();
                 ShopVo shopVo = new ShopVo();
                 PImageVo pImageVo = new PImageVo();
-                shopVo.setPName(item.get("title").asText());
+                String title = item.get("title").asText().replaceAll("<b>", "");
+                title = title.replaceAll("</b>", "");
+                shopVo.setPName(title);
                 shopVo.setPrice(item.get("lprice").asInt());
                 shopVo.setCategoryNo(categoryNo);
                 shopVo.setMcategoryName(mcategoryName);

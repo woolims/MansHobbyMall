@@ -96,18 +96,21 @@ public class AdminController {
     
     @RequestMapping("adminAjax.do")
     @ResponseBody
-    public List<ShopVo> adminAjax(@RequestParam(defaultValue = "대분류 선택") String categoryName, String mcategoryName) {
+    public List<ShopVo> adminAjax(String categoryName, String mcategoryName) {
+        ShopVo shop = new ShopVo();
+        int categoryNo = shopMapper.selectCategoryNo(categoryName);
 
-        if (categoryName != null && !categoryName.equals("대분류 선택") && !categoryName.equals("전체보기")
+        shop.setCategoryNo(categoryNo);
+        shop.setMcategoryName(mcategoryName);
+        if (categoryName != null && !categoryName.equals("전체보기")
                 && mcategoryName == null) {
-            String categoryNameParam = categoryName;
-            List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryNameParam);
+            List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryName);
             return mcategoryNameList;
         }
 
         if (mcategoryName != null && !mcategoryName.equals("선택 안 함")) {
-            String mcategoryNameParam = mcategoryName;
-            List<ShopVo> dcategoryNameList = shopMapper.selectDcategoryNameList(mcategoryNameParam);
+            int mcategoryNo = shopMapper.selectMCategoryNo(shop);
+            List<ShopVo> dcategoryNameList = shopMapper.selectdCategoryNameList(mcategoryNo);
             return dcategoryNameList;
         }
 
@@ -225,11 +228,11 @@ public class AdminController {
 
     @PostMapping("pInsert.do")
     public String pInsert(ShopVo shop, Model model, List<MultipartFile> photo) throws Exception {
-        int categoryNo = shopMapper.selectAdminCategoryNo(shop);
-        int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
-        int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
+        int categoryNo = shopMapper.selectCategoryNo(shop.getCategoryName());
         shop.setCategoryNo(categoryNo);
+        int mcategoryNo = shopMapper.selectMCategoryNo(shop);
         shop.setMcategoryNo(mcategoryNo);
+        int dcategoryNo = shopMapper.selectDcategoryNo(shop);
         shop.setDcategoryNo(dcategoryNo);
         int res = shopMapper.productInsert(shop);
 
@@ -311,7 +314,6 @@ public class AdminController {
         List<String> filename_list = new ArrayList<String>();
 
         String absPath = application.getRealPath("/resources/images/");
-        System.out.println("absPath : " + absPath);
 
         for (MultipartFile photoOne : photo) {
             if (!photoOne.isEmpty()) {
@@ -402,7 +404,6 @@ public class AdminController {
         int res = shopMapper.deletePImageOne(pImage.getFileIdx());
         // 선택한 사진을 지운 후 남은 사진들의 리스트
         List<PImageVo> deleteAfterList = shopMapper.selectAdminPImageList(pImage.getPIdx());
-        System.out.println(pImage);
         return deleteAfterList;
     }
 }
