@@ -335,7 +335,7 @@
               let dcategoryName = $("#dcategorySearch").val();
 
               $.ajax({
-                url: "/shop/shopAjaxProductList.do",
+                url: "/shopAjaxProductList.do",
                 data: {
                   "searchParam": searchParam,
                   "categoryName": categoryName,
@@ -356,7 +356,7 @@
                     productHtml += `
                         <div class="col-sm-3">
                           <div class="product-card"
-                            onclick="location.href='productOne.do?categoryNo=\${pVo.getCategoryNo()}&pIdx=\${pVo.getPIdx()}';">`;
+                            onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`;
                     if ("\${pVo.fileNameLink == 'Y'}") {
                       productHtml += `
                               <div>
@@ -372,8 +372,8 @@
                               `;
                     }
                     productHtml += `
-                            <div class="product-name">\${pVo.getPName()}</div>
-                            <div class="product-price">\${pVo.getPrice()} 원</div>
+                            <div class="product-name">\${pVo.pname}</div>
+                            <div class="product-price">\${pVo.price} 원</div>
                           </div>
                         </div>`;
                   });

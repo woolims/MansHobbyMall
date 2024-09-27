@@ -167,6 +167,7 @@ public class ShopController {
 
         ShopVo shop = new ShopVo();
         shop.setCategoryNo(categoryNo);
+        shop.setCategoryName(shopMapper.selectCategoryName(categoryNo));
         shop.setMcategoryNo(mcategoryNo);
         shop.setDcategoryName(dcategoryNameParam);
         // if (!mcategoryName.equals("emptyMcategoryName")) {
@@ -244,7 +245,7 @@ public class ShopController {
                 List<ProductVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
                 for (int i = 0; i < productMCategoryList.size(); i++) {
                     int pIdx = productMCategoryList.get(i).getPIdx();
-                    ProductVo fileName = shopMapper.selectFileName(pIdx);
+                    ProductVo fileName = shopMapper.selectFile(pIdx);
                     // duplicate 중복제거
                     HashSet<String> duplicate = new HashSet<>();
                     if (duplicate.contains(productMCategoryList.get(i).getFileName())) {
@@ -259,7 +260,7 @@ public class ShopController {
             List<ProductVo> productDCategoryList = shopMapper.selectProductDCategoryList(dcategoryNo);
             for (int i = 0; i < productDCategoryList.size(); i++) {
                 int pIdx = productDCategoryList.get(i).getPIdx();
-                ProductVo fileName = shopMapper.selectFileName(pIdx);
+                ProductVo fileName = shopMapper.selectFile(pIdx);
                 // duplicate 중복제거
                 HashSet<String> duplicate = new HashSet<>();
                 if (duplicate.contains(productDCategoryList.get(i).getFileName())) {
@@ -268,6 +269,77 @@ public class ShopController {
             }
             return productDCategoryList;
         }
+        return Collections.emptyList(); // 작동안함
+    }
+
+    @RequestMapping("/shopAjaxProductList.do")
+    @ResponseBody
+    public List<ProductVo> shopAjaxProductList(@RequestParam(defaultValue = "") String categoryName,@RequestParam(defaultValue = "") String mcategoryName,@RequestParam(defaultValue = "") String dcategoryName, String searchParam) {
+
+        ShopVo shop = new ShopVo();
+        shop.setPName(searchParam);
+        shop.setCategoryName(categoryName);
+        shop.setMcategoryName(mcategoryName);
+        shop.setDcategoryName(dcategoryName);
+
+        int categoryNo = shopMapper.selectAdminCategoryNo(shop);
+        shop.setCategoryNo(categoryNo);
+        if (!shop.getMcategoryName().equals("")) {
+            int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
+            shop.setMcategoryNo(mcategoryNo);
+            if (!shop.getDcategoryName().equals("")) {
+                int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
+                shop.setDcategoryNo(dcategoryNo);
+            }
+        }
+
+        // 상품명만 검색한 경우
+        if (!shop.getCategoryName().equals("") && !searchParam.equals("") && shop.getMcategoryName().equals("")) {
+            List<ShopVo> categorySearchList = shopMapper.selectCategorySearchList(shop);
+            List<ProductVo> productSearchList = new ArrayList<ProductVo>();
+            int[] pIdx = new int[categorySearchList.size()];
+            HashSet<String> duplicate = new HashSet<>();
+            for (int i = 0; i < categorySearchList.size(); i++) {
+                pIdx[i] += categorySearchList.get(i).getPIdx();
+            }
+            for (int i = 0; i < pIdx.length; i++) {
+                productSearchList.add(shopMapper.selectProductSearch(pIdx[i]));
+                ProductVo fileName = shopMapper.selectFile(pIdx[i]);
+                System.out.println(fileName.getFileIdx());
+                if (duplicate.contains(productSearchList.get(i).getFileName())) {
+                    productSearchList.add(fileName);
+                }
+                System.out.println(pIdx[i]);
+            }
+            // shop뷰의 정보로 for문을 이용해 이미지를 찾고 상품뷰를 리턴
+            System.out.println(productSearchList.get(5).getFileIdx());
+            return productSearchList;
+        }
+
+        // 중분류를 검색한 경우
+        // if (!mcategoryName.equals("") && searchParam.equals("") && dcategoryName.equals("")) {
+        //     List<ShopVo> mcategorySearchList = shopMapper.selectMcategoryList(shop);
+        //     return mcategorySearchList;
+        // }
+ 
+        // // 중분류와 검색어(상품명)를 검색한 경우
+        // if (!mcategoryName.equals("") && !searchParam.equals("") && dcategoryName.equals("")) {
+        //     List<ShopVo> mcategorySearchList = shopMapper.selectMcategorySearchList(shop);
+        //     return mcategorySearchList;
+        // }
+
+        // // 소분류만 검색한 경우
+        // if (!dcategoryName.equals("") && searchParam.equals("")) {
+        //     List<ShopVo> dcategoryList = shopMapper.selectDcategoryList(shop);
+        //     return dcategoryList;
+        // }
+
+        // // 소분류와 검색어(상품명)를 검색한 경우
+        // if (!dcategoryName.equals("") && !searchParam.equals("")) {
+        //     List<ShopVo> dcategorySearchList = shopMapper.selectDcategorySearchList(shop);
+        //     return dcategorySearchList;
+        // }
+
         return Collections.emptyList(); // 작동안함
     }
 
@@ -356,7 +428,7 @@ public class ShopController {
             List<ProductVo> productMCategoryList = shopMapper.selectProductMCategoryList(mCategoryNo);
             for (int i = 0; i < productMCategoryList.size(); i++) {
                 int pIdx = productMCategoryList.get(i).getPIdx();
-                ProductVo fileName = shopMapper.selectFileName(pIdx);
+                ProductVo fileName = shopMapper.selectFile(pIdx);
                 // duplicate 중복제거
                 HashSet<String> duplicate = new HashSet<>();
                 if (duplicate.contains(productMCategoryList.get(i).getFileName())) {
@@ -370,7 +442,7 @@ public class ShopController {
                 List<ProductVo> productDCategoryList = shopMapper.selectProductDCategoryList(dCategoryNo);
                 for (int i = 0; i < productDCategoryList.size(); i++) {
                     int pIdx = productMCategoryList.get(i).getPIdx();
-                    ProductVo fileName = shopMapper.selectFileName(pIdx);
+                    ProductVo fileName = shopMapper.selectFile(pIdx);
                     // duplicate 중복제거
                     HashSet<String> duplicate = new HashSet<>();
                     if (duplicate.contains(productDCategoryList.get(i).getFileName())) {
