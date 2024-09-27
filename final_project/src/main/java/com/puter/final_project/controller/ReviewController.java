@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.puter.final_project.dao.ReviewMapper;
+import com.puter.final_project.dao.UserActivityMapper;
 import com.puter.final_project.vo.ReviewLikeVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.UserVo;
@@ -35,6 +36,9 @@ public class ReviewController {
 
     @Autowired
     ReviewMapper reviewMapper;
+
+    @Autowired
+    UserActivityMapper userActivityMapper;
 
     @RequestMapping("review.do")
     public String list(Model model) {
@@ -100,6 +104,9 @@ public class ReviewController {
                     reviewMapper.updateReviewImg(vo); // vo 객체로 업데이트
                 }
             }
+
+            res = userActivityMapper.updateTotalReviewPlus(user.getUserIdx());
+            res = userActivityMapper.callUpdateUserGrade(user.getUserIdx());
 
             return "redirect:" + url;  // 성공적으로 처리 후 리다이렉트
         } else {
@@ -218,9 +225,18 @@ public class ReviewController {
     @RequestMapping(value = "deleteReview.do", produces = "application/json; charset=utf-8;")
     @ResponseBody
     public String deleteReview(@RequestParam("rvIdx") int rvIdx) {
+        UserVo user = (UserVo) session.getAttribute("user");
         System.out.println("=================== rvIdx ================="+rvIdx);
         int res = reviewMapper.deleteByReview(rvIdx);
         System.out.println("=================== res ================="+res);
+        if (res > 0){
+            res = userActivityMapper.updateTotalReviewMinus(user.getUserIdx());
+            System.out.println("=================== res1 ================="+res);
+            res = userActivityMapper.callUpdateUserGrade(user.getUserIdx());
+            System.out.println("=================== res2 ================="+res);
+            if(res == -1) res = 1;
+        }
+        System.out.println("=================== res3 ================="+res);
 
         JSONObject json = new JSONObject();
         json.put("result", res > 0 ? "success" : "failure");
