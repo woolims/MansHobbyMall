@@ -163,109 +163,139 @@
           });
         }//end:check_id()
 
-        function check_id_email() {
-
+        function check_id() {
           //회원가입 버튼은 비활성화
-          // <input id="btn_register" type="button" ...  disabled="disabled">
-          $("#btn_register_email").prop("disabled", true);
+          $("#btn_register").prop("disabled", true);
 
+          let re_id = $("#re_id").val();
 
-          //           document.getElementById("mem_id").value
-          let em_id = $("#em_id").val();
-
-          if (em_id.length == 0) {
-
-            $("#em_id_msg").html("");
-            return;
+          // 아이디가 입력되지 않았을 경우
+          if (re_id.length == 0) {
+              $("#id_msg").html("");
+              return;
           }
 
+          // 아이디 길이 체크
+          if (re_id.length < 4 || re_id.length > 20) {
+              $("#id_msg").html("아이디는 4자리 이상 20자리 이하로 입력하세요.").css("color", "red");
+              return;
+          }
 
-          if (em_id.length < 3) {
-
-            $("#em_id_msg").html("id는 3자리 이상 입력하세요").css("color", "red");
-            return;
+          // 정규식 체크
+          const re_idText = /^[a-zA-Z0-9]{4,20}$/; // 소문자, 대문자, 숫자 허용
+          if (!re_idText.test(re_id)) {
+              $("#id_msg").html("아이디는 영문 대소문자 및 숫자만 포함해야 합니다.").css("color", "red");
+              return;
           }
 
           //서버에 현재 입력된 ID를 체크요청(jQuery Ajax이용)
           $.ajax({
-            url: "${pageContext.request.contextPath}/user/check_id.do",     //MemberCheckIdAction
-            data: { "id": em_id }, //parameter   => check_id.do?mem_id=one
-            dataType: "json",
-            success: function (res_data) {
-              // res_data = {"result": true}  or {"result": false}
-              if (res_data.result) {
+              url: "${pageContext.request.contextPath}/user/check_id.do", // MemberCheckIdAction
+              data: { "id": re_id }, //parameter => check_id.do?mem_id=one
+              dataType: "json",
+              success: function (res_data) {
+                  // res_data = {"result": true}  or {"result": false}
+                  if (res_data.result) {
+                      $("#id_msg").html("사용가능한 아이디 입니다").css("color", "blue");
 
-                $("#em_id_msg").html("사용가능한 아이디 입니다").css("color", "blue");
-
-                //가입버튼 활성화
-                $("#btn_register_email").prop("disabled", false);
-
-              } else {
-
-                $("#em_id_msg").html("이미 사용중인 아이디 입니다").css("color", "red");
-
+                      //가입버튼 활성화
+                      $("#btn_register").prop("disabled", false);
+                  } else {
+                      $("#id_msg").html("이미 사용중인 아이디 입니다").css("color", "red");
+                  }
+              },
+              error: function (err) {
+                  alert(err.responseText);
               }
-            },
-            error: function (err) {
-              alert(err.responseText);
+            });
+            
+        } //end:check_id()
+
+          function registerUser(f) {
+            let re_id = f.re_id.value.trim();
+            let re_password = f.re_password.value.trim();
+            let nickName = f.nickName.value.trim();
+            let name = f.name.value.trim();
+            let phone = f.phone.value.trim();
+            let addr = f.addr.value.trim();
+            let subAddr = f.subAddr.value.trim();
+
+            const re_idText = /^[a-zA-Z0-9]{4,20}$/; // 소문자, 대문자, 숫자 허용
+            const re_passwordText = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+            const nameText = /^[가-힣]+$/;
+            const nickNameText = /^[가-힣a-zA-Z0-9]{4,20}$/; // 한글, 영문(대소문자), 숫자 허용
+            const phoneText = /^\d{3}-\d{3,4}-\d{4}$/;
+
+            if (!re_id) {
+                alert("아이디를 입력하세요.");
+                f.re_id.focus();
+                return;
             }
-          });
-          }//end:check_id()
+            if (!re_idText.test(re_id)) {
+                alert("아이디는 4~20자의 영문 대소문자 또는 숫자여야 합니다.");
+                f.re_id.focus();
+                return;
+            }
 
-        function registerUser(f) {
-          let re_id = f.re_id.value.trim();
-          let re_password = f.re_password.value.trim();
-          let nickName = f.nickName.value.trim();
-          let name = f.name.value.trim();
-          let phone = f.phone.value.trim();
-          let addr = f.addr.value.trim();
-          let subAddr = f.subAddr.value.trim();
+            if (!re_password) {
+                alert("비밀번호를 입력하세요.");
+                f.re_password.focus();
+                return;
+            }
+            if (!re_passwordText.test(re_password)) {
+                alert("비밀번호는 최소 8자 이상, 하나 이상의 대문자, 소문자 및 특수문자를 포함해야 합니다.");
+                f.re_password.focus();
+                return;
+            }
 
-          if (re_id == '') {
-            alert("아이디를 입력하세요.");
-            f.re_id.value = "";
-            f.re_id.focus();
-            return;
+            if (!nickName) {
+                alert("닉네임을 입력하세요.");
+                f.nickName.focus();
+                return;
+            }
+            if (!nickNameText.test(nickName)) {
+                alert("닉네임은 4~20자 한글, 영문(대소문자) 또는 숫자여야 합니다.");
+                f.nickName.focus();
+                return;
+            }
+
+            if (!name) {
+                alert("이름을 입력하세요.");
+                f.name.focus();
+                return;
+            }
+            if (!nameText.test(name)) {
+                alert("이름은 한글로만 입력해야 합니다.");
+                f.name.focus();
+                return;
+            }
+
+            if (!phone) {
+                alert("전화번호를 입력하세요.");
+                f.phone.focus();
+                return;
+            }
+            if (!phoneText.test(phone)) {
+                alert("전화번호 형식이 올바르지 않습니다. 예: 010-1234-5678");
+                f.phone.focus();
+                return;
+            }
+
+            if (!addr) {
+                alert("주소를 입력하세요.");
+                f.addr.focus();
+                return;
+            }
+
+            if (!subAddr) {
+                alert("상세주소를 입력하세요.");
+                f.subAddr.focus();
+                return;
+            }
+
+            f.action = "${pageContext.request.contextPath}/user/insert.do";
+            f.submit();
           }
-
-          if (re_password == '') {
-            alert("비밀번호를 입력하세요.");
-            f.re_password.value = "";
-            f.re_password.focus();
-            return;
-          }
-
-          if (nickName == '') {
-            alert("닉네임을 입력하세요.");
-            f.nickName.value = "";
-            f.nickName.focus();
-            return;
-          }
-
-          if (name == '') {
-            alert("이름을 입력하세요.");
-            f.name.value = "";
-            f.name.focus();
-            return;
-          }
-
-          if (phone == '') {
-            alert("전화번호를 입력하세요.");
-            f.phone.value = "";
-            f.phone.focus();
-            return;
-          }
-
-          if (addr == '') {
-            alert("주소를 입력하세요.");
-            f.addr.value = "";
-            f.addr.focus();
-            return;
-          }
-
-          f.action = "${pageContext.request.contextPath}/user/insert.do";
-          f.submit();
-        }//end:registerUser()
 
         function registerEmailUser(f) {
           let em_id = f.em_id.value.trim();
