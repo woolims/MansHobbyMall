@@ -371,6 +371,7 @@
 
                                 <span style="font-size: 1.5em;">수량:</span> <input type="number" id="scamount"
                                     name="scamount" value="1" min="1" class="quantity-field">
+                                <p style="display: inline-block; font-size: 1.5em;"> 재고수량: ${shop.getAmount()}</p>
                                 <p id="product-description" class="description-box">${shop.getPEx()}</p>
                                 <div class="button-group">
                                     <button class="add-to-cart" onclick="addToCart()">장바구니에 추가</button>

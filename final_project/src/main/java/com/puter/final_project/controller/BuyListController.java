@@ -37,6 +37,10 @@ public class BuyListController {
 
         System.out.println(vo);
         int res = buyListMapper.insert(vo);
+
+        buyListMapper.updateAmount(vo);
+        
+
         int bIdx = buyListMapper.selectBuyListOne(vo);
 
         res = buyListMapper.orderInsert(bIdx);

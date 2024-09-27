@@ -44,4 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update buyList set status = 'canceled' where orderNumber = #{orderNumber}
     </update> -->
 
+    <update id="updateAmount" parameterType="buy">
+        update product set amount = amount - #{bamount} where pIdx = #{pIdx}
+    </update>
+
 </mapper>

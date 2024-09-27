@@ -116,6 +116,13 @@
             return;
         }
 
+        let amount = "${ shop.getAmount() }";
+        let scamount = $("#scamount").val();
+        if(amount - scamount < 0) {
+            alert("재고수량이 부족합니다.");
+            return;
+        }
+
         console.log("결제하려할 때 finalPrice : " + finalPrice);
 
         IMP.request_pay({
@@ -174,6 +181,13 @@
                 loginModal.style.display = "flex";
 
             }
+            return;
+        }
+
+        let amount = "${ shop.getAmount() }";
+        let scamount = $("#scamount").val();
+        if(amount - scamount < 0) {
+            alert("재고수량이 부족합니다.");
             return;
         }
 
@@ -236,6 +250,13 @@
                 loginModal.style.display = "flex";
 
             }
+            return;
+        }
+
+        let amount = "${ shop.getAmount() }";
+        let scamount = $("#scamount").val();
+        if(amount - scamount < 0) {
+            alert("재고수량이 부족합니다.");
             return;
         }
 
