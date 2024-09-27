@@ -123,7 +123,7 @@
                 pay_method: 'uplus',
                 merchant_uid: merchant_uid,
                 name: '${shop.getPName()}',
-                amount: finalPrice, // 쿠폰 할인 적용된 최종 금액
+                amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g, ''), // 쿠폰 할인 적용된 최종 금액
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
@@ -184,7 +184,7 @@
                 pay_method: 'tosspay',
                 merchant_uid: merchant_uid,
                 name: '${ shop.getPName() }',
-                amount: finalPrice, // 쿠폰 할인 적용된 최종 금액
+                amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g, ''), // 쿠폰 할인 적용된 최종 금액
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
@@ -246,7 +246,7 @@
                 pay_method: 'kakaopay',
                 merchant_uid: merchant_uid,
                 name: '${ shop.getPName() }',
-                amount: finalPrice, // 쿠폰 할인 적용된 최종 금액
+                amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g, ''), // 쿠폰 할인 적용된 최종 금액
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
