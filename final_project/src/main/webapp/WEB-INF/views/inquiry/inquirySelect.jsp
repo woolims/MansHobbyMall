@@ -156,7 +156,10 @@
                         <p><strong>작성자:</strong> ${ vo.name }</p>
                         <p><strong>작성일:</strong> ${ vo.inDate }</p>
                         <hr>
-                        <p>${ vo.inContent }</p>
+                        <p>${ vo.inContent }
+                            <img src="${pageContext.request.contextPath}/resources/images/inquiry/${vo.inPP}"
+                            alt="문의 이미지" style="width: 300px; height: 300px; object-fit: cover;">
+                        </p>
                     </div>
                 </div>
                 <button style="background-color: #303030; color: #f1f1f1;" type="button" class="btn btn-default"
