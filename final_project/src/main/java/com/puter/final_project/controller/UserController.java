@@ -210,6 +210,11 @@ public class UserController {
 	@RequestMapping("mypage.do")
 	public String mypage() {
 
+		UserVo user = (UserVo) session.getAttribute("user");
+		if (user == null) {
+			return "redirect:../home.do"; // 로그아웃 상태이면 홈으로 리다이렉트
+		}
+
 		return "shopPage/mypage";
 	}
 
@@ -303,15 +308,15 @@ public class UserController {
 	}
 
 	@RequestMapping("grade.do")
-    public String Grade(Model model) {
+	public String Grade(Model model) {
 
 		List<GradeVo> list = gradeMapper.selectList();
 
 		model.addAttribute("list", list);
 
-        return "myPage/grade";  // grade.jsp로 이동
-    }
-	
+		return "myPage/grade"; // grade.jsp로 이동
+	}
+
 	@PostMapping("addAddress.do")
 	@ResponseBody
 	public ResponseEntity<Map<String, String>> addAddress(@RequestBody DaddressVo daddress) {
@@ -322,7 +327,7 @@ public class UserController {
 			response.put("message", "주소가 성공적으로 추가되었습니다.");
 			return ResponseEntity.ok(response);
 		} else {
-			response.put("message", "주소 추가에 실패했습니다."+daddress.getUserIdx());
+			response.put("message", "주소 추가에 실패했습니다." + daddress.getUserIdx());
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
@@ -337,7 +342,7 @@ public class UserController {
 			response.put("message", "주소가 성공적으로 수정되었습니다.");
 			return ResponseEntity.ok(response);
 		} else {
-			response.put("message", "주소 수정에 실패했습니다."+daddress.getUserIdx());
+			response.put("message", "주소 수정에 실패했습니다." + daddress.getUserIdx());
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
@@ -357,7 +362,5 @@ public class UserController {
 			return ResponseEntity.badRequest().body(response);
 		}
 	}
-
-
 
 }
