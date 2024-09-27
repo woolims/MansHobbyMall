@@ -33,7 +33,7 @@ public class NaverSearchService {
 
     public void searchAndSave( int categoryNo, String mcategoryName, String dcategoryName) {
         RestTemplate restTemplate = new RestTemplate();
-        String url = "https://openapi.naver.com/v1/search/shop.json?&query=" + dcategoryName + "&category3=" + dcategoryName;
+        String url = "https://openapi.naver.com/v1/search/shop.json?&query=" + dcategoryName + "&category3=" + dcategoryName + "&display=" + 30;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", clientId);

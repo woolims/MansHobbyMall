@@ -264,27 +264,25 @@
                   let product = $("#product");
                   product.empty();
                   productHtml = ``;
-
                   $.each(res_data, function (index, pVo) {
                     productHtml += `<div class="col-sm-3">
                       <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`
                     if (pVo.fileNameLink == 'Y') {
-                      productHtml += `<div>
-                                        <img src="\${pVo.fileName}" alt="상품이미지">
-                                      </div>
-                           <div class="product-name">\${pVo.pname}</div>
-                         <div class="product-price">\${pVo.price} 원</div>
-                       </div>
-                     </div>`
+                      productHtml +=
+                        `<div>
+                            <img src="\${pVo.fileName}" alt="상품이미지">
+                          </div>`
                     } else if (pVo.fileNameLink == 'N') {
-                      productHtml += `<div>
-                                        <img src="/resources/images/\${pVo.fileName}" alt="상품이미지">
-                                      </div>
+                      productHtml +=
+                        `<div>
+                            <img src="/resources/images/\${pVo.fileName}" alt="상품이미지">
+                          </div>`;
+                    }
+                    productHtml += `
                            <div class="product-name">\${pVo.pname}</div>
                          <div class="product-price">\${pVo.price} 원</div>
                        </div>
                      </div>`
-                    };
                   });
                   product.html(productHtml);
                 }
@@ -329,6 +327,65 @@
                 });
               }
             };
+
+            function SportsSearch() {
+              let searchParam = $("#search").val().trim();
+              let categoryName = "${shop.categoryName}";
+              let mcategoryName = $("#mcategorySearch").val();
+              let dcategoryName = $("#dcategorySearch").val();
+
+              $.ajax({
+                url: "/shop/shopAjaxProductList.do",
+                data: {
+                  "searchParam": searchParam,
+                  "categoryName": categoryName,
+                  "mcategoryName": mcategoryName,
+                  "dcategoryName": dcategoryName
+                },
+                dataType: "json",
+                method: 'GET',
+                success: function (res_data) {
+                  if (res_data.length == 0) {
+                    alert("검색결과가 없습니다");
+                    return;
+                  }
+                  console.log(res_data);
+                  $("#product").empty();
+                  var productHtml = ``;
+                  $.each(res_data, function (index, pVo) {
+                    productHtml += `
+                        <div class="col-sm-3">
+                          <div class="product-card"
+                            onclick="location.href='productOne.do?categoryNo=\${pVo.getCategoryNo()}&pIdx=\${pVo.getPIdx()}';">`;
+                    if ("\${pVo.fileNameLink == 'Y'}") {
+                      productHtml += `
+                              <div>
+                                <img src="\${pVo.fileName}" alt="상품이미지">
+                              </div>
+                              `;
+                    } else if ("\${pVo.fileNameLink == 'N'}") {
+                      productHtml += `
+                              <div>
+                                <img src="/resources/images/\${pVo.fileName}"
+                                  alt="상품이미지">
+                              </div>
+                              `;
+                    }
+                    productHtml += `
+                            <div class="product-name">\${pVo.getPName()}</div>
+                            <div class="product-price">\${pVo.getPrice()} 원</div>
+                          </div>
+                        </div>`;
+                  });
+                  // HTML을 특정 컨테이너에 삽입
+                  $("#product").html(productHtml);
+                },
+                error: function (err) {
+                  console.log(err.responseText);
+                }
+              });
+              return;
+            }
           </script>
         </head>
 
@@ -380,17 +437,21 @@
                   </a>
                 </div>
               </div>
-
               <div id="category-box">
                 <h2>Sports</h2>
                 <h3>category</h3>
                 <div id="mcategory">
                   <c:forEach var="shopM" items="${mCategoryNameList}">
                     <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
-                      value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);" style="display: block; margin: auto;">
+                      value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);"
+                      style="display: block; margin: auto;">
                   </c:forEach>
                 </div>
                 <div id="dcategory">
+                </div>
+                <div>
+                  <input type="text" id="search" placeholder="상품명을 입력하세요">
+                  <input type="button" class="btn btn-default" id="searchBtn" value="검색" onclick="SportsSearch();">
                 </div>
               </div>
 
