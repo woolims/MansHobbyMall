@@ -1,5 +1,7 @@
 package com.puter.final_project.controller;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.puter.final_project.dao.InquiryMapper;
 import com.puter.final_project.vo.AnswerVo;
@@ -47,10 +51,10 @@ public class InquiryController {
         // 이름 + 제목
         // if (search.equals("name")) {
 
-        //     map.put("name", search_text);
-        //     map.put("inType", search_text);
+        // map.put("name", search_text);
+        // map.put("inType", search_text);
 
-        // } else 
+        // } else
         if (search.equals("id")) { // search == "name" (X)
 
             // 이름
@@ -74,7 +78,7 @@ public class InquiryController {
         model.addAttribute("list", list);
         model.addAttribute("answerMap", answerMap);
         model.addAttribute("search", search);
-	    model.addAttribute("search_text", search_text);
+        model.addAttribute("search_text", search_text);
 
         return "inquiry/inquiry";
     }
@@ -99,16 +103,56 @@ public class InquiryController {
 
     // 게시글 작성
     @RequestMapping("inquiryWrite.do")
-    public String inquiryWrite(InquiryVo vo) {
+    public String inquiryWrite(InquiryVo vo, String url, HttpSession session, Model model,
+            @RequestParam("inquiryImg") List<MultipartFile> inPP,
+            HttpServletRequest request) {
 
         UserVo user = (UserVo) session.getAttribute("user");
 
         vo.setUserIdx(user.getUserIdx());
 
-        int res = inquiryMapper.inquiryInsert(vo);
+
+
+        // 이미지 저장 경로 설정
+        String absPath = request.getServletContext().getRealPath("/resources/images/inquiry/");
+        List<String> filenameList = new ArrayList<>();
+
+        for (MultipartFile file : inPP) {
+            if (!file.isEmpty()) {
+                String filename = file.getOriginalFilename();
+                File f = new File(absPath, filename);
+
+                // 동일한 파일이 존재할 경우 파일명 변경
+                if (f.exists()) {
+                    long tm = System.currentTimeMillis();
+                    filename = String.format("%d_%s", tm, filename);
+                    f = new File(absPath, filename);
+                }
+
+                // 파일 저장
+                try {
+                    file.transferTo(f);
+                    filenameList.add(filename);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    model.addAttribute("error", "이미지 업로드에 실패했습니다.");
+                    return "redirect:inquiry.do";
+                }
+            }
+        }
+
+        // 모든 이미지 파일명을 ReviewVo에 저장 (여러 이미지를 처리)
+        if (!filenameList.isEmpty()) {
+            for (String filename : filenameList) {
+                // 이미지 정보를 DB에 저장하는 로직 추가
+                vo.setInPP(filename); // 각 이미지 파일명을 설정
+                int res = inquiryMapper.inquiryInsert(vo);
+            }
+        }
 
         return "redirect:inquiry.do";
     }
+
 
     // 게시글 삭제
     @RequestMapping("inquiryDelete.do")
@@ -138,7 +182,5 @@ public class InquiryController {
 
         return "redirect:inquiry.do";
     }
-
-    
 
 }

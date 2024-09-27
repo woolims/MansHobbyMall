@@ -51,6 +51,12 @@
                 return;
             }
 
+            if (f.inPP.files.length === 0) {
+                            if (!confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?")) return;
+                        } else if (!confirm("등록하시겠습니까?")) return;
+
+            f.method = "POST";
+            f.enctype = "multipart/form-data";
             f.action = "inquiryWrite.do"; // 전송대상
             f.submit(); // 전송
         }
@@ -74,6 +80,9 @@
                             <option value="칭찬">칭찬</option>
                             <option value="기타">기타</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="inquiryImg" id="inPP">
                     </div>
                     <div class="form-group" style="color: black;">
                         <label for="content" style="color: black;">내용</label>
