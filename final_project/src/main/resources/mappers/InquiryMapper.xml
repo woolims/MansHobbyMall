@@ -44,8 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   <select id="selectByCondition" parameterType="Map" resultType="inquiry">
     select * from InquiryView
     <trim prefix="where" prefixOverrides="or">
-      <if test="name != null">
-            name like CONCAT('%', #{name}, '%')
+      <if test="id != null">
+            id like CONCAT('%', #{id}, '%')
       </if>
       <if test="inType != null">
             or inType like CONCAT('%', #{inType}, '%')

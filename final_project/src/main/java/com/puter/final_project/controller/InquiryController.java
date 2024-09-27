@@ -45,15 +45,16 @@ public class InquiryController {
         Map<String, String> map = new HashMap<String, String>();
 
         // 이름 + 제목
-        if (search.equals("name")) {
+        // if (search.equals("name")) {
 
-            map.put("name", search_text);
-            map.put("inType", search_text);
+        //     map.put("name", search_text);
+        //     map.put("inType", search_text);
 
-        } else if (search.equals("name")) { // search == "name" (X)
+        // } else 
+        if (search.equals("id")) { // search == "name" (X)
 
             // 이름
-            map.put("name", search_text);
+            map.put("id", search_text);
 
         } else if (search.equals("inType")) {
 

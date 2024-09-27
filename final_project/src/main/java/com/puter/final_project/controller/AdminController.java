@@ -93,7 +93,7 @@ public class AdminController {
 
         return "shopPage/adminMain";
     }
-
+    
     @RequestMapping("adminAjax.do")
     @ResponseBody
     public List<ShopVo> adminAjax(@RequestParam(defaultValue = "대분류 선택") String categoryName, String mcategoryName) {

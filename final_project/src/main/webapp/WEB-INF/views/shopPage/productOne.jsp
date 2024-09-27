@@ -349,9 +349,17 @@
                         <div class="product-container">
                             <c:forEach var="product" items="${product}">
                                 <div class="product-image">
-                                    <img id="product-image"
-                                        src="${pageContext.request.contextPath}/resources/images/${product.getFileName()}"
-                                        alt="상품 이미지" class="img-responsive">
+                                    <c:if test="${product.fileNameLink == 'Y'}">
+                                        <div>
+                                            <img src="${product.fileName}" alt="상품이미지">
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${product.fileNameLink == 'N'}">
+                                        <div>
+                                            <img src="${ pageContext.request.contextPath }/resources/images/${product.fileName}"
+                                                alt="상품이미지">
+                                        </div>
+                                    </c:if>
                                 </div>
                             </c:forEach>
 

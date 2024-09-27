@@ -28,7 +28,7 @@ public interface ShopMapper {
     
     List<ShopVo> selectdCategoryNameList(int mCategoryNo);
     
-    int selectDCategoryNo(ShopVo shop);
+    // int selectDCategoryNo(ShopVo shop);
     
     List<ProductVo> selectProductMCategoryList(int mCategoryNo);
     
@@ -93,7 +93,7 @@ public interface ShopMapper {
 
     String selectCategoryName(int categoryNo);
 
-    int selectdCategoryNo(ShopVo shopVo);
+    int selectDcategoryNo(ShopVo shopVo);
 
     ProductVo selectFileName(int pIdx);
 
