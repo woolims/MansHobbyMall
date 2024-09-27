@@ -66,16 +66,16 @@
                             $("#price").focus();
                             return;
                         }
-                        
+
                         if (pEx == "") {
                             alert("상품설명을 입력하세요");
                             $("#pEx").focus();
                             return;
                         }
-                        if(photo[0].files.length == 0) {
-                            if(confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?") == false)
-                            return;
-                        }else if (confirm("등록하시겠습니까?") == false) return;
+                        if (photo[0].files.length == 0) {
+                            if (confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?") == false)
+                                return;
+                        } else if (confirm("등록하시겠습니까?") == false) return;
 
                         f.method = "POST";
                         f.enctype = "multipart/form-data";

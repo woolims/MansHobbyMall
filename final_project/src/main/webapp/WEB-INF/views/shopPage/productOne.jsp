@@ -39,7 +39,7 @@
 
                     .product-image img {
                         max-width: 100%;
-                        height: auto;
+                        height: 95%;
                     }
 
                     .product-details h1 {
@@ -59,8 +59,11 @@
 
                     .product-details .add-to-cart:hover,
                     .share-to-other:hover {
-                        background-color: rgb(39, 39, 94) !important;
-                        color: white !important;
+                        background-color: #f5f1f1 !important;
+                        color: #00bcd4 !important;
+                        transition: background-color 0.3s ease, color 0.3s ease;
+                        border: 1px solid #f5f1f1;
+
                     }
 
                     .quantity-box {

@@ -14,6 +14,61 @@
                 <meta charset="UTF-8">
                 <title>상품수정</title>
 
+                <style>
+                    body {
+                        padding: 20px;
+                        background-color: #f7f7f7;
+                    }
+
+                    .form-container {
+                        background-color: #fff;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                    }
+
+                    table {
+                        width: 100%;
+                    }
+
+                    th,
+                    td {
+                        padding: 10px;
+                        text-align: left;
+                    }
+
+                    th {
+                        background-color: #f8f8f8;
+                        border-bottom: 1px solid #ddd;
+                    }
+
+                    td input,
+                    td select,
+                    td textarea {
+                        width: 100%;
+                        padding: 8px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                    }
+
+                    #pImgTable img {
+                        width: 100%;
+                        height: auto;
+                        border-radius: 5px;
+                    }
+
+                    .btn {
+                        width: 120px;
+                    }
+
+                    .form-actions {
+                        text-align: center;
+                        margin-top: 20px;
+                    }
+                </style>
+
+
+
                 <script>
                     function pUpdate(f) {
 
@@ -24,20 +79,20 @@
                         let categoryName = $("#categorySearch").val();
                         let mcategoryName = $("#mcategorySearch").val();
                         let dcategoryName = $("#dcategorySearch").val();
-                        let amount = $("#amount").val(); 
+                        let amount = $("#amount").val();
 
-                        
+
                         const numberRegex = /^[0-9]+$/;
 
-                        if(categoryName=='대분류 선택'){
+                        if (categoryName == '대분류 선택') {
                             alert("대분류를 선택하세요");
                             return;
                         }
-                        if(mcategoryName=='중분류 선택'){
+                        if (mcategoryName == '중분류 선택') {
                             alert("중분류를 선택하세요");
                             return;
                         }
-                        if(dcategoryName=='소분류 선택'){
+                        if (dcategoryName == '소분류 선택') {
                             alert("소분류를 선택하세요");
                             return;
                         }
@@ -83,12 +138,12 @@
                         f.submit();
                     }
 
-                    function mcategoryNameSearch(val){
-                        if($("#categorySearch").val()=='대분류 선택') {
+                    function mcategoryNameSearch(val) {
+                        if ($("#categorySearch").val() == '대분류 선택') {
                             let categoryName = val;
                             $.ajax({
                                 url: "/admin/adminAjax.do",
-                                data: {"categoryName": categoryName},
+                                data: { "categoryName": categoryName },
                                 dataType: "json",
                                 method: 'GET',
                                 success: function (data) {
@@ -109,7 +164,7 @@
                         let categoryName = val;
                         $.ajax({
                             url: "/admin/adminAjax.do",
-                            data: {"categoryName": categoryName},
+                            data: { "categoryName": categoryName },
                             dataType: "json",
                             method: 'GET',
                             success: function (data) {
@@ -120,7 +175,7 @@
                                 mselect.append($('<option disabled selected hidden></option>').val('중분류 선택').text('중분류 선택'))
                                 dselect.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))
                                 // 데이터가 배열이라고 가정하고 수정
-                                $.each(data, function(index, item) {
+                                $.each(data, function (index, item) {
                                     // 옵션 생성
                                     mselect.append($('<option></option>').val(item.mcategoryName).text(item.mcategoryName));
                                 });
@@ -131,62 +186,62 @@
                         });
                     }
 
-                function dcategoryNameSearch(val){
-                    if($("#mcategorySearch").val()=='중분류 선택') {
+                    function dcategoryNameSearch(val) {
+                        if ($("#mcategorySearch").val() == '중분류 선택') {
+                            let mcategoryName = val;
+                            $.ajax({
+                                url: "/admin/adminAjax.do",
+                                data: { "mcategoryName": mcategoryName },
+                                dataType: "json",
+                                method: 'GET',
+                                success: function (data) {
+                                    var dSelect = $('#dcategorySearch');
+                                    dSelect.empty();
+                                    dSelect.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))
+                                },
+                                error: function (err) {
+                                    console.log(err.responseText);
+                                }
+                            });
+                            return;
+                        }
+
                         let mcategoryName = val;
                         $.ajax({
                             url: "/admin/adminAjax.do",
-                            data: {"mcategoryName": mcategoryName},
+                            data: { "mcategoryName": mcategoryName },
                             dataType: "json",
                             method: 'GET',
                             success: function (data) {
-                                var dSelect = $('#dcategorySearch');
-                                dSelect.empty();
-                                dSelect.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))
+                                var select = $('#dcategorySearch');
+                                select.empty();
+                                select.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))
+                                $.each(data, function (index, item) {
+                                    select.append($('<option></option>').val(item.dcategoryName).text(item.dcategoryName));
+                                });
                             },
                             error: function (err) {
                                 console.log(err.responseText);
                             }
                         });
-                        return;
                     }
 
-                    let mcategoryName = val;
-                    $.ajax({
-                        url: "/admin/adminAjax.do",
-                        data: {"mcategoryName": mcategoryName},
-                        dataType: "json",
-                        method: 'GET',
-                        success: function (data) {
-                            var select = $('#dcategorySearch');
-                            select.empty();
-                            select.append($('<option disabled selected hidden></option>').val('소분류 선택').text('소분류 선택'))
-                            $.each(data, function(index, item) {
-                                select.append($('<option></option>').val(item.dcategoryName).text(item.dcategoryName));
-                            });
-                        },
-                        error: function (err) {
-                            console.log(err.responseText);
-                        }
-                    });
-                }
+                    function updateCancel() {
+                        if (confirm("수정을 취소하시겠습니까?\n내용은 저장되지 않습니다.") == false) return;
+                        location.href = '/admin/admin.do'
+                    }
 
-                function updateCancel(){
-                    if(confirm("수정을 취소하시겠습니까?\n내용은 저장되지 않습니다.")==false) return;
-                    location.href='/admin/admin.do'
-                }
-
-                function pImageDelete(fileName, fileIdx , pIdx){
-                    if(confirm("이미지를 삭제하시겠습니까?")==false) return;
-                    $.ajax({
-                        url: "/admin/pImageDelete.do",
-                        data: {"fileIdx" : fileIdx, "pIdx" : pIdx, "fileName" : fileName},
-                        dataType: "json",
-                        method: 'POST',
-                        success: function (res_data) {
-                            let pImgTable = $("#pImgTable");
-                            pImgTable.empty();
-                            let pImgTableHtml = `
+                    function pImageDelete(fileName, fileIdx, pIdx) {
+                        if (confirm("이미지를 삭제하시겠습니까?") == false) return;
+                        $.ajax({
+                            url: "/admin/pImageDelete.do",
+                            data: { "fileIdx": fileIdx, "pIdx": pIdx, "fileName": fileName },
+                            dataType: "json",
+                            method: 'POST',
+                            success: function (res_data) {
+                                let pImgTable = $("#pImgTable");
+                                pImgTable.empty();
+                                let pImgTableHtml = `
                                 <tr>
                                     <th>상품사진</th>
                                     <td><input type="file" name="photo" id="pImg" multiple></td>
@@ -195,36 +250,37 @@
                                     <th>현재등록된 상품사진</th>
                                     `;
 
-                            if (res_data.length == 0 || res_data == null) {
-                                pImgTableHtml += `등록된 사진이 없습니다`;
-                            }else {
-                                $.each(res_data, function (i, photoList) {
-                                    pImgTableHtml += `
+                                if (res_data.length == 0 || res_data == null) {
+                                    pImgTableHtml += `등록된 사진이 없습니다`;
+                                } else {
+                                    $.each(res_data, function (i, photoList) {
+                                        pImgTableHtml += `
                                     <td style="display: inline-block; width: 200px; height: 160px;"><img src="/resources/images/\${photoList.fileName}"
                                     onclick="pImageDelete('\${photoList.fileName}', 
                                     '\${photoList.fileIdx}', '\${photoList.pidx}')">
                                     </td>`;
-                                });
-                            }
-                            pImgTableHtml += `
+                                    });
+                                }
+                                pImgTableHtml += `
                                 </tr>`;
 
-                            // HTML을 특정 컨테이너에 추가
-                            $('#pImgTable').html(pImgTableHtml);
-                        },
-                        error: function (err) {
-                            console.log(err.responseText);
-                        }
-                    });
-                }
+                                // HTML을 특정 컨테이너에 추가
+                                $('#pImgTable').html(pImgTableHtml);
+                            },
+                            error: function (err) {
+                                console.log(err.responseText);
+                            }
+                        });
+                    }
                 </script>
 
                 <style>
                     textarea {
                         resize: none;
                     }
-                    img{
-                        width: 100%; 
+
+                    img {
+                        width: 100%;
                         height: 100%;
                     }
                 </style>
@@ -232,74 +288,91 @@
             </head>
 
             <body>
-                <form>
-                    <table>
-                        <tr>
-                            <th>상품번호</th>
-                            <td><input type="text" class="form-control" value="${shop.getPIdx()}" id="pIdx" name="pIdx"
-                                    readonly="readonly">
-                            </td>
-                        </tr>
-                        <tr>
-                            <select name="categoryName" id="categorySearch" onchange="mcategoryNameSearch(this.value);">
-                                <option value="${shop.categoryName}" hidden selected>${shop.categoryName}</option>
-                                <c:forEach var="vo" items="${categoryName}">
-                                    <option value="${vo.categoryName}">${vo.categoryName}</option>
-                                </c:forEach>
-                            </select>
-                            <br>
-                            <select name="mcategoryName" id="mcategorySearch" onchange="dcategoryNameSearch(this.value);">
-                                <option value="${shop.mcategoryName}">${shop.mcategoryName}</option>
-                            </select>
-                            <br>
-                            <select name="dcategoryName" id="dcategorySearch">
-                                <option value="${shop.dcategoryName}">${shop.dcategoryName}</option>
-                            </select>
-                        </tr>
-                        <tr>
-                            <th>상품이름</th>
-                            <td><input type="text" class="form-control" value="${shop.getPName()}" name="pName" id="pName"></td>
-                        </tr>
-                        <tr>
-                            <th>상품수량</th>
-                            <td><input type="text" class="form-control" value="${shop.getAmount()}" name="amount" id="amount"></td>
-                        </tr>
-                        <tr>
-                            <th>상품가격</th>
-                            <td><input type="text" class="form-control" value="${shop.price}" name="price" id="price"></td>
-                        </tr>
+                <div class="container form-container">
+                    <h2 class="text-center">상품 수정</h2>
+                    <form>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>상품번호</th>
+                                <td><input type="text" class="form-control" value="${shop.getPIdx()}" id="pIdx"
+                                        name="pIdx" readonly="readonly"></td>
+                            </tr>
+                            <tr>
+                                <th>카테고리</th>
+                                <td>
+                                    <select class="form-control" name="categoryName" id="categorySearch"
+                                        onchange="mcategoryNameSearch(this.value);">
+                                        <option value="${shop.categoryName}" hidden selected>${shop.categoryName}
+                                        </option>
+                                        <c:forEach var="vo" items="${categoryName}">
+                                            <option value="${vo.categoryName}">${vo.categoryName}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <br>
+                                    <select class="form-control" name="mcategoryName" id="mcategorySearch"
+                                        onchange="dcategoryNameSearch(this.value);">
+                                        <option value="${shop.mcategoryName}">${shop.mcategoryName}</option>
+                                    </select>
+                                    <br>
+                                    <select class="form-control" name="dcategoryName" id="dcategorySearch">
+                                        <option value="${shop.dcategoryName}">${shop.dcategoryName}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>상품이름</th>
+                                <td><input type="text" class="form-control" value="${shop.getPName()}" name="pName"
+                                        id="pName"></td>
+                            </tr>
+                            <tr>
+                                <th>상품수량</th>
+                                <td><input type="text" class="form-control" value="${shop.getAmount()}" name="amount"
+                                        id="amount"></td>
+                            </tr>
+                            <tr>
+                                <th>상품가격</th>
+                                <td><input type="text" class="form-control" value="${shop.price}" name="price"
+                                        id="price"></td>
+                            </tr>
+                        </table>
 
-                    </table>
-                    <table id="pImgTable">
-                        <tr>
-                            <th>상품사진</th>
-                            <td><input type="file" name="photo" id="pImg" multiple></td>
-                        </tr>
-                        <tr>
-                            <th>현재등록된 상품사진</th>
-                            <c:if test="${empty pImageList}">
-                                <td>등록된 사진이 없습니다</td>
-                            </c:if>
-                            <c:if test="${not empty pImageList && pImageList.size() != 0}">
-                                <c:forEach var="vo" items="${pImageList}">
-                                    <td style="display: inline-block; width: 200px; height: 160px;">
-                                        <img style="width: 100%; height: 100%;" 
-                                        src="${ pageContext.request.contextPath }/resources/images/${vo.fileName}"
-                                        onclick="pImageDelete('${vo.fileName}', '${vo.fileIdx}', '${vo.getPIdx()}')"></td>
-                                </c:forEach>
-                            </c:if>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr>
-                            <th>상품설명</th>
-                            <td><textarea name="pEx" id="pEx" cols="50" rows="20">${pEx}</textarea></td>
-                        </tr>
-                    </table>
-                    <input type="button" class="btn btn-default" id="updateBtn" value="수정하기"
-                        onclick="pUpdate(this.form);">
-                    <input type="button" class="btn btn-danger" id="canselBtn" value="수정취소" onclick="updateCancel();">
-                </form>
+                        <table class="table table-bordered" id="pImgTable">
+                            <tr>
+                                <th>상품사진</th>
+                                <td><input type="file" name="photo" id="pImg" multiple></td>
+                            </tr>
+                            <tr>
+                                <th>현재등록된 상품사진</th>
+                                <c:if test="${empty pImageList}">
+                                    <td>등록된 사진이 없습니다</td>
+                                </c:if>
+                                <c:if test="${not empty pImageList && pImageList.size() != 0}">
+                                    <c:forEach var="vo" items="${pImageList}">
+                                        <td style="width: 200px; height: auto;">
+                                            <img src="${ pageContext.request.contextPath }/resources/images/${vo.fileName}"
+                                                onclick="pImageDelete('${vo.fileName}', '${vo.fileIdx}', '${vo.getPIdx()}')">
+                                        </td>
+                                    </c:forEach>
+                                </c:if>
+                            </tr>
+                        </table>
+
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>상품설명</th>
+                                <td><textarea name="pEx" id="pEx" cols="50" rows="5"
+                                        class="form-control">${pEx}</textarea></td>
+                            </tr>
+                        </table>
+
+                        <div class="form-actions">
+                            <input type="button" class="btn btn-primary" id="updateBtn" value="수정하기"
+                                onclick="pUpdate(this.form);">
+                            <input type="button" class="btn btn-danger" id="canselBtn" value="수정취소"
+                                onclick="updateCancel();">
+                        </div>
+                    </form>
+                </div>
             </body>
 
             </html>
