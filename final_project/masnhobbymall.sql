@@ -70,9 +70,9 @@ CREATE TABLE DAddress (
 -- GCondition 테이블
 CREATE TABLE GCondition (
     jIdx int PRIMARY KEY AUTO_INCREMENT,
-    userIdx int NOT NULL,
-    bpAmount BIGINT NOT NULL DEFAULT 0,
-    rCount int NOT NULL DEFAULT 0,
+    gIdx int NOT NULL,
+    bpAmount BIGINT NOT NULL,
+    rCount int NOT NULL,
     FOREIGN KEY (gIdx) REFERENCES Grade (gIdx) ON DELETE CASCADE
 );
 
