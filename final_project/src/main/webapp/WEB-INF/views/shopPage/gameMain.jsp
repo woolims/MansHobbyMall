@@ -246,6 +246,12 @@
             function dCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
               let dcategoryNo_param = id.id;
+
+              // 모든 소분류의 highlight 클래스 제거
+              $('#dcategory input').removeClass('highlight');
+
+              // 클릭된 소분류에 highlight 클래스 추가z
+              $(id).addClass('highlight');
               
               $.ajax({
                 url: "/productAjax.do",

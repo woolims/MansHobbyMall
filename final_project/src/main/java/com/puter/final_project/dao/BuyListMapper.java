@@ -20,4 +20,7 @@ public interface BuyListMapper {
 
     public List<BuyListVo> selectBuyList();
 
+    // 재고수량 업데이트
+    public int updateAmount(BuyListVo vo);
+
 }
