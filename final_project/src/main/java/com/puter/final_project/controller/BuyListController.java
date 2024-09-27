@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.puter.final_project.dao.BuyListMapper;
 import com.puter.final_project.dao.CouponBoxMapper;
+import com.puter.final_project.dao.UserActivityMapper;
 import com.puter.final_project.vo.BuyListVo;
+import com.puter.final_project.vo.UserActivityVo;
 import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +29,9 @@ public class BuyListController {
     BuyListMapper buyListMapper;
 
     @Autowired
+    UserActivityMapper userActivityMapper;
+
+    @Autowired
     CouponBoxMapper couponBoxMapper;
 
     @RequestMapping(value = "/buy.do", produces = "application/json; charset=utf-8")
@@ -35,11 +40,17 @@ public class BuyListController {
         System.out.println("BuyListVo: " + vo);
         System.out.println("Received couponid: " + couponid);
 
+        UserActivityVo userActVo = new UserActivityVo();
+        userActVo.setUserIdx(vo.getUserIdx());
+        userActVo.setTotalPurchaseAmount(vo.getBuyPrice());
+
         System.out.println(vo);
         int res = buyListMapper.insert(vo);
         int bIdx = buyListMapper.selectBuyListOne(vo);
 
         res = buyListMapper.orderInsert(bIdx);
+        res = userActivityMapper.updateTotalBuyPlus(userActVo);
+        res = userActivityMapper.callUpdateUserGrade(userActVo.getUserIdx());
 
         if (res > 0) {
             // 쿠폰 사용 처리: couponid가 있을 경우 N -> Y로 업데이트

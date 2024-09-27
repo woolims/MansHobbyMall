@@ -239,14 +239,14 @@
             return;
         }
 
-        console.log("결제하려할 때 finalPrice : " + finalPrice);
+        console.log("결제하려할 때 finalPrice : " + document.getElementById('finalPrice').textContent.replace(/[^0-9]/g, ''));
 
         IMP.request_pay({
             pg: "kakaopay",
             pay_method: 'kakaopay',
             merchant_uid: merchant_uid,
             name: '${ shop.getPName() }',
-            amount: finalPrice, // 쿠폰 할인 적용된 최종 금액
+            amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g, ''), // 쿠폰 할인 적용된 최종 금액
             buyer_email: '${ user.id }',
             buyer_name: '${ user.name }',
             buyer_tel: '${ user.phone }',
