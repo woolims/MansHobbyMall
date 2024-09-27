@@ -85,9 +85,9 @@
                     <form action="" class="form-inline">
                         <select id="search" class="form-control">
                             <option value="all">전체보기</option>
-                            <option value="name">이름</option>
+                            <option value="id">아이디</option>
                             <option value="inType">제목</option>
-                            <option value="name_content">이름+제목</option>
+                            <!-- <option value="name_content">이름+제목</option> -->
                         </select>
 
                         <input id="search_text" class="form-control" value="${ param.search_text }">
@@ -99,8 +99,9 @@
                         ">
                     <thead>
                         <tr>
-                            <th style="text-align: center;">번호</th>
-                            <th style="width: 45%; text-align: center;">제목</th>
+                            <th style="width: 10%; text-align: center;">번호</th>
+                            <th style="width: 15%; text-align: center;">아이디</th>
+                            <th style="width: 40%; text-align: center;">제목</th>
                             <th style="width: 25%; text-align: center;">작성일</th>
                             <th style="width: 20%; text-align: center;">답변 여부</th>
                         </tr>
@@ -111,34 +112,43 @@
                             <c:forEach var="vo" items="${list}">
                                 <c:if test="${vo.inAc eq 'Y'}">
                                     <tr">
-                                        <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">공지사항</td>
-                                        <td style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030; ">${vo.inType}</td>
-                                        <td style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030; ">${vo.inDate}</td>
-                                        <td style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; "></td>
-                                    </tr>
+                                        <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">공지사항
+                                        </td>
+                                        <td
+                                            style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030; ">
+                                            ${vo.inType}</td>
+                                        <td
+                                            style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030; ">
+                                            ${vo.inDate}</td>
+                                        <td
+                                            style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; ">
+                                        </td>
+                                        </tr>
                                 </c:if>
                             </c:forEach>
                             <c:forEach var="vo" items="${list}">
                                 <c:if test="${vo.inAc ne 'Y'}">
-                                <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
-                                    <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
-                                        ${vo.inIdx}</td>
-                                    <td
-                                        style="width: 45%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                        ${vo.inType}</td>
-                                    <td
-                                        style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                        ${vo.inDate}
-                                    </td>
-                                    <td
-                                        style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                        <c:choose>
-                                            <c:when test="${answerMap[vo.inIdx] eq true}">답변 완료</c:when>
-                                            <c:otherwise>답변 미완료</c:otherwise>
-                                        </c:choose>
-                                    </td>
-                                </tr>
-                            </c:if>
+                                    <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
+                                        <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
+                                            ${vo.inIdx}</td>
+                                        <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
+                                            ${vo.id}</td>
+                                        <td
+                                            style="width: 45%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                            ${vo.inType}</td>
+                                        <td
+                                            style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                            ${vo.inDate}
+                                        </td>
+                                        <td
+                                            style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                            <c:choose>
+                                                <c:when test="${answerMap[vo.inIdx] eq true}">답변 완료</c:when>
+                                                <c:otherwise>답변 미완료</c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                    </tr>
+                                </c:if>
                             </c:forEach>
                         </c:if>
                     </tbody>
