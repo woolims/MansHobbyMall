@@ -174,7 +174,7 @@
                         `<div>
                              <img src="\${pVo.fileName}" alt="상품이미지">
                            </div>`
-                    } else if (pVo.fileNameLink == 'Y') {
+                    } else if (pVo.fileNameLink == 'N') {
                       productHtml +=
                         `<div>
                              <img src="/resources/images/\${pVo.fileName}"

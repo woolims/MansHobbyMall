@@ -211,20 +211,19 @@
         }
 
         function dcategoryName(val) {
+            let categoryName = $("#categorySearch").val();
             if (val == '선택 안 함') {
                 let mcategoryName = val;
                 $.ajax({
                     url: "/admin/adminAjax.do",
                     data: {
-                        "mcategoryName": mcategoryName
+                        "mcategoryName": mcategoryName,"categoryName":categoryName
                     },
                     dataType: "json",
                     method: 'GET',
                     success: function (res_data) {
                         var dSelect = $('#dcategorySearch');
                         dSelect.empty();
-                        dSelect.append($('<option disabled selected hidden></option>').val('소분류 선택').text(
-                            '소분류 선택'))
                         dSelect.append($('<option></option>').val('선택 안 함').text('선택 안 함'))
                     },
                     error: function (err) {
@@ -237,7 +236,7 @@
             $.ajax({
                 url: "/admin/adminAjax.do",
                 data: {
-                    "mcategoryName": mcategoryName
+                    "mcategoryName": mcategoryName,"categoryName": categoryName
                 },
                 dataType: "json",
                 method: 'GET',
@@ -328,6 +327,10 @@
                         console.log(err.responseText);
                     }
                 });
+            }else if(categoryName == "전체보기" && searchParam != ""){
+                alert("카테고리가 '전체선택'일 경우 검색어를 입력할 수 없습니다.")
+                f.searchParam.value="";
+                return;
             }
 
             if (mcategoryName == '선택 안 함') {
