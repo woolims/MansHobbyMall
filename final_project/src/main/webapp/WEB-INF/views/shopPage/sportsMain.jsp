@@ -134,24 +134,23 @@
             }
 
             #category-box {
+              display: inline-block;
               position: fixed;
               /* 고정 위치 설정 */
-              top: 20px;
+              top: 113px;
               /* 상단에서의 거리 조정 */
-              left: 50%;
-              /* 중앙 정렬 */
-              transform: translateX(-50%);
-              /* 중앙 정렬 보정 */
-              width: 73%;
+              left: 20px;
+              /* 왼쪽에서의 거리 조정 */
+              width: 190px;
               /* 너비 설정 */
+              /* height: 33%; */
+              /* 전체 높이에서 여백을 뺀 값 */
+              background-color: #fff;
+              /* 배경색 */
+              padding: 10px;
+              /* 여백 추가 */
               z-index: 1000;
               /* 다른 요소 위에 보이도록 설정 */
-              background-color: #fff;
-              /* 배경색 설정 (투명도 조절 가능) */
-              padding: 10px 0;
-              /* 여백 추가 */
-              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-              /* 그림자 추가 */
             }
           </style>
 
@@ -205,10 +204,11 @@
                   let dcategory = $("#dcategory");
                   dcategory.empty();
                   dcategoryHtml = ``;
+                  dcategoryHtml += `<hr>`;
                   $.each(res_data, function (index, pVo) {
                     dcategoryHtml +=
                       `<input type="button" id="\${pVo.dcategoryNo}" class="btn btn-default"
-                        value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);">`;
+                        value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);" style="display: block; margin: auto">`;
                   });
                   dcategory.html(dcategoryHtml);
                   const mcategoryHighlight = mcategoryName_param; // 사용자가 선택한 중분류
@@ -382,18 +382,18 @@
               </div>
 
               <div id="category-box">
-                <hr>
+                <h2>Sports</h2>
+                <h3>category</h3>
                 <div id="mcategory">
                   <c:forEach var="shopM" items="${mCategoryNameList}">
                     <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
-                      value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);">
+                      value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);" style="display: block; margin: auto;">
                   </c:forEach>
                 </div>
-                <hr>
                 <div id="dcategory">
                 </div>
               </div>
-              <hr>
+
 
               <div id="product" class="row">
                 <c:forEach var="shopP" items="${productList}">

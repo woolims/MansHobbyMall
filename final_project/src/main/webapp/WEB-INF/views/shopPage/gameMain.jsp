@@ -132,6 +132,25 @@
               font-weight: bolder;
               color: #333;
             }
+            #category-box {
+              display: inline-block;
+              position: fixed;
+              /* 고정 위치 설정 */
+              top: 113px;
+              /* 상단에서의 거리 조정 */
+              left: 20px;
+              /* 왼쪽에서의 거리 조정 */
+              width: 190px;
+              /* 너비 설정 */
+              /* height: 33%; */
+              /* 전체 높이에서 여백을 뺀 값 */
+              background-color: #fff;
+              /* 배경색 */
+              padding: 10px;
+              /* 여백 추가 */
+              z-index: 1000;
+              /* 다른 요소 위에 보이도록 설정 */
+            }
           </style>
 
           <script>
@@ -182,16 +201,39 @@
                 success: function (res_data) {
                   console.log(res_data);
                   let dcategory = $("#dcategory");
-                    dcategory.empty();
-                    dcategoryHtml = ``;
-                    $.each(res_data, function (index, pVo) {
-                      dcategoryHtml +=
+                  dcategory.empty();
+                  dcategoryHtml = ``;
+                  dcategoryHtml += `<hr>`;
+                  $.each(res_data, function (index, pVo) {
+                    dcategoryHtml +=
                       `<input type="button" id="\${pVo.dcategoryNo}" class="btn btn-default"
-                        value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);">`;
+                        value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);" style="display: block; margin: auto">`;
+                  });
+                  dcategory.html(dcategoryHtml);
+                  const mcategoryHighlight = mcategoryName_param; // 사용자가 선택한 중분류
+                  const dcategoryHighlight = dcategory; // 사용자가 선택한 소분류
+
+                  $('#mcategory input').removeClass('highlight');
+                  // 중분류 input에 highlight 클래스 추가
+                  if (mcategoryHighlight) {
+                    $('#mcategory input').each(function () {
+                      if ($(this).val() === mcategoryHighlight) {
+                        $(this).addClass('highlight');
+                      }
                     });
-                    dcategory.html(dcategoryHtml);
+                  }
+
+                  // 소분류 input에 highlight 클래스 추가
+                  if (dcategoryHighlight) {
+                    $('#dcategory input').each(function () {
+                      if ($(this).val() === dcategoryHighlight) {
+                        $(this).addClass('highlight');
+                      }
+                    });
+                  }
 
                   product(categoryNo_param, mcategoryName_param);
+
                 },
                 error: function () {
                   alert("error");
@@ -331,20 +373,18 @@
                   </a>
                 </div>
               </div>
-
-              <hr>
-
+            <div id="category-box">
+              <h2>Game</h2>
+              <h3>category</h3>
               <div id="mcategory">
                 <c:forEach var="shopM" items="${mCategoryNameList}">
                   <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
-                    value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);">
+                    value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);" style="display: block; margin: auto;">
                 </c:forEach>
               </div>
-
-              <hr>
-                <div id="dcategory">
-                </div>
-              <hr>
+              <div id="dcategory">
+              </div>
+            </div>
 
               <div id="product" class="row">
                 <c:forEach var="shopP" items="${productList}">
