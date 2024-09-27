@@ -1,6 +1,7 @@
 -- 테이블 삭제
 DROP TABLE IF EXISTS Compony;
 DROP TABLE IF EXISTS Chat_logs;
+DROP TABLE IF EXISTS UserActivity;
 DROP TABLE IF EXISTS Answer;
 DROP TABLE IF EXISTS Inquiry;
 DROP TABLE IF EXISTS Follow;
@@ -62,6 +63,7 @@ CREATE TABLE DAddress (
     daIdx int PRIMARY KEY AUTO_INCREMENT,
     userIdx int NOT NULL,
     daAddr LONGTEXT NOT NULL,
+    subDaAddr LONGTEXT NOT NULL,
     FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
 
@@ -71,8 +73,7 @@ CREATE TABLE GCondition (
     userIdx int NOT NULL,
     bpAmount BIGINT NOT NULL DEFAULT 0,
     rCount int NOT NULL DEFAULT 0,
-    sGradeAt char(1) NOT NULL DEFAULT 'N',
-    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
+    FOREIGN KEY (gIdx) REFERENCES Grade (gIdx) ON DELETE CASCADE
 );
 
 -- Coupon 테이블
@@ -131,7 +132,7 @@ CREATE TABLE Product (
 );
 
 CREATE TABLE ProductImage (
-	fileIdx	int PRIMARY KEY AUTO_INCREMENT,
+    fileIdx	int PRIMARY KEY AUTO_INCREMENT,
     pIdx int NOT NULL,
     fileName LONGTEXT,
     fileNameLink char(1) default 'Y',
@@ -166,7 +167,7 @@ CREATE TABLE Orders (
     daStartDate DATETIME NOT NULL DEFAULT now(),
     daEndDate DATETIME NOT NULL DEFAULT now(),
     FOREIGN KEY (dsIdx) REFERENCES DStatus (dsIdx) ON DELETE CASCADE,
-	FOREIGN KEY (bIdx) REFERENCES BuyList (bIdx) ON DELETE CASCADE
+    FOREIGN KEY (bIdx) REFERENCES BuyList (bIdx) ON DELETE CASCADE
 );
 
 -- SCart 테이블
@@ -235,6 +236,15 @@ CREATE TABLE Compony (
     comPhone varchar(50) NOT NULL
 );
 
+CREATE TABLE UserActivity (
+    userActivityId INT PRIMARY KEY AUTO_INCREMENT,
+    userIdx INT NOT NULL,
+    totalPurchaseAmount BIGINT NOT NULL DEFAULT 0,
+    totalReviewCount INT NOT NULL DEFAULT 0,
+    lastUpdated DATETIME NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
+);
+
 -- Chat_logs 테이블
 CREATE TABLE Chat_logs (
     chatIdx int PRIMARY KEY AUTO_INCREMENT,
@@ -260,7 +270,7 @@ VIEW `shop_list_view` AS
         `p`.`pName` AS `pName`,
         `p`.`pEx` AS `pEx`,
         `p`.`price` AS `price`,
-		`p`.`amount` As `amount`,
+        `p`.`amount` As `amount`,
         `c`.`categoryName` AS `categoryName`,
         `m`.`mcategoryName` AS `mcategoryName`,
         `d`.`dcategoryName` AS `dcategoryName`
@@ -431,7 +441,7 @@ SELECT DISTINCT
     p.pEx,
     p.amount,
     p.price,
-	i.pIdx,
+    i.pIdx,
     i.fileIdx,
     i.fileName
 FROM Product p
@@ -463,14 +473,29 @@ VALUES ('브론즈', 1, 0),
 	('다이아', 2, 5),
 	('마스터', 3, 5);
 
+INSERT INTO GCondition (gIdx, bpAmount, rCount) VALUES
+	(1, 0, 0),
+	(2, 100000, 5),
+	(3, 500000, 20),
+	(4, 1000000, 50),
+	(5, 2000000, 100);
+
 -- User 테이블에 샘플 데이터 삽입
 INSERT INTO User(gIdx, id, password, nickName, name, phone, addr, subAddr, adminAt, point)
 VALUES (5, 'admin', 'admin', '관리자', '관리자', '미공개', '서울시 관악구', '미공개', 'Y', 10000000),
-	(1, 'user1', 'user1', '사용자1', '김원진', '010-1111-1111', '미공개', '미공개', 'N', default),
-	(2, 'user2', 'user2', '사용자2', '배현진', '010-2222-2222', '미공개', '미공개', 'N', default),
-	(3, 'user3', 'user3', '사용자3', '강민경', '010-3333-3333', '미공개', '미공개', 'N', default),
-	(4, 'user4', 'user4', '사용자4', '손호영', '010-4444-4444', '미공개', '미공개', 'N', default),
+	(1, 'user1', 'user1', '김원진', '김원진', '010-1111-1111', '미공개', '미공개', 'N', default),
+	(2, 'user2', 'user2', '배현진', '배현진', '010-2222-2222', '미공개', '미공개', 'N', default),
+	(3, 'user3', 'user3', '강민경', '강민경', '010-3333-3333', '미공개', '미공개', 'N', default),
+	(4, 'user4', 'user4', '손호영', '손호영', '010-4444-4444', '미공개', '미공개', 'N', default),
 	(5, 'user5', 'user5', '매니저(심우림)', '심우림', '010-5555-5555', '미공개', '미공개', 'N', 1000000);
+
+-- UserActivity 테이블에 샘플 데이터 삽입
+INSERT INTO UserActivity (userIdx, totalPurchaseAmount, totalReviewCount)
+VALUES (2, 0, 0),
+    (3, 0, 0),
+    (4, 0, 0),
+    (5, 0, 0),
+    (6, 0, 0);
 
 -- 대 카테고리 데이터 추가
 INSERT INTO category values(null,'게임');
@@ -699,6 +724,66 @@ CREATE EVENT update_order_status_event
 ON SCHEDULE EVERY 1 MINUTE
 DO
     CALL update_order_status();
+
+Drop PROCEDURE IF EXISTS UpdateUserGrade;
+
+-- 등급 조정 관련 DB 정리
+DELIMITER $$
+
+CREATE PROCEDURE UpdateUserGrade(IN userId INT)
+BEGIN
+    -- 변수 선언
+    DECLARE currentGrade INT;
+    DECLARE newGrade INT;
+    DECLARE userBpAmount BIGINT;
+    DECLARE userRCount INT;
+    DECLARE currentGradeBpAmount BIGINT;
+    DECLARE currentGradeRCount INT;
+
+    -- 현재 등급 가져오기
+    SELECT gIdx INTO currentGrade FROM User WHERE userIdx = userId;
+
+    -- 사용자의 총 구매 금액과 리뷰 수 가져오기
+    SELECT totalPurchaseAmount, totalReviewCount INTO userBpAmount, userRCount
+    FROM UserActivity WHERE userIdx = userId;
+
+    -- 현재 상태 출력
+    SELECT '현재 등급: ', currentGrade, '구매 금액: ', userBpAmount, '리뷰 수: ', userRCount;
+
+    -- 하락 조건 체크
+    decrease_loop: WHILE currentGrade > 1 DO
+        -- 현재 등급 조건 가져오기
+        SELECT bpAmount, rCount INTO currentGradeBpAmount, currentGradeRCount
+        FROM GCondition WHERE gIdx = currentGrade;
+
+        IF (userBpAmount < currentGradeBpAmount OR userRCount < currentGradeRCount) THEN
+            SET currentGrade = currentGrade - 1; -- 등급 하락
+            UPDATE User SET gIdx = currentGrade WHERE userIdx = userId;
+            SELECT '등급 하락: ', currentGrade;  -- 하락한 등급 출력
+        ELSE
+            LEAVE decrease_loop; -- 조건이 충족되면 종료
+        END IF;
+    END WHILE;
+
+    -- 상승 조건 체크
+    increase_loop: WHILE currentGrade < (SELECT MAX(gIdx) FROM Grade) DO
+        SET newGrade = currentGrade + 1;
+
+        -- 신규 등급 조건 가져오기
+        SELECT bpAmount, rCount INTO currentGradeBpAmount, currentGradeRCount
+        FROM GCondition WHERE gIdx = newGrade;
+
+        IF (userBpAmount >= currentGradeBpAmount AND userRCount >= currentGradeRCount) THEN
+            SET currentGrade = newGrade; -- 등급 상승
+            UPDATE User SET gIdx = currentGrade WHERE userIdx = userId;
+            SELECT '등급 상승: ', currentGrade;  -- 상승한 등급 출력
+        ELSE
+            LEAVE increase_loop; -- 조건이 충족되지 않으면 종료
+        END IF;
+    END WHILE;
+END $$
+
+DELIMITER ;
 
 
 
