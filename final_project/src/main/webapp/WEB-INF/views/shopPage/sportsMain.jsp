@@ -120,7 +120,9 @@
               margin-top: 50px;
               font-weight: bold;
               font-size: 20px;
-
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
             .product-price {
@@ -130,21 +132,169 @@
               font-weight: bolder;
               color: #333;
             }
+
+            #category-box {
+              display: inline-block;
+              position: fixed;
+              /* 고정 위치 설정 */
+              top: 113px;
+              /* 상단에서의 거리 조정 */
+              left: 20px;
+              /* 왼쪽에서의 거리 조정 */
+              width: 190px;
+              /* 너비 설정 */
+              /* height: 33%; */
+              /* 전체 높이에서 여백을 뺀 값 */
+              background-color: #fff;
+              /* 배경색 */
+              padding: 10px;
+              /* 여백 추가 */
+              z-index: 1000;
+              /* 다른 요소 위에 보이도록 설정 */
+            }
           </style>
 
           <script>
+
+            function product(categoryNo, mcategoryName) {
+              $.ajax({
+                url: "/productAjax.do",
+                data: { "categoryNo": categoryNo, "mcategoryName": mcategoryName },
+                datatype: "json",
+                method: 'GET',
+                success: function (res_data) {
+                  console.log(res_data);
+                  $("#product").empty();
+                  productHtml = ``;
+                  $.each(res_data, function (index, pVo) {
+                    productHtml += `<div class="col-sm-3">
+                       <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`
+                    if (pVo.fileNameLink == 'Y') {
+                      productHtml +=
+                        `<div>
+                             <img src="\${pVo.fileName}" alt="상품이미지">
+                           </div>`
+                    } else if (pVo.fileNameLink == 'Y') {
+                      productHtml +=
+                        `<div>
+                             <img src="/resources/images/\${pVo.fileName}"
+                               alt="상품이미지">
+                           </div>`
+                    }
+                    productHtml += `
+                         <div class="product-name">\${pVo.pname}</div>
+                         <div class="product-price">\${pVo.price} 원</div>
+                       </div>
+                     </div>`
+                  });
+                  $("#product").html(productHtml);
+                }
+              });
+            }
             function mCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
               let mcategoryName_param = id.value;
-              location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param;
+              $.ajax({
+                url: "/categoryAjax.do",
+                data: { "categoryNo": categoryNo_param, "mcategoryName": mcategoryName_param },
+                datatype: "json",
+                method: 'GET',
+                success: function (res_data) {
+                  console.log(res_data);
+                  let dcategory = $("#dcategory");
+                  dcategory.empty();
+                  dcategoryHtml = ``;
+                  dcategoryHtml += `<hr>`;
+                  $.each(res_data, function (index, pVo) {
+                    dcategoryHtml +=
+                      `<input type="button" id="\${pVo.dcategoryNo}" class="btn btn-default"
+                        value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);" style="display: block; margin: auto">`;
+                  });
+                  dcategory.html(dcategoryHtml);
+                  const mcategoryHighlight = mcategoryName_param; // 사용자가 선택한 중분류
+                  const dcategoryHighlight = dcategory; // 사용자가 선택한 소분류
+
+                  $('#mcategory input').removeClass('highlight');
+                  // 중분류 input에 highlight 클래스 추가
+                  if (mcategoryHighlight) {
+                    $('#mcategory input').each(function () {
+                      if ($(this).val() === mcategoryHighlight) {
+                        $(this).addClass('highlight');
+                      }
+                    });
+                  }
+
+                  // 소분류 input에 highlight 클래스 추가
+                  if (dcategoryHighlight) {
+                    $('#dcategory input').each(function () {
+                      if ($(this).val() === dcategoryHighlight) {
+                        $(this).addClass('highlight');
+                      }
+                    });
+                  }
+
+                  product(categoryNo_param, mcategoryName_param);
+
+                },
+                error: function () {
+                  alert("error");
+                }
+              });
             }
+
+
 
             function dCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
-              let mcategoryName_param = '${shop.mcategoryName}';
-              let dcategoryName_param = id.value;
-              location.href = "/sports.do?categoryNo=" + categoryNo_param + "&mcategoryName=" + mcategoryName_param + "&dcategoryName=" + dcategoryName_param;
+              let dcategoryNo_param = id.id;
+
+              // 모든 소분류의 highlight 클래스 제거
+              $('#dcategory input').removeClass('highlight');
+
+              // 클릭된 소분류에 highlight 클래스 추가z
+              $(id).addClass('highlight');
+
+              $.ajax({
+                url: "/productAjax.do",
+                data: { "categoryNo": categoryNo_param, "dcategoryNo": dcategoryNo_param },
+                datatype: "json",
+                method: 'GET',
+                success: function (res_data) {
+                  console.log(res_data);
+                  let product = $("#product");
+                  product.empty();
+                  productHtml = ``;
+
+                  $.each(res_data, function (index, pVo) {
+                    productHtml += `<div class="col-sm-3">
+                      <div class="product-card" onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`
+                    if (pVo.fileNameLink == 'Y') {
+                      productHtml += `<div>
+                                        <img src="\${pVo.fileName}" alt="상품이미지">
+                                      </div>
+                           <div class="product-name">\${pVo.pname}</div>
+                         <div class="product-price">\${pVo.price} 원</div>
+                       </div>
+                     </div>`
+                    } else if (pVo.fileNameLink == 'N') {
+                      productHtml += `<div>
+                                        <img src="/resources/images/\${pVo.fileName}" alt="상품이미지">
+                                      </div>
+                           <div class="product-name">\${pVo.pname}</div>
+                         <div class="product-price">\${pVo.price} 원</div>
+                       </div>
+                     </div>`
+                    };
+                  });
+                  product.html(productHtml);
+                }
+              });
             }
+
+
+
+            //  ajax 처리하기 여기까지
+
 
             // 스크롤 위치를 로컬 스토리지에 저장
             window.onbeforeunload = function () {
@@ -231,34 +381,36 @@
                 </div>
               </div>
 
-              <hr>
-
-              <div id="mcategory">
-                <c:forEach var="shopM" items="${mCategoryNameList}">
-                  <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
-                    value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);">
-                </c:forEach>
-              </div>
-
-              <hr>
-
-              <c:if test="${mcategoryName != 'emptyMcategoryName'}">
-                <div id="dcategory">
-                  <c:forEach var="shopD" items="${dCategoryName}">
-                    <input type="button" id="${shopD.dcategoryNo}" class="btn btn-default"
-                      value="${shopD.dcategoryName}" onclick="dCategoryNoParam(this);">
+              <div id="category-box">
+                <h2>Sports</h2>
+                <h3>category</h3>
+                <div id="mcategory">
+                  <c:forEach var="shopM" items="${mCategoryNameList}">
+                    <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
+                      value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);" style="display: block; margin: auto;">
                   </c:forEach>
                 </div>
-              </c:if>
+                <div id="dcategory">
+                </div>
+              </div>
 
-              <hr>
 
               <div id="product" class="row">
                 <c:forEach var="shopP" items="${productList}">
                   <div class="col-sm-3">
                     <div class="product-card"
-                      onclick="location.href='${pageContext.request.contextPath}/productOne.do?categoryNo=${shopP.categoryNo}&pIdx=${shopP.getPIdx()}'">
-                      <img src="${pageContext.request.contextPath}/resources/images/${shopP.getFileName()}" alt="상품이미지">
+                      onclick="location.href='productOne.do?categoryNo=${shopP.getCategoryNo()}&pIdx=${shopP.getPIdx()}';">
+                      <c:if test="${shopP.fileNameLink == 'Y'}">
+                        <div>
+                          <img src="${shopP.fileName}" alt="상품이미지">
+                        </div>
+                      </c:if>
+                      <c:if test="${shopP.fileNameLink == 'N'}">
+                        <div>
+                          <img src="${ pageContext.request.contextPath }/resources/images/${shopP.fileName}"
+                            alt="상품이미지">
+                        </div>
+                      </c:if>
                       <div class="product-name">${shopP.getPName()}</div>
                       <div class="product-price">${shopP.getPrice()} 원</div>
                     </div>

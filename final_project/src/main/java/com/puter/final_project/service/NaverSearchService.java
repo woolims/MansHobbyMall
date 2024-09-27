@@ -57,7 +57,7 @@ public class NaverSearchService {
                 int mcategoryNo = shopMapper.selectMCategoryNo(shopVo);
                 shopVo.setMcategoryNo(mcategoryNo);
                 shopVo.setDcategoryName(dcategoryName);
-                int dcategoryNo = shopMapper.selectdCategoryNo(shopVo);
+                int dcategoryNo = shopMapper.selectDcategoryNo(shopVo);
                 shopVo.setDcategoryNo(dcategoryNo);
                 shopVo.setAmount(1);
                 shopVo.setPEx("상품설명");
