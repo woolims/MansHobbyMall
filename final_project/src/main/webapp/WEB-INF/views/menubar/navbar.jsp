@@ -212,24 +212,6 @@
           });
           }//end:check_id()
 
-        function find_addr() {
-
-          var themeObj = {
-            bgColor: "#B51D1D" //바탕 배경색
-          };
-
-          new daum.Postcode({
-            theme: themeObj,
-            oncomplete: function (data) {
-              // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-              // 예제를 참고하여 다양한 활용법을 확인해 보세요.
-              $("#addr").val(data.zonecode); //우편번호 넣기
-              $("#subAddr").val(data.address);     //주소넣기
-
-            }
-          }).open();
-        }//end:find_addr()
-
         function registerUser(f) {
           let re_id = f.re_id.value.trim();
           let re_password = f.re_password.value.trim();

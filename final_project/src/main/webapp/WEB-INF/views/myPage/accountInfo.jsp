@@ -52,6 +52,16 @@
             f.action = "${pageContext.request.contextPath}/user/userModify.do";
             f.submit();
         }
+
+        // 주소검색 API
+        function find_addr2(){
+          
+            new daum.Postcode({
+                    oncomplete: function(data) {
+                        $("#myPageAddr").val(data.address); 	  //선택한 정보의 주소 넣기
+                    }
+                }).open();
+        }//end:find_addr()
     </script>
 </head>
 <body>
@@ -88,12 +98,13 @@
     
             <div class="form-group">
                 <label for="addr">주소</label>
-                <input type="text" id="addr" name="addr" value="${user.addr}" />
+                <input type="text" id="myPageAddr" name="addr" value="${user.addr}" />
             </div>
     
             <div class="form-group">
                 <label for="subAddr">상세 주소</label>
                 <input type="text" id="subAddr" name="subAddr" value="${user.subAddr}" />
+                <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr2()">
             </div>
     
             <div class="form-group">
