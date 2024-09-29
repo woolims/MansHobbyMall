@@ -122,20 +122,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                         )
     </insert>
     <!-- 관리자용 상품사진 리스트 조회 -->
-    <select id="selectAdminPImageList" resultType="pImage" parameterType="int">
+    <!-- <select id="selectAdminPImageList" resultType="pImage" parameterType="int">
         select * from productImage where pIdx=#{pIdx} order by pIdx desc
-    </select>
-    <!-- 고객용 상품사진 리스트 조회 -->
+    </select> -->
+
+    <!--상품사진 리스트 조회 -->
     <select id="selectPImageList" resultType="pImage" parameterType="int">
         select * from productImage where pIdx=#{pIdx} order by pIdx desc
     </select>
+    
     <!-- DB용 상품사진 조회 -->
     <!-- <select id="selectFileLinkList" resultType="pImage" parameterType="int">
         select * from productImage where pIdx=#{pIdx} order by pIdx desc
     </select> -->
     <!-- DB용 상품사진링크여부 조회 -->
     <select id="selectFile" resultType="product" parameterType="int">
-        select *, (select min(fileIdx) from productImage where pIdx=#{pIdx}) from productImage where fileIdx=#{fileIdx}
+        select * from productImage where fileIdx = (select min(fileIdx) from productImage where pIdx=#{pIdx})
     </select>
     <!-- 
     <select id="selectFileIdx" resultType="int" parameterType="int">
@@ -230,7 +232,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectProductSearch" resultType="product" parameterType="int">
-        SELECT * FROM product where pIdx=#{pIdx}
+        SELECT * FROM productListView where pIdx=#{pIdx}
     </select>
     
 

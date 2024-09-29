@@ -59,14 +59,14 @@
 
     <script>
         function pUpdate(f) {
-            let pName = $("#pName").val().trim();
-            let price = $("#price").val().trim();
-            let pEx = $("#pEx").val().trim();
-            let pIdx = $("#pIdx").val();
-            let categoryName = $("#categorySearch").val();
-            let mcategoryName = $("#mcategorySearch").val();
-            let dcategoryName = $("#dcategorySearch").val();
-            let amount = $("#amount").val(); 
+            let pName = f.pName.value.trim();
+            let price = f.price.value.trim();
+            let pEx = f.pEx.value.trim();
+            let pIdx = f.pIdx.value;
+            let categoryName = f.categoryName.value;
+            let mcategoryName = f.mcategoryName.value;
+            let dcategoryName = f.dcategoryName.value;
+            let amount = f.amount.value;
 
             const numberRegex = /^[0-9]+$/;
 
@@ -194,11 +194,11 @@
             location.href='/admin/admin.do'
         }
 
-        function pImageDelete(fileName, fileIdx , pIdx) {
+        function pImageDelete(fileIdx , pIdx) {
             if(confirm("이미지를 삭제하시겠습니까?")==false) return;
             $.ajax({
                 url: "/admin/pImageDelete.do",
-                data: {"fileIdx" : fileIdx, "pIdx" : pIdx, "fileName" : fileName},
+                data: {"fileIdx" : fileIdx, "pIdx" : pIdx},
                 dataType: "json",
                 method: 'POST',
                 success: function (res_data) {
@@ -217,11 +217,19 @@
                         pImgTableHtml += `등록된 사진이 없습니다`;
                     } else {
                         $.each(res_data, function (i, photoList) {
-                            pImgTableHtml += `
-                            <td style="display: inline-block; width: 200px; height: 160px;"><img src="/resources/images/${photoList.fileName}"
-                            onclick="pImageDelete('${photoList.fileName}', 
-                            '${photoList.fileIdx}', '${photoList.pidx}')">
+                            console.log(photoList.fileName);
+                            if(photoList.fileNameLink == 'Y'){
+                                pImgTableHtml += `
+                            <td style="display: inline-block; width: 200px; height: 160px;"><img src="\${photoList.fileName}"
+                            onclick="pImageDelete('\${photoList.fileIdx}', '\${photoList.pidx}')">
                             </td>`;
+                            } else if(photoList.fileNameLink == 'N'){
+                                pImgTableHtml += `
+                            <td style="display: inline-block; width: 200px; height: 160px;"><img src="/resources/images/\${photoList.fileName}"
+                            onclick="pImageDelete('\${photoList.fileIdx}', '\${photoList.pidx}')">
+                            </td>`;
+                            }
+                            
                         });
                     }
                     pImgTableHtml += `</tr>`;
@@ -285,7 +293,7 @@
                         <td style="display: inline-block; width: 200px; height: 160px;">
                             <img style="width: 100%; height: 100%;" 
                             src="${pageContext.request.contextPath}/resources/images/${vo.fileName}"
-                            onclick="pImageDelete('${vo.fileName}', '${vo.fileIdx}', '${vo.getPIdx()}')"></td>
+                            onclick="pImageDelete('${vo.fileIdx}', '${vo.getPIdx()}')"></td>
                     </c:forEach>
                 </c:if>
             </tr>

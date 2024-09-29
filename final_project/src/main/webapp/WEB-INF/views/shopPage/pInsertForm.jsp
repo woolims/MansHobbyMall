@@ -59,27 +59,25 @@
 
     <script>
         function pInsert(f) {
-            let pName = $("#pName").val().trim();
-            let price = $("#price").val().trim();
-            let pEx = $("#pEx").val().trim();
-            let pIdx = $("#pIdx").val();
-            let categoryName = $("#categorySearch").val();
-            let mcategoryName = $("#mcategorySearch").val();
-            let dcategoryName = $("#dcategorySearch").val();
-            let amount = $("#amount").val(); 
+            let pName = f.pName.value.trim();
+            let price = f.price.value.trim();
+            let pEx = f.pEx.value.trim();
+            let categoryName = f.categoryName.value;
+            let mcategoryName = f.mcategoryName.value;
+            let dcategoryName = f.dcategoryName.value;
+            let amount = f.amount.value;
 
-            console.log(categoryName,mcategoryName,dcategoryName,amount,pName,price,pEx,pIdx);
             const numberRegex = /^[0-9]+$/;
 
-            if(categoryName=='대분류 선택'){
+            if(categoryName=='대분류선택'){
                 alert("대분류를 선택하세요");
                 return;
             }
-            if(mcategoryName=='중분류 선택'){
+            if(mcategoryName=='중분류선택'){
                 alert("중분류를 선택하세요");
                 return;
             }
-            if(dcategoryName=='소분류 선택'){
+            if(dcategoryName=='소분류선택'){
                 alert("소분류를 선택하세요");
                 return;
             }
