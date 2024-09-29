@@ -328,7 +328,7 @@
                     }
                 });
             }else if(categoryName == "전체보기" && searchParam != ""){
-                alert("카테고리가 '전체선택'일 경우 검색어를 입력할 수 없습니다.")
+                alert("카테고리가 '전체보기'일 경우 검색어를 입력할 수 없습니다.")
                 f.searchParam.value="";
                 return;
             }

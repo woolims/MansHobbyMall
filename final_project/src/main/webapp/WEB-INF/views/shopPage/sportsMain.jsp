@@ -191,6 +191,7 @@
                 }
               });
             }
+
             function mCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
               let mcategoryName_param = id.value;
@@ -201,33 +202,23 @@
                 method: 'GET',
                 success: function (res_data) {
                   console.log(res_data);
-                  let dcategory = $("#dcategory");
+                  let dcategory = $("#dcategorySearch");
                   dcategory.empty();
                   dcategoryHtml = ``;
                   dcategoryHtml += `<hr>`;
                   $.each(res_data, function (index, pVo) {
                     dcategoryHtml +=
-                      `<input type="button" id="\${pVo.dcategoryNo}" class="btn btn-default"
+                      `<input type="button" id="dcategorySearch" class="btn btn-default"
                         value="\${pVo.dcategoryName}" onclick="dCategoryNoParam(this);" style="display: block; margin: auto">`;
                   });
                   dcategory.html(dcategoryHtml);
                   const mcategoryHighlight = mcategoryName_param; // 사용자가 선택한 중분류
-                  const dcategoryHighlight = dcategory; // 사용자가 선택한 소분류
 
                   $('#mcategory input').removeClass('highlight');
                   // 중분류 input에 highlight 클래스 추가
                   if (mcategoryHighlight) {
                     $('#mcategory input').each(function () {
                       if ($(this).val() === mcategoryHighlight) {
-                        $(this).addClass('highlight');
-                      }
-                    });
-                  }
-
-                  // 소분류 input에 highlight 클래스 추가
-                  if (dcategoryHighlight) {
-                    $('#dcategory input').each(function () {
-                      if ($(this).val() === dcategoryHighlight) {
                         $(this).addClass('highlight');
                       }
                     });
@@ -246,17 +237,19 @@
 
             function dCategoryNoParam(id) {
               let categoryNo_param = '${shop.categoryNo}';
-              let dcategoryNo_param = id.id;
+              let mcategoryName_param = $('#mcategory input.highlight').val();
+              let dcategoryName_param = id.value;
+              console.log(categoryNo_param, mcategoryName_param, dcategoryName_param);
 
               // 모든 소분류의 highlight 클래스 제거
-              $('#dcategory input').removeClass('highlight');
+              $('#dcategorySearch input').removeClass('highlight');
 
               // 클릭된 소분류에 highlight 클래스 추가z
               $(id).addClass('highlight');
 
               $.ajax({
                 url: "/productAjax.do",
-                data: { "categoryNo": categoryNo_param, "dcategoryNo": dcategoryNo_param },
+                data: { "categoryNo": categoryNo_param, "mcategoryName": mcategoryName_param, "dcategoryName": dcategoryName_param },
                 datatype: "json",
                 method: 'GET',
                 success: function (res_data) {
@@ -328,14 +321,20 @@
               }
             };
 
-            function SportsSearch() {
+            function search() {
               let searchParam = $("#search").val().trim();
               let categoryName = "${shop.categoryName}";
-              let mcategoryName = $("#mcategorySearch").val();
-              let dcategoryName = $("#dcategorySearch").val();
+              let mcategoryName = $("#mcategory input.highlight").val();
+              let dcategoryName = $("#dcategorySearch input.highlight").val();
+              
+              if (searchParam == "") {
+                alert("상품명을 입력하세요");
+                $("#search").focus();
+                return;
+              }
 
               $.ajax({
-                url: "/shop/shopAjaxProductList.do",
+                url: "/shopAjaxProductList.do",
                 data: {
                   "searchParam": searchParam,
                   "categoryName": categoryName,
@@ -356,14 +355,14 @@
                     productHtml += `
                         <div class="col-sm-3">
                           <div class="product-card"
-                            onclick="location.href='productOne.do?categoryNo=\${pVo.getCategoryNo()}&pIdx=\${pVo.getPIdx()}';">`;
-                    if ("\${pVo.fileNameLink == 'Y'}") {
+                            onclick="location.href='productOne.do?categoryNo=\${pVo.categoryNo}&pIdx=\${pVo.pidx}';">`;
+                    if (pVo.fileNameLink == 'Y') {
                       productHtml += `
                               <div>
                                 <img src="\${pVo.fileName}" alt="상품이미지">
                               </div>
                               `;
-                    } else if ("\${pVo.fileNameLink == 'N'}") {
+                    } else if (pVo.fileNameLink == 'N') {
                       productHtml += `
                               <div>
                                 <img src="/resources/images/\${pVo.fileName}"
@@ -372,8 +371,8 @@
                               `;
                     }
                     productHtml += `
-                            <div class="product-name">\${pVo.getPName()}</div>
-                            <div class="product-price">\${pVo.getPrice()} 원</div>
+                            <div class="product-name">\${pVo.pname}</div>
+                            <div class="product-price">\${pVo.price} 원</div>
                           </div>
                         </div>`;
                   });
@@ -442,16 +441,16 @@
                 <h3>category</h3>
                 <div id="mcategory">
                   <c:forEach var="shopM" items="${mCategoryNameList}">
-                    <input type="button" id="${shopM.mcategoryName}" class="btn btn-default"
+                    <input type="button" id="mcategorySearch" class="btn btn-default"
                       value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);"
                       style="display: block; margin: auto;">
                   </c:forEach>
                 </div>
-                <div id="dcategory">
+                <div id="dcategorySearch">
                 </div>
                 <div>
                   <input type="text" id="search" placeholder="상품명을 입력하세요">
-                  <input type="button" class="btn btn-default" id="searchBtn" value="검색" onclick="SportsSearch();">
+                  <input type="button" class="btn btn-default" id="searchBtn" value="검색" onclick="search();">
                 </div>
               </div>
 

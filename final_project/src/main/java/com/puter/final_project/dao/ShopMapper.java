@@ -95,9 +95,11 @@ public interface ShopMapper {
 
     int selectDcategoryNo(ShopVo shopVo);
 
-    ProductVo selectFileName(int pIdx);
+    ProductVo selectFile(int pIdx);
 
     int selectCategoryNo(String categoryName);
+
+    ProductVo selectProductSearch(int pIdx);
 
     // int selectFileIdx(int pIdx);
 

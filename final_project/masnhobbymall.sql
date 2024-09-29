@@ -785,7 +785,7 @@ END $$
 
 DELIMITER ;
 
-
+select * from shop_list_view where pIdx = 627
 
 
 
