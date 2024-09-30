@@ -92,21 +92,23 @@
                 <table class="table table-striped" style="margin-top: 20px; table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th style="text-align: center;">상품번호</th>
+                            <!-- <th style="text-align: center;">상품번호</th> -->
                             <th style="text-align: center;">상품명</th>
                             <th style="text-align: center;">상품가격</th>
                             <th style="text-align: center;">구매 수량</th>
                             <th style="text-align: center;">구매 금액</th>
+                            <th style="text-align: center;">배송주소</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="buy" items="${buyList}">
                             <tr>
-                                <td>${buy.getPIdx()}</td>
+                                <!-- <td>${buy.getPIdx()}</td> -->
                                 <td>${buy.getPName()}</td>
                                 <td>${buy.getPrice()}</td>
                                 <td>${buy.getBamount()}</td>
                                 <td>${buy.getPrice() * buy.getBamount()}</td>
+                                <td>${buy.getBdate()}</td>
                             </tr>
                         </c:forEach>
                     </tbody>

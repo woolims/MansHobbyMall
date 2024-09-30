@@ -23,11 +23,13 @@ import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.service.NaverSearchService;
+import com.puter.final_project.vo.BuyListVo;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.CouponBoxVo;
 import com.puter.final_project.vo.CouponVo;
+import com.puter.final_project.vo.DaddressVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
@@ -390,6 +392,13 @@ public class ShopController {
         if (finalPrice < 0) {
             finalPrice = 0;
         }
+
+        // 배송지 조회
+        if (user != null) {
+            List<DaddressVo> daAddrList = shopMapper.selectDaAddrList(user.getUserIdx());
+            model.addAttribute("daAddrList", daAddrList);
+        }
+        
 
         // 6. 모델에 정보 추가
         model.addAttribute("shop", shop);

@@ -42,10 +42,11 @@ public class BuyListController {
     CouponBoxMapper couponBoxMapper;
 
     @PostMapping(value = "/buy.do", produces = "application/json; charset=utf-8")
-    public String buy(BuyListVo vo, @RequestParam(value = "couponid", required = false) Integer couponid) {
+    public String buy(BuyListVo vo, @RequestParam(value = "couponid", required = false) Integer couponid, String daAddr) {
         // 디버깅 로그 추가
         System.out.println("BuyListVo: " + vo);
         System.out.println("Received couponid: " + couponid);
+        System.out.println("주소: " + daAddr);
 
         UserActivityVo userActVo = new UserActivityVo();
         userActVo.setUserIdx(vo.getUserIdx());
@@ -55,7 +56,6 @@ public class BuyListController {
         int res = buyListMapper.insert(vo);
 
         buyListMapper.updateAmount(vo);
-        
 
         int bIdx = buyListMapper.selectBuyListOne(vo);
 

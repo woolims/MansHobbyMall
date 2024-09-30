@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.puter.final_project.vo.BuyListVo;
+import com.puter.final_project.vo.DaddressVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.ShopVo;
@@ -104,5 +106,10 @@ public interface ShopMapper {
     // int selectFileIdx(int pIdx);
 
     // String selectFileLinkList(int pIdx);
+
+    List<DaddressVo> selectDaAddrList(int userIdx);
+    
+
+    
 
 }
