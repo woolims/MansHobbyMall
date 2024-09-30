@@ -459,7 +459,9 @@ SELECT
     b.bamount,
     (p.price*bamount) as price,
     u.name,
-    b.buyDate
+    b.bIdx,
+    b.buyDate,
+    b.orderNumber
 FROM BuyList b
 INNER JOIN Product p ON b.pIdx = p.pIdx
 INNER JOIN User u ON b.userIdx = u.userIdx
