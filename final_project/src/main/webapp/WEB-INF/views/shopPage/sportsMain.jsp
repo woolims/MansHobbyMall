@@ -136,21 +136,66 @@
             #category-box {
               display: inline-block;
               position: fixed;
-              /* 고정 위치 설정 */
               top: 113px;
-              /* 상단에서의 거리 조정 */
               left: 20px;
-              /* 왼쪽에서의 거리 조정 */
-              width: 190px;
-              /* 너비 설정 */
-              /* height: 33%; */
-              /* 전체 높이에서 여백을 뺀 값 */
+              width: 220px;
               background-color: #fff;
-              /* 배경색 */
-              padding: 10px;
-              /* 여백 추가 */
               z-index: 1000;
-              /* 다른 요소 위에 보이도록 설정 */
+              margin: 20px auto;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 8px;
+              background-color: #f9f9f9;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            #category-box {
+              
+            }
+
+            #category-box h2 {
+              text-align: center;
+              color: #333;
+            }
+
+            #category-box h3 {
+              text-align: center;
+              color: #666;
+              margin-bottom: 20px;
+            }
+
+            #mcategory {
+              margin-bottom: 20px;
+            }
+
+            #dcategorySearch {
+              margin-top: 20px;
+            }
+
+            .btn {
+              display: block;
+              width: 100%;
+              padding: 10px;
+              margin-bottom: 10px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              font-size: 16px;
+              transition: background-color 0.3s;
+            }
+
+            .btn:hover {
+              background-color: #0056b3;
+            }
+
+            #search {
+              width: calc(100% - 22px);
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              margin-bottom: 10px;
             }
           </style>
 
@@ -326,7 +371,7 @@
               let categoryName = "${shop.categoryName}";
               let mcategoryName = $("#mcategory input.highlight").val();
               let dcategoryName = $("#dcategorySearch input.highlight").val();
-              
+
               if (searchParam == "") {
                 alert("상품명을 입력하세요");
                 $("#search").focus();
@@ -385,6 +430,14 @@
               });
               return;
             }
+
+            $(document).ready(function () {
+              $('#search').on('keypress', function (event) {
+                if (event.key === 'Enter') {
+                  search();
+                }
+              });
+            });
           </script>
         </head>
 
@@ -441,16 +494,15 @@
                 <h3>category</h3>
                 <div id="mcategory">
                   <c:forEach var="shopM" items="${mCategoryNameList}">
-                    <input type="button" id="mcategorySearch" class="btn btn-default"
-                      value="${shopM.mcategoryName}" onclick="mCategoryNoParam(this);"
-                      style="display: block; margin: auto;">
+                    <input type="button" id="mcategorySearch" class="btn btn-default" value="${shopM.mcategoryName}"
+                      onclick="mCategoryNoParam(this);" style="display: block; margin: auto;">
                   </c:forEach>
                 </div>
                 <div id="dcategorySearch">
                 </div>
                 <div>
                   <input type="text" id="search" placeholder="상품명을 입력하세요">
-                  <input type="button" class="btn btn-default" id="searchBtn" value="검색" onclick="search();">
+                  <input type="button" class="btn btn-success" id="searchBtn" value="검색" onclick="search();">
                 </div>
               </div>
 
