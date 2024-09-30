@@ -23,7 +23,7 @@ public class UserVo {
 
     int emailIdx;
     String email;
-    String esite;
+    String esite; 
 
     String gradeName;
     int authority;

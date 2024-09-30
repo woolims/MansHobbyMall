@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     SET totalPurchaseAmount = totalPurchaseAmount + #{totalPurchaseAmount}, lastUpdated = NOW()
     WHERE userIdx = #{userIdx}
   </update>
+
   <!-- 환불 시 전체구매량 제거 -->
   <update id="updateTotalBuyMinus" parameterType="userActivity">
     UPDATE UserActivity
@@ -24,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     SET totalReviewCount = totalReviewCount + 1, lastUpdated = NOW()
     WHERE userIdx = #{userIdx}
   </update>
+
     <!-- 리뷰 삭제 시 리뷰카운트 - 1 -->
   <update id="updateTotalReviewMinus" parameterType="int">
     UPDATE UserActivity

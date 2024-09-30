@@ -10,4 +10,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from grade order by gIdx
     </select>
 
+    <select id="selectOne" parameterType="int" resultType="grade">
+        select * from gradeAllView where userIdx=#{userIdx}
+    </select>
+
+    <select id="selectGCodition" parameterType="int" resultType="gCondition">
+        select * from GCondition where gIdx = #{gIdx}
+    </select>
+
 </mapper>
