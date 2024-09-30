@@ -101,9 +101,9 @@
 
                     <div class="form-group">
                         <label for="addr">주소</label>
-                        <div class="inline">
+                        <div class="inline-address">
                             <input type="text" id="myPageAddr" name="addr" value="${user.addr}" />
-                            <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr2()">
+                            <input type="button" value="주소검색" onclick="find_addr2()">
                         </div>
                     </div>
 

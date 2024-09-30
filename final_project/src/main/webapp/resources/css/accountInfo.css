@@ -22,24 +22,25 @@ h1 {
     margin-bottom: 1.5rem;
 }
 
+/* 레이블과 필드가 고정된 위치에 배치되도록 수정 */
 .form-group { 
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* 레이블과 필드가 좌측 정렬 */
     align-items: center;
-    margin-bottom: 1rem; 
+    margin-bottom: 1rem;
 }
 
 .form-group label {
-    width: 20%;
-    margin-right: 10px;
+    width: 150px; /* 고정된 레이블 너비 */
     text-align: right;
+    margin-right: 10px;
     font-size: 18px;
     color: #1a1a1a; 
 }
 
 .form-group input, 
 .form-group select { 
-    width: 80%; 
+    flex: 1; /* 필드가 남은 공간을 채우도록 설정 */
     padding: 0.75rem; 
     font-size: 14px;
     border: 1px solid #ddd; 
@@ -92,34 +93,33 @@ h1 {
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); 
 }
 
-/* 주소 필드와 검색 버튼을 한 줄에 정렬 */
-.form-group.inline {
-    display: inline-flex;
+/* 주소 필드와 검색 버튼을 한 줄에 정렬하는 별도 클래스 */
+.inline-address {
+    display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 80% !important; /* 다른 input 필드와 동일한 너비 */
+    width: 80%;
 }
 
-.form-group.inline input[type="text"] {
-    width: calc(100% - 130px)!important ; /* 주소 입력 필드의 너비를 계산해서 버튼과 맞춤 */
-    padding: 0.75rem !important;
-    font-size: 14px !important;
-    border: 1px solid #ddd !important;
-    border-radius: 4px !important;
-    box-sizing: border-box !important;
+.inline-address input[type="text"] {
+    width: 400px;
+    padding: 0.75rem;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
-.form-group.inline input[type="button"] {
-    width: 120px !important; /* 주소 검색 버튼의 너비 */
-    padding: 0.75rem !important;
-    background-color: #1eff00 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    font-size: 14px !important;
-    margin-left: 10px !important; /* 버튼과 입력 필드 간의 간격 조정 */
+.inline-address input[type="button"] {
+    width: 40px; /* 버튼의 너비를 더 줄임 */
+    margin-left: 10px; /* 버튼과 입력 필드 사이의 간격 */
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
 }
-.form-group.inline input[type="button"]:hover {
+
+.inline-address input[type="button"]:hover {
     background-color: #0056b3;
 }
