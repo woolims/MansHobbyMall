@@ -153,10 +153,12 @@ CREATE TABLE BuyList (
     pIdx int NOT NULL,
     bamount int NOT NULL,
     buyDate DATETIME NOT NULL DEFAULT now(),
-    orderNumber bigint NOT NULL,
+	orderNumber bigint NOT NULL,
     buyPrice bigint NOT NULL,
+    daIdx int NULL,
     FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE,
-    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE
+    FOREIGN KEY (pIdx) REFERENCES Product (pIdx) ON DELETE CASCADE,
+    FOREIGN KEY (daIdx) REFERENCES DAddress (daIdx) ON DELETE CASCADE
 );
 
 -- Orders 테이블
