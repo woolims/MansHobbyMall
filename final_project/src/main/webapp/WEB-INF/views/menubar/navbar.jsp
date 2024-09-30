@@ -412,19 +412,9 @@
 
             <li>
               <a href="${ pageContext.request.contextPath }/game.do?categoryNo=1">Gaming</a>
-              <ul class="dropdown">
-                <li><a href="#">게임 메뉴 1</a></li>
-                <li><a href="#">게임 메뉴 2</a></li>
-                <li><a href="#">게임 메뉴 3</a></li>
-              </ul>
             </li>
             <li>
               <a href="${ pageContext.request.contextPath }/sports.do?categoryNo=2">Sports</a>
-              <ul class="dropdown">
-                <li><a href="#">스포츠 메뉴 1</a></li>
-                <li><a href="#">스포츠 메뉴 2</a></li>
-                <li><a href="#">스포츠 메뉴 3</a></li>
-              </ul>
             </li>
             <li><a href="${pageContext.request.contextPath}/inquiry/inquiry.do">고객문의</a></li>
             <c:if test="${ not empty user }">

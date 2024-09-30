@@ -12,5 +12,7 @@ public interface OrdersMapper {
     List<OrdersVo> selectList(int userIdx);
 
     List<OrdersVo> selectBuyList();
+
+    void deleteBuyList(int bIdx);
     
 }

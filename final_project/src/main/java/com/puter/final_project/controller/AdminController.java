@@ -1,22 +1,31 @@
 package com.puter.final_project.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.puter.final_project.dao.AdminMapper;
 import com.puter.final_project.dao.InquiryMapper;
 import com.puter.final_project.dao.OrdersMapper;
@@ -31,6 +40,7 @@ import com.puter.final_project.vo.UserVo;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import net.minidev.json.JSONObject;
 
 @Controller
 @RequestMapping("/admin/")
@@ -63,8 +73,8 @@ public class AdminController {
 
     @RequestMapping("admin.do")
     public String list(@RequestParam(value = "searchType", required = false) String searchType,
-                    @RequestParam(value = "searchText", required = false) String searchText,
-                    Model model) {
+            @RequestParam(value = "searchText", required = false) String searchText,
+            Model model) {
 
         UserVo user = (UserVo) session.getAttribute("user");
         if (user == null || "N".equals(user.getAdminAt())) {
@@ -74,7 +84,7 @@ public class AdminController {
         List<UserVo> list;
         if ("id".equals(searchType) && searchText != null && !searchText.isEmpty()) {
             // 아이디로 검색
-            list = adminMapper.selectUsersById(searchText);  // id로 검색
+            list = adminMapper.selectUsersById(searchText); // id로 검색
         } else {
             // 전체 보기
             list = adminMapper.selectListUserView();
@@ -93,21 +103,24 @@ public class AdminController {
 
         return "shopPage/adminMain";
     }
-    
+
     @RequestMapping("adminAjax.do")
     @ResponseBody
-    public List<ShopVo> adminAjax(@RequestParam(defaultValue = "대분류 선택") String categoryName, String mcategoryName) {
+    public List<ShopVo> adminAjax(String categoryName, String mcategoryName) {
+        ShopVo shop = new ShopVo();
+        int categoryNo = shopMapper.selectCategoryNo(categoryName);
 
-        if (categoryName != null && !categoryName.equals("대분류 선택") && !categoryName.equals("전체보기")
+        shop.setCategoryNo(categoryNo);
+        shop.setMcategoryName(mcategoryName);
+        if (categoryName != null && !categoryName.equals("전체보기")
                 && mcategoryName == null) {
-            String categoryNameParam = categoryName;
-            List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryNameParam);
+            List<ShopVo> mcategoryNameList = shopMapper.selectMcategoryNameList(categoryName);
             return mcategoryNameList;
         }
 
         if (mcategoryName != null && !mcategoryName.equals("선택 안 함")) {
-            String mcategoryNameParam = mcategoryName;
-            List<ShopVo> dcategoryNameList = shopMapper.selectDcategoryNameList(mcategoryNameParam);
+            int mcategoryNo = shopMapper.selectMCategoryNo(shop);
+            List<ShopVo> dcategoryNameList = shopMapper.selectdCategoryNameList(mcategoryNo);
             return dcategoryNameList;
         }
 
@@ -225,11 +238,11 @@ public class AdminController {
 
     @PostMapping("pInsert.do")
     public String pInsert(ShopVo shop, Model model, List<MultipartFile> photo) throws Exception {
-        int categoryNo = shopMapper.selectAdminCategoryNo(shop);
-        int mcategoryNo = shopMapper.selectAdminMcategoryNo(shop);
-        int dcategoryNo = shopMapper.selectAdminDcategoryNo(shop);
+        int categoryNo = shopMapper.selectCategoryNo(shop.getCategoryName());
         shop.setCategoryNo(categoryNo);
+        int mcategoryNo = shopMapper.selectMCategoryNo(shop);
         shop.setMcategoryNo(mcategoryNo);
+        int dcategoryNo = shopMapper.selectDcategoryNo(shop);
         shop.setDcategoryNo(dcategoryNo);
         int res = shopMapper.productInsert(shop);
 
@@ -283,7 +296,7 @@ public class AdminController {
         List<ShopVo> categoryName = shopMapper.selectCategoryNameList();
         List<ShopVo> mcategoryName = shopMapper.selectMcategoryNameList(shop.getCategoryName());
         List<ShopVo> dcategoryName = shopMapper.selectDcategoryNameList(shop.getMcategoryName());
-        List<PImageVo> pImageList = shopMapper.selectAdminPImageList(shop.getPIdx());
+        List<PImageVo> pImageList = shopMapper.selectPImageList(shop.getPIdx());
 
         model.addAttribute("pImageList", pImageList);
         model.addAttribute("categoryName", categoryName);
@@ -311,7 +324,6 @@ public class AdminController {
         List<String> filename_list = new ArrayList<String>();
 
         String absPath = application.getRealPath("/resources/images/");
-        System.out.println("absPath : " + absPath);
 
         for (MultipartFile photoOne : photo) {
             if (!photoOne.isEmpty()) {
@@ -349,7 +361,6 @@ public class AdminController {
             shopMapper.insertPImage(pImageVo);
         }
 
-
         return "redirect:admin.do";
     }
 
@@ -381,7 +392,7 @@ public class AdminController {
 
     @RequestMapping("nModify.do")
     public String nModify(InquiryVo vo) {
-        
+
         int res = inquiryMapper.nModify(vo);
 
         return "redirect:admin.do";
@@ -401,8 +412,107 @@ public class AdminController {
 
         int res = shopMapper.deletePImageOne(pImage.getFileIdx());
         // 선택한 사진을 지운 후 남은 사진들의 리스트
-        List<PImageVo> deleteAfterList = shopMapper.selectAdminPImageList(pImage.getPIdx());
-        System.out.println(pImage);
+        List<PImageVo> deleteAfterList = shopMapper.selectPImageList(pImage.getPIdx());
         return deleteAfterList;
+    }
+
+    @PostMapping(value = "cancel", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<String> cancelPay(@RequestBody Map<String, Object> requestData) {
+
+        Long merchantUid = Long.valueOf(requestData.get("merchant_uid").toString());
+        Long cancelRequestAmount = Long.valueOf(requestData.get("cancel_request_amount").toString());
+        String reason = requestData.get("reason").toString(); // reason에서 환불 사유를 가져옴
+        int bIdx = extractBIdxFromReason(reason); // reason에서 bIdx 추출
+
+        // 포트원 API Key 및 Secret 설정
+        String impKey = "3672717442038407";
+        String impSecret = "Z0zCEcoGYox8ODy9Ukpd7UGdNg7D9meXKi9zItAoyhwSE2eeCfu98edzsHRTEpxRmjmju70Ot8pa0oD8";
+
+        // 토큰 발급 URL 및 환불 요청 URL
+        String tokenUrl = "https://api.iamport.kr/users/getToken";
+        String cancelUrl = "https://api.iamport.kr/payments/cancel";
+
+        // ObjectMapper 및 RestTemplate 객체 생성
+        ObjectMapper objectMapper = new ObjectMapper();
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 토큰 발급 요청
+        String accessToken = "";
+        try {
+            // 포트원 REST API Key 및 Secret 설정
+            JsonNode requestNode = objectMapper.createObjectNode()
+                    .put("imp_key", impKey)
+                    .put("imp_secret", impSecret);
+
+            // JSON 데이터 문자열로 변환
+            String requestJson = objectMapper.writeValueAsString(requestNode);
+
+            // 토큰 발급을 위한 헤더 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            // 엔터티 설정
+            HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
+
+            // 토큰 발급 요청 전송
+            ResponseEntity<String> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, entity, String.class);
+
+            // 응답 JSON 파싱하여 access_token 추출
+            JsonNode tokenResponse = objectMapper.readTree(response.getBody());
+            accessToken = tokenResponse.path("response").path("access_token").asText();
+            System.out.println("발급된 Access Token: " + accessToken);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("토큰 발급 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // 발급된 토큰을 이용하여 결제 취소 API 호출
+        try {
+            // 환불 요청 데이터 설정
+            JSONObject cancelRequest = new JSONObject();
+            cancelRequest.put("reason", "테스트 결제 환불"); // 환불 사유
+            cancelRequest.put("merchant_uid", merchantUid); // 환불하려는 결제의 merchant_uid
+            cancelRequest.put("amount", cancelRequestAmount); // 환불 요청 금액
+            cancelRequest.put("checksum", cancelRequestAmount); // [권장] 환불 가능 금액 입력
+
+            // 환불 요청 헤더 설정
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", accessToken);
+
+            // 환불 요청 엔터티 설정
+            HttpEntity<String> cancelEntity = new HttpEntity<>(cancelRequest.toString(), headers);
+
+            // 환불 요청 전송
+            ResponseEntity<String> cancelResponse = restTemplate.exchange(cancelUrl, HttpMethod.POST, cancelEntity,
+                    String.class);
+
+                    // 응답 JSON 파싱
+            JsonNode responseJson = objectMapper.readTree(cancelResponse.getBody());
+            System.out.println("환불 요청 결과: " + responseJson.toString());
+
+            // 환불 요청 결과 처리
+            if (responseJson.path("code").asInt() == 0) {
+                // 성공 시 주문 삭제
+                ordersMapper.deleteBuyList(bIdx);
+                return new ResponseEntity<>(responseJson.toString(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(responseJson.toString(), HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("환불 요청 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    // reason에서 bIdx 추출하는 메소드
+    private int extractBIdxFromReason(String reason) {
+        // 예시: "환불 사유: 123" 형식으로 되어 있으므로, ':' 뒤의 값을 추출
+        String[] parts = reason.split(":");
+        if (parts.length > 1) {
+            return Integer.parseInt(parts[1].trim()); // bIdx를 정수로 변환
+        }
+        throw new IllegalArgumentException("잘못된 환불 사유 형식입니다.");
     }
 }
