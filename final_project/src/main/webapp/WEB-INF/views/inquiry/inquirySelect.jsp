@@ -157,8 +157,10 @@
                         <p><strong>작성일:</strong> ${ vo.inDate }</p>
                         <hr>
                         <p>${ vo.inContent }
-                            <img src="${pageContext.request.contextPath}/resources/images/inquiry/${vo.inPP}"
-                            alt="문의 이미지" style="width: 300px; height: 300px; object-fit: cover;">
+                            <c:if test="${vo.inPP ne 'NoPhoto' && vo.inPP ne null}">
+                                 <img src="${pageContext.request.contextPath}/resources/images/inquiry/${vo.inPP}"
+                                alt="문의 이미지" style="width: 200px; height: 200px; object-fit: cover;">
+                            </c:if>
                         </p>
                     </div>
                 </div>

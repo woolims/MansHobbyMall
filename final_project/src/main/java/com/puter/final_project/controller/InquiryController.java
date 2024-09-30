@@ -148,6 +148,9 @@ public class InquiryController {
                 vo.setInPP(filename); // 각 이미지 파일명을 설정
                 int res = inquiryMapper.inquiryInsert(vo);
             }
+        }else{
+            vo.setInPP("NoPhoto");
+            int res = inquiryMapper.inquiryInsert(vo);
         }
 
         return "redirect:inquiry.do";
@@ -176,11 +179,51 @@ public class InquiryController {
 
     // 게시글 수정
     @RequestMapping("inquiryModify.do")
-    public String inquiryModify(InquiryVo vo) {
+    public String inquiryModify(InquiryVo vo, Model model, @RequestParam("inquiryImg") List<MultipartFile> inPP) {
+    
+        // inPP가 null일 경우 빈 리스트로 초기화
+        if (inPP == null || inPP.isEmpty()) {
+            inPP = new ArrayList<>();
+        }
+    
+        // 이미지 저장 경로 설정
+        String absPath = request.getServletContext().getRealPath("/resources/images/inquiry/");
+        List<String> filenameList = new ArrayList<>();
+    
+        // 파일 업로드 처리
+        for (MultipartFile file : inPP) {
+            if (!file.isEmpty()) {
+                String filename = file.getOriginalFilename();
+                File f = new File(absPath, filename);
+    
+                // 동일한 파일이 존재할 경우 파일명 변경
+                if (f.exists()) {
+                    long tm = System.currentTimeMillis();
+                    filename = String.format("%d_%s", tm, filename);
+                    f = new File(absPath, filename);
+                }
+    
+                // 파일 저장
+                try {
+                    file.transferTo(f);
+                    filenameList.add(filename);
+                } catch (Exception e) {
+                    System.out.println("error : "+filename);
 
+                    e.printStackTrace();
+                    model.addAttribute("error", "이미지 업로드에 실패했습니다.");
+                    return "redirect:inquiry.do";
+                }
+                vo.setInPP(filename);
+                System.out.println(filename);
+            }
+        }
+    
+        // 데이터베이스 업데이트 수행
         int res = inquiryMapper.update(vo);
-
+    
         return "redirect:inquiry.do";
     }
+    
 
 }

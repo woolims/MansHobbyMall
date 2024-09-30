@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!-- 게시글 수정 -->
   <update id="update" parameterType="inquiry">
-    update inquiry set inType=#{inType}, inContent=#{inContent} where inIdx=#{inIdx}
+    update inquiry set inType=#{inType}, inContent=#{inContent}, inPP=#{inPP} where inIdx=#{inIdx}
   </update>
 
   <!-- 검색조건별 조회 -->

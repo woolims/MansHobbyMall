@@ -10,7 +10,7 @@
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <style>
         .ck-editor__editable {
-            min-height: 800px;
+            min-height: 600px;
         }
 
         @media (max-width : 768px) {
