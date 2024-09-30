@@ -10,6 +10,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from CartView where userIdx=#{userIdx}
     </select>
 
+    <select id="selectPIdx" parameterType="int" resultType="cart">
+        select pIdx from CartView where userIdx=#{userIdx}
+    </select>
+    
+
     <!-- 구매내역 -->
     <insert id="cartInsert" parameterType="cart">
         insert into scart values(

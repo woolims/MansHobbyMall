@@ -7,7 +7,7 @@
         <head>
             <meta charset="UTF-8" />
             <title>MansHobby</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/payment.css" />
+            <link rel="stylesheet" href="../../../resources/css/payment.css" />
             <!-- jQuery -->
             <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
             <!-- iamport.payment.js -->

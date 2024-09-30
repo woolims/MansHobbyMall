@@ -16,4 +16,6 @@ public interface CartMapper {
     void updateQuantity(int scIdx, int scamount);
 
     int cartDelete(int scIdx);
+
+    int selectPIdx(int userIdx);
 }

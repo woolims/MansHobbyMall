@@ -149,8 +149,6 @@
               box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
 
-            #category-box {}
-
             #category-box h2 {
               text-align: center;
               color: #333;

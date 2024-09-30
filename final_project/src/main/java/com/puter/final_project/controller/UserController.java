@@ -1,5 +1,6 @@
 package com.puter.final_project.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +23,15 @@ import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.dao.GradeMapper;
 import com.puter.final_project.dao.DaddressMapper;
 import com.puter.final_project.dao.OrdersMapper;
+import com.puter.final_project.dao.ProductMapper;
+import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.CouponBoxVo;
 import com.puter.final_project.vo.GradeVo;
 import com.puter.final_project.vo.DaddressVo;
 import com.puter.final_project.vo.OrdersVo;
+import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,6 +63,9 @@ public class UserController {
 
 	@Autowired
 	GradeMapper gradeMapper;
+
+	@Autowired
+	ShopMapper shopMapper;
 
 	// 회원전체목록
 	@RequestMapping("list.do")
@@ -235,8 +242,21 @@ public class UserController {
 
 		UserVo user = (UserVo) session.getAttribute("user");
 		List<CartVo> cartList = cartMapper.selectMyCart(user.getUserIdx());
-
+		List<ProductVo> imageList = new ArrayList<ProductVo>();
+		//user가 주문한 pIdx가져와서 이미지 추출하기
+		for (CartVo cart : cartList) {
+			ProductVo image = shopMapper.selectFile(cart.getPIdx());
+			imageList.add(image);
+		}
+		
+		for (int i = 0; i < cartList.size(); i++) {
+			System.out.println(cartList.get(i).getPIdx()); 
+			System.out.println(imageList.get(i).getFileName());
+		}
+		System.out.println("======================끝======================");
+		model.addAttribute("imageList", imageList);
 		model.addAttribute("cartList", cartList);
+		
 
 		return "myPage/cart";
 	}
