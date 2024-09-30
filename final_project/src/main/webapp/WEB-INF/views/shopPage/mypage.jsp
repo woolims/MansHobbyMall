@@ -76,6 +76,9 @@
                     method: 'GET',
                     success: function (data) {
                         $("#content").html(data);
+                        if(page == 'cart.do'){
+                            //cart.do를 선택하면 footer태그가 보이는 로직
+                        }
                     },
                     error: function () {
                         alert("삐빅 오류");
@@ -86,7 +89,7 @@
             // 기본 콘텐츠로 환영 메시지를 추가합니다.
             $("#content").html('<div class="welcome-message">환영합니다! 여기는 마이페이지입니다.</div>');
             $.ajax({
-                url: "deliveryAddress.do",
+                url: "cart.do",
                 method: 'GET',
                 success: function (data) {
                     $("#content").html(data);
@@ -127,6 +130,9 @@
 
     <!-- 푸터 -->
     <%@ include file="../menubar/footer.jsp" %>
+    <footer style="position: static; margin-top: 100px; padding-bottom: 20px;">
+        <%@ include file="../menubar/cartPayment.jsp" %>
+    </footer>
 </body>
 
 </html>

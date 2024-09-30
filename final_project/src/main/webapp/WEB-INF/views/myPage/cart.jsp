@@ -185,7 +185,6 @@
 
         <div class="cart-summary">
             <p>총 합계: <span class="total-price">${totalPrice}</span></p> <!-- 총 합계 -->
-            <button class="checkout-btn">결제하기</button>
         </div>
     </main>
 </body>
