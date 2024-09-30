@@ -640,14 +640,16 @@
                                     <td>${bVo.getName()}</td>
                                     <td>${bVo.getBuyDate()}</td>
                                     <form>
-                                        <input type="hidden" name="pIdx" value="">
-                                        <input type="hidden" name="categoryName" value="">
-                                        <input type="hidden" name="mcategoryName" value="">
-                                        <input type="hidden" name="dcategoryName" value="">
-                                        <input type="hidden" name="pName" value="">
-                                        <input type="hidden" name="amount" value="">
-                                        <input type="hidden" name="price" value="">
-                                        <input type="button" class="btn btn-danger" value="환불" onclick="cancelPay()">
+                                        <input type="hidden" name="pIdx" value="${bVo.getPIdx()}">
+                                        <input type="hidden" name="bIdx" value="${bVo.getBIdx()}">
+                                        <input type="hidden" name="categoryName" value="${bVo.getCategoryName()}">
+                                        <input type="hidden" name="mcategoryName" value="${bVo.getMcategoryName()}">
+                                        <input type="hidden" name="dcategoryName" value="${bVo.getDcategoryName()}">
+                                        <input type="hidden" name="pName" value="${bVo.getPName()}">
+                                        <input type="hidden" name="amount" value="${bVo.getBamount()}">
+                                        <input type="hidden" name="price" value="${bVo.getPrice()}">
+                                        <input type="hidden" name="orderNumber" value="${bVo.getOrderNumber()}">
+                                        <input type="button" class="btn btn-danger" value="환불" onclick="cancelPay(this.form)">
                                     </form>
                                     <form>
                                         <input type="hidden" name="pIdx" value="">
@@ -714,21 +716,30 @@
 
     <!-- 환불 취소 요청하기 -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous">
+    </script>
     <script>
-        function cancelPay() {
+        function cancelPay(f) {
+            var merchant_uid = f.orderNumber.value;
+            var cancel_request_amount = f.price.value;
+            var bIdx = f.bIdx.value; // bIdx를 가져오기
+            var reason = "환불사유:" + bIdx; // 환불 사유에 bIdx 포함
+            console.log(merchant_uid);
+            console.log(cancel_request_amount);
+
             jQuery.ajax({
-                url: "../buyList/cancel.do", // 환불 요청을 처리할 서버 엔드포인트
-                type: "GET",
+                //url: "../buyList/cancel.do", // 환불 요청을 처리할 서버 엔드포인트
+                url: "cancel",
+                type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
-                    merchant_uid: "${ buy.orderNumber() }", // 주문번호
-                    cancel_request_amount: "${ buy.buyPrice() }", // 환불 금액
-                    reason: "환불 사유" // 환불 사유
+                    merchant_uid: f.orderNumber.value, // 주문번호
+                    cancel_request_amount: f.price.value, // 환불 금액
+                    reason: reason // 환불 사유
                 }),
                 dataType: "json",
                 success: function (result) {
-                    if (result.result) {
+                    if (result.code === 0) {
                         alert("환불 성공");
                     } else {
                         alert("환불 실패");

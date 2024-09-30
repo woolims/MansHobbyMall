@@ -20,6 +20,7 @@ public class OrdersVo {
     int pIdx;
     int bamount;
     String buyDate;
+    Long orderNumber;
 
     String dsContent;
 
