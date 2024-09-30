@@ -9,7 +9,7 @@ import lombok.Data;
 public class GConditionVo {
     
     int jIdx;
-    int userIdx;
+    int gIdx;
     int bpAmount;
     int rCount;
 }

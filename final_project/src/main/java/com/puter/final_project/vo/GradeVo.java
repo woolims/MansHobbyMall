@@ -8,8 +8,11 @@ import lombok.Data;
 @Alias("grade")
 public class GradeVo {
     
+    int userIdx;
+    Long totalPurchaseAmount;
+    int totalReviewCount;
     int gIdx;
     String gradeName;
-    int authority;
     int discount;
+
 }

@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +18,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
 import com.puter.final_project.dao.CouponBoxMapper;
-import com.puter.final_project.dao.GradeMapper;
 import com.puter.final_project.dao.DaddressMapper;
+import com.puter.final_project.dao.GradeMapper;
 import com.puter.final_project.dao.OrdersMapper;
+import com.puter.final_project.dao.UserActivityMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.CouponBoxVo;
-import com.puter.final_project.vo.GradeVo;
 import com.puter.final_project.vo.DaddressVo;
+import com.puter.final_project.vo.GConditionVo;
+import com.puter.final_project.vo.GradeVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.UserVo;
 
@@ -60,6 +61,9 @@ public class UserController {
 	@Autowired
 	GradeMapper gradeMapper;
 
+	@Autowired
+	UserActivityMapper userActivityMapper;
+	
 	// 회원전체목록
 	@RequestMapping("list.do")
 	public String list(Model model) {
@@ -310,9 +314,15 @@ public class UserController {
 	@RequestMapping("grade.do")
 	public String Grade(Model model) {
 
-		List<GradeVo> list = gradeMapper.selectList();
+		UserVo user = (UserVo) session.getAttribute("user");
 
-		model.addAttribute("list", list);
+		GradeVo gvo = gradeMapper.selectOne(user.getUserIdx());
+		GConditionVo gcvo = gradeMapper.selectGCodition(gvo.getGIdx()+1);
+
+		model.addAttribute("gvo", gvo);
+		model.addAttribute("gcvo", gcvo);
+
+
 
 		return "myPage/grade"; // grade.jsp로 이동
 	}
