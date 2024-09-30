@@ -7,7 +7,7 @@
         <head>
             <meta charset="UTF-8" />
             <title>MansHobby</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/payment.css" />
+            <link rel="stylesheet" href="../../../resources/css/payment.css" />
             <!-- jQuery -->
             <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
             <!-- iamport.payment.js -->
@@ -494,6 +494,15 @@
                             <p>판매가: <span id="price">${shop.getPrice()}</span>원</p>
                             <p>할인 금액: <span id="discountAmount">0</span>원</p>
                             <p>최종 결제 금액: <span id="finalPrice">${shop.getPrice()}</span>원</p>
+                        </div>
+                        <!-- 배송지 선택 -->
+                        <div class="address">
+                            <p>배송지: <span id="address-id"><select name="address" id="address">
+                                        <option value="0">배송지를 선택하세요</option>
+                                        <c:forEach var="ad" items="${daAddrList}">
+                                            <option value="${ad.daIdx}">${ad.daAddr}</option>
+                                        </c:forEach>
+                                    </select></span></p>
                         </div>
 
                         <!-- 구매 버튼 -->

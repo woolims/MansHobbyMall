@@ -315,8 +315,8 @@
                 });
             }
 
-            function pSearch(f) {
-                let searchParam = f.searchParam.value.trim();
+            function pSearch() {
+                let searchParam = $("#searchParam").val().trim();
                 let categoryName = $("#categorySearch").val();
                 let mcategoryName = $("#mcategorySearch").val();
                 let dcategoryName = $("#dcategorySearch").val();
@@ -339,7 +339,84 @@
                             var pListHtml = ``;
                             $.each(res_data, function (index, pVo) {
                                 pListHtml += `
-                            <table style="margin-top: 10px;">
+                            <table>
+                                <tr id="p_th">
+                                    <th>상품번호</th>
+                                    <th>대분류</th>
+                                    <th>중분류</th>
+                                    <th>소분류</th>
+                                    <th>상품이름</th>
+                                    <th>상품갯수</th>
+                                    <th>상품가격</th>
+                                    <th>작업</th>
+                                </tr>
+                                <tr>
+                                    <td>\${pVo.pidx}</td>
+                                    <td>\${pVo.categoryName}</td>
+                                    <td>\${pVo.mcategoryName}</td>
+                                    <td>\${pVo.dcategoryName}</td>
+                                    <td>\${pVo.pname}</td>
+                                    <td>\${pVo.amount}</td>
+                                    <td>\${pVo.price}</td>
+                                    <td>
+                                        <form>
+                                            <input type="hidden" name="pIdx" value="\${pVo.pidx}">
+                                            <input type="hidden" name="categoryName" value="\${pVo.categoryName}">
+                                            <input type="hidden" name="mcategoryName" value="\${pVo.mcategoryName}">
+                                            <input type="hidden" name="dcategoryName" value="\${pVo.dcategoryName}">
+                                            <input type="hidden" name="pName" value="\${pVo.pname}">
+                                            <input type="hidden" name="amount" value="\${pVo.amount}">
+                                            <input type="hidden" name="price" value="\${pVo.price}">
+                                            <input type="button" class="btn btn-default" value="수정" onclick="pUpdate(this.form);">
+                                        </form>
+                                        <form>
+                                            <input type="hidden" name="pIdx" value="\${pVo.pidx}">
+                                            <input type="button" class="btn btn-danger" value="삭제" onclick="confirmProductDelete(this.form);">
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table><br><br>`
+                            });
+                            // HTML을 특정 컨테이너에 삽입
+                            $("#pList").html(pListHtml);
+                        },
+                        error: function (err) {
+                            console.log(err.responseText);
+                        }
+                    });
+                } else if (categoryName == "전체보기" && searchParam != "") {
+                    alert("카테고리가 '전체보기'일 경우 검색어를 입력할 수 없습니다.")
+                    f.searchParam.value = "";
+                    return;
+                }
+
+                if (mcategoryName == '선택 안 함') {
+                    mcategoryName = "";
+                }
+
+                if (dcategoryName == '선택 안 함') {
+                    dcategoryName = "";
+                }
+
+                $.ajax({
+                    url: "/admin/adminAjaxPList.do",
+                    data: {
+                        "searchParam": searchParam,
+                        "categoryName": categoryName,
+                        "mcategoryName": mcategoryName,
+                        "dcategoryName": dcategoryName
+                    },
+                    dataType: "json",
+                    method: 'GET',
+                    success: function (res_data) {
+                        if (res_data.length == 0) {
+                            alert("검색결과가 없습니다");
+                            return;
+                        }
+                        var pListHtml = ``;
+                        $.each(res_data, function (index, pVo) {
+                            pListHtml += `
+                            <table>
                                 <tr id="p_th">
                                     <th style="padding: 6px;">상품번호</th>
                                     <th>대분류</th>
@@ -505,6 +582,14 @@
                 // 페이지 이동
                 window.location.href = url;
             }
+            $(document).ready(function () {
+                $('#searchParam').on('keypress', function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        pSearch();
+                    }
+                });
+            });
         </script>
 
     </head>

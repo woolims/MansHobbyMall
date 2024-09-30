@@ -269,34 +269,37 @@
                 <h1>장바구니</h1>
             </header>
             <main>
-                <section class="cart-items">
-                    <c:set var="totalPrice" value="0" />
-                    <c:forEach var="item" items="${cartList}">
+                <c:set var="totalPrice" value="0" />
+                <c:if test="${!cartList.isEmpty()}">
+                    <c:forEach var="i" begin="0" end="${cartList.size()-1}">
+                        <c:set var="cart" value="${cartList[i]}" />
+                        <c:set var="image" value="${imageList[i]}" />
                         <div class="cart-item">
-                            <input type="checkbox" id="item-${item.getScIdx()}" class="item-checkbox">
-                            <label for="item-${item.getScIdx()}" class="item-content">
-                                <!--<img src="" alt="상품 이미지">  상품 이미지 URL -->
-                                <img src="https://via.placeholder.com/100" alt="상품 이미지">
+                            <input type="checkbox" id="item-${cart.getScIdx()}" class="item-checkbox">
+                            <label for="item-${cart.getScIdx()}" class="item-content">
+                                <c:if test="${image.fileNameLink == 'Y'}">
+                                    <img src="${image.fileName}" alt="상품이미지"> <!-- 상품 이미지 URL -->
+                                </c:if>
+                                <c:if test="${image.fileNameLink == 'N'}">
+                                    <img src="${pageContext.request.contextPath}/resources/images/${image.fileName}"
+                                        alt="상품이미지"> <!-- 상품 이미지 URL -->
+                                </c:if>
                                 <div class="item-details">
-                                    <h2>${item.getPName()}</h2>
-                                    <p>상품 가격: <span class="price">${item.getPrice()}</span>원</p>
-                                    <div class="item-controls">
-                                        <label for="scamount-${item.getScIdx()}">수량:</label>
-                                        <input type="number" id="scamount-${item.getScIdx()}" name="scamount"
-                                            value="${item.getScamount()}" min="1">
-                                    </div>
+                                    <h2>${cart.getPName()}</h2> <!-- 상품 이름 -->
+                                    <p>상품 가격: <span class="price">${cart.getPrice()}</span></p> <!-- 상품 가격 -->
+                                    <label for="quantity-${cart.getPIdx()}">수량:</label>
+                                    <input type="number" id="scamount-${cart.getScIdx()}" name="scamount"
+                                        value="${cart.getScamount()}" min="1"> <!-- 수량 -->
                                 </div>
-                                <button class="remove-btn" onclick="cartDelete('${item.getScIdx()}')">삭제</button>
+                                <button class="remove-btn" onclick="cartDelete('${cart.getScIdx()}')">삭제</button>
                             </label>
                         </div>
-                        <c:set var="totalPrice" value="${totalPrice + item.price * item.scamount}" />
+                        <c:set var="totalPrice" value="${totalPrice + cart.price * cart.scamount}" />
                     </c:forEach>
-                </section>
-
+                </c:if>
 
                 <div class="cart-summary">
                     <p>총 합계: <span class="total-price">${totalPrice}</span></p> <!-- 총 합계 -->
-                    <button class="checkout-btn">결제하기</button>
                 </div>
             </main>
         </body>
