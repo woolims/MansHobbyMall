@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,16 +19,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.puter.final_project.dao.CartMapper;
 import com.puter.final_project.dao.CouponBoxMapper;
-import com.puter.final_project.dao.GradeMapper;
 import com.puter.final_project.dao.DaddressMapper;
+import com.puter.final_project.dao.GradeMapper;
 import com.puter.final_project.dao.OrdersMapper;
-import com.puter.final_project.dao.ProductMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.vo.CartVo;
 import com.puter.final_project.vo.CouponBoxVo;
-import com.puter.final_project.vo.GradeVo;
 import com.puter.final_project.vo.DaddressVo;
+import com.puter.final_project.vo.GradeVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.ProductVo;
 import com.puter.final_project.vo.UserVo;
@@ -249,11 +247,6 @@ public class UserController {
 			imageList.add(image);
 		}
 		
-		for (int i = 0; i < cartList.size(); i++) {
-			System.out.println(cartList.get(i).getPIdx()); 
-			System.out.println(imageList.get(i).getFileName());
-		}
-		System.out.println("======================끝======================");
 		model.addAttribute("imageList", imageList);
 		model.addAttribute("cartList", cartList);
 		
