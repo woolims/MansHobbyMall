@@ -336,7 +336,8 @@ SELECT
     i.inDate,
     i.inPP,
     u.name,
-    u.id
+    u.id,
+    i.inAc
 FROM Inquiry i
 INNER JOIN User u ON i.userIdx = u.userIdx;
 

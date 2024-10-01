@@ -114,6 +114,7 @@
                                     <tr">
                                         <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">공지사항
                                         </td>
+                                        <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">관리자</td>
                                         <td
                                             style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030; ">
                                             ${vo.inType}</td>
