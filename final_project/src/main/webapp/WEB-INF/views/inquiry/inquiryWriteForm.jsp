@@ -3,6 +3,25 @@
 <!DOCTYPE html>
 <html>
 
+<style>
+    .form-button {
+        display: flex;
+        /* 플렉스 레이아웃 사용 */
+        justify-content: space-between;
+        /* 버튼들을 양 끝으로 배치 */
+        align-items: center;
+        /* 수직 정렬 */
+    }
+
+    .form-button button {
+        padding: 10px 20px;
+        /* 버튼의 여백 설정 */
+        font-size: 16px;
+        /* 버튼의 폰트 크기 */
+    }
+</style>
+
+
 <head>
     <meta charset="UTF-8">
     <title>게시글 등록</title>
@@ -10,7 +29,7 @@
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <style>
         .ck-editor__editable {
-            min-height: 600px;
+            min-height: 500px;
         }
 
         @media (max-width : 768px) {
@@ -52,8 +71,8 @@
             }
 
             if (f.inPP.files.length === 0) {
-                            if (!confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?")) return;
-                        } else if (!confirm("등록하시겠습니까?")) return;
+                if (!confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?")) return;
+            } else if (!confirm("등록하시겠습니까?")) return;
 
             f.method = "POST";
             f.enctype = "multipart/form-data";
@@ -90,7 +109,11 @@
                             <textarea name="inContent"></textarea>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
+                    <div class="form-button">
+                        <button type="button" class="btn btn-info"
+                            onclick="location.href='${pageContext.request.contextPath}/inquiry/inquiry.do'">뒤로가기</button>
+                        <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
+                    </div>
                 </form>
             </div>
         </div>

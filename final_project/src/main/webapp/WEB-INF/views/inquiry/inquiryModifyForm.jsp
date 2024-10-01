@@ -10,13 +10,29 @@
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <style>
         .ck-editor__editable {
-            min-height: 600px;
+            min-height: 500px;
         }
 
         @media (max-width : 768px) {
             .login-container {
                 margin-top: 50px;
             }
+        }
+
+        .form-button {
+            display: flex;
+            /* 플렉스 레이아웃 사용 */
+            justify-content: space-between;
+            /* 버튼들을 양 끝으로 배치 */
+            align-items: center;
+            /* 수직 정렬 */
+        }
+
+        .form-button button {
+            padding: 10px 20px;
+            /* 버튼의 여백 설정 */
+            font-size: 16px;
+            /* 버튼의 폰트 크기 */
         }
     </style>
     <script>
@@ -69,7 +85,8 @@
             } else if (!confirm("등록하시겠습니까?")) return;
 
             f.method = "POST";
-            f.enctype = "multipart/form-data";7
+            f.enctype = "multipart/form-data";
+            7
             f.action = "inquiryModify.do"; // 전송대상
             f.submit(); // 전송
         }
@@ -99,16 +116,21 @@
                         <input type="file" name="inquiryImg" id="inPP"><br>
                         현재 등록된 사진 : <c:if test="${vo.inPP ne 'NoPhoto' && vo.inPP ne null}">
                             <img src="${pageContext.request.contextPath}/resources/images/inquiry/${vo.inPP}"
-                           alt="문의 이미지" style="width: 100px; height: 100px; object-fit: cover;">
-                       </c:if>
-                       <c:if test="${vo.inPP eq 'NoPhoto' || vo.inPP eq null}">없음</c:if>
-                    <div class="form-group" style="color: black;">
-                        <label for="content" style="color: black;">내용</label>
-                        <div id="editor">
-                            <textarea name="inContent"></textarea>
+                                alt="문의 이미지" style="width: 100px; height: 100px; object-fit: cover;">
+                        </c:if>
+                        <c:if test="${vo.inPP eq 'NoPhoto' || vo.inPP eq null}">없음</c:if>
+                        <div class="form-group" style="color: black;">
+                            <label for="content" style="color: black;">내용</label>
+                            <div id="editor">
+                                <textarea name="inContent"></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="sendM(this.form)">수정</button>
+
+                        <div class="form-button">
+                            <button type="button" class="btn btn-info"
+                                onclick="location.href='${pageContext.request.contextPath}/inquiry/inquiry.do'">목록으로</button>
+                            <button type="button" class="btn btn-primary" onclick="sendM(this.form)">수정</button>
+                        </div>
                 </form>
             </div>
         </div>
