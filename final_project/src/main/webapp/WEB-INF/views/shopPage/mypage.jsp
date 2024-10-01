@@ -130,9 +130,6 @@
 
     <!-- 푸터 -->
     <%@ include file="../menubar/footer.jsp" %>
-    <footer style="position: static; margin-top: 100px; padding-bottom: 20px;">
-        <%@ include file="../menubar/cartPayment.jsp" %>
-    </footer>
 </body>
 
 </html>
