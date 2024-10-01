@@ -22,6 +22,8 @@ public interface InquiryMapper {
     // 게시글 상세 조회
     public InquiryVo selectOne(int inIdx);
 
+    public InquiryVo selectOneP(Integer pIdx);
+
     // 게시글 삭제
     public int delete(int inIdx);
 

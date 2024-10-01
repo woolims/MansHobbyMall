@@ -337,9 +337,10 @@ SELECT
     i.inPP,
     u.name,
     u.id,
-    i.inAc
+    p.pName
 FROM Inquiry i
-INNER JOIN User u ON i.userIdx = u.userIdx;
+INNER JOIN User u ON i.userIdx = u.userIdx
+INNER JOIN Product p ON i.pIdx = p.pIdx;
 
 CREATE OR REPLACE VIEW AnswerView AS
 SELECT

@@ -96,7 +96,11 @@ public class InquiryController {
 
     // 게시글 작성폼 이동
     @RequestMapping("inquiryWriteForm.do")
-    public String inquiryWriteForm() {
+    public String inquiryWriteForm(@RequestParam(value = "pIdx", required = false) Integer pIdx, Model model) {
+
+        InquiryVo vo = inquiryMapper.selectOneP(pIdx);
+
+        model.addAttribute("vo", vo);
 
         return "inquiry/inquiryWriteForm";
     }
@@ -110,8 +114,6 @@ public class InquiryController {
         UserVo user = (UserVo) session.getAttribute("user");
 
         vo.setUserIdx(user.getUserIdx());
-
-
 
         // 이미지 저장 경로 설정
         String absPath = request.getServletContext().getRealPath("/resources/images/inquiry/");

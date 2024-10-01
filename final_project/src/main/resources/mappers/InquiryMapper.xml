@@ -15,12 +15,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select * from InquiryView where inIdx=#{inIdx}
   </select>
 
+  <select id="selectOneP" parameterType="Integer" resultType="inquiry">
+       select * from product where pIdx=#{pIdx}
+  </select>
+
   <!-- 게시글 작성 -->
   <insert id="inquiryInsert" parameterType="inquiry">
     <!-- 나중에 수정 필요 -->
     insert into inquiry values(
       null,
-      null, 
+      #{pIdx}, 
       #{userIdx}, 
       #{inType}, 
       #{inContent}, 

@@ -9,16 +9,17 @@ import lombok.Data;
 public class InquiryVo {
 
     int inIdx;
-    int pIdx;
+    Integer pIdx;
     int userIdx;
     String inType;
     String inContent;
     String inDate;
     String inPP;
-    
     String inAc;
 
     String name;
     String id;
+
+    String pName;
 
 }

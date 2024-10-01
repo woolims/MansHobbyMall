@@ -153,8 +153,11 @@
                 <br>
                 <div class="panel panel-default" style="background-color: #8f8f8fed; color: #f1f1f1;">
                     <div class="panel-body" style="min-height: 500px;">
-                        <p><strong>작성자:</strong> ${ vo.name }</p>
+                        <p><strong>작성자:</strong> ${ vo.name }(${ vo.id })</p>
                         <p><strong>작성일:</strong> ${ vo.inDate }</p>
+                        <c:if test="${vo.getPName() ne null}">
+                            <p><strong>상품명:</strong> ${ vo.getPName() }</p>
+                        </c:if>
                         <hr>
                         <p>${ vo.inContent }
                             <c:if test="${vo.inPP ne 'NoPhoto' && vo.inPP ne null}">
