@@ -355,11 +355,6 @@ public class ShopController {
 
         UserVo user = (UserVo) session.getAttribute("user");
 
-
-        // 사용자가 해당 상품을 구매했는지 확인
-        int purchaseCount = reviewMapper.purchasedProduct(user.getUserIdx(), vo.getPIdx());
-        model.addAttribute("purchaseCount", purchaseCount);  
-
         // 1. 상품 정보 가져오기
         ShopVo shop = shopMapper.selectProductInfoList(categoryNo, pIdx);
         if (shop == null) {
@@ -378,7 +373,9 @@ public class ShopController {
 
         if (user != null) {
             List<CouponBoxVo> couponList = couponBoxMapper.selectCouponsByUserId(user.getUserIdx());
+            int purchaseCount = reviewMapper.purchasedProduct(user.getUserIdx(), vo.getPIdx());
             model.addAttribute("couponList", couponList);
+            model.addAttribute("purchaseCount", purchaseCount);  
         }
 
         // 4. 쿠폰이 있을 때만 할인 적용
