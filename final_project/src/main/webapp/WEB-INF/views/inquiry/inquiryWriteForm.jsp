@@ -110,8 +110,7 @@
                         </div>
                     </div>
                     <div class="form-button">
-                        <button type="button" class="btn btn-info"
-                            onclick="location.href='${pageContext.request.contextPath}/inquiry/inquiry.do'">뒤로가기</button>
+                        <button type="button" class="btn btn-info" onclick="goBack()">뒤로가기</button>
                         <button type="button" class="btn btn-primary" onclick="send1(this.form)">등록</button>
                     </div>
                 </form>
@@ -133,6 +132,16 @@
             .catch(error => {
                 console.error('에디터 로드 중 오류가 발생했습니다.', error);
             });
+    </script>
+
+    <script>
+        function goBack() {
+            if (document.referrer) { // 이전 페이지가 있는 경우
+                history.back(); // 또는 history.go(-1);
+            } else {
+                alert("이전 페이지가 없습니다.");
+            }
+        }
     </script>
 </body>
 

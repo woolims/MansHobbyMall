@@ -731,7 +731,6 @@
         function openInquiryForm() {
 
             location.href = `inquiry/inquiryWriteForm.do?pIdx=${shop.getPIdx()}`;
-
         }
     </script>
 
