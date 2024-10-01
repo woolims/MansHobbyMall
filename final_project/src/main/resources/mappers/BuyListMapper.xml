@@ -10,6 +10,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from user where userIdx=#{userIdx}
     </select>
 
+    <select id="selectOnePrice" parameterType="int" resultType="int">
+        select price from product where pIdx=#{pIdx}
+    </select>
+
     <!-- 구매내역 -->
     <insert id="insert" parameterType="buy">
         insert into buyList values(

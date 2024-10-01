@@ -1,5 +1,7 @@
 package com.puter.final_project.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import com.puter.final_project.dao.BuyListMapper;
+import com.puter.final_project.dao.CartMapper;
 import com.puter.final_project.dao.CouponBoxMapper;
 import com.puter.final_project.dao.UserActivityMapper;
 import com.puter.final_project.vo.BuyListVo;
@@ -34,6 +37,9 @@ public class BuyListController {
 
     @Autowired
     BuyListMapper buyListMapper;
+
+    @Autowired
+    CartMapper cartMapper;
 
     @Autowired
     UserActivityMapper userActivityMapper;
@@ -93,6 +99,44 @@ public class BuyListController {
 
             session.setAttribute("alertMsg", "결제에 실패했습니다!");
             return "redirect:home.do";
+        }
+
+    }
+
+    @PostMapping(value = "cartBuy.do", produces = "application/json; charset=utf-8")
+    public String cartBuy(BuyListVo vo, @RequestParam(value = "pIdxList") List<Integer> pIdxList, @RequestParam(value = "bamountList") List<Integer> bamountList, @RequestParam(value = "scIdxList") List<Integer> scIdxList ) {
+
+        UserActivityVo userActVo = new UserActivityVo();
+        userActVo.setUserIdx(vo.getUserIdx());
+        userActVo.setTotalPurchaseAmount(vo.getBuyPrice());
+
+        int res = 0;
+        int bIdx = 0;
+
+        for (int i = 0; i < pIdxList.size(); i++){
+            vo.setPIdx(pIdxList.get(i));
+            vo.setBamount(bamountList.get(i));
+            vo.setBuyPrice(buyListMapper.selectOnePrice(pIdxList.get(i)) * vo.getBamount());
+            res = buyListMapper.insert(vo);
+            buyListMapper.updateAmount(vo);
+            bIdx = buyListMapper.selectBuyListOne(vo);
+            res = buyListMapper.orderInsert(bIdx);
+            cartMapper.cartDelete(scIdxList.get(i));
+        }
+        
+        
+        userActivityMapper.updateTotalBuyPlus(userActVo);
+        userActivityMapper.callUpdateUserGrade(userActVo.getUserIdx());
+        if (res > 0) {
+            session.setAttribute("alertMsg", "결제 완료 되었습니다!");
+
+            // {"result" : true}
+            String json = String.format("{\"result\" : %d}", res);
+            return json;
+
+        } else {
+            session.setAttribute("alertMsg", "결제에 실패했습니다!");
+            return "redirect:../home.do";
         }
 
     }

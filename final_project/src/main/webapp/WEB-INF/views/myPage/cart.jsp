@@ -190,7 +190,135 @@
                     margin-bottom: 10px;
                     /* 간격을 줄이기 위해 margin-bottom을 추가 */
                 }
+                #paymentModal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed; /* 고정 위치 */
+            z-index: 1000; /* 다른 요소 위에 표시 */
+            left: 0;
+            top: 0;
+            width: 100%; /* 전체 화면 너비 */
+            height: 100%; /* 전체 화면 높이 */
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto; /* 중앙 정렬 */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* 너비 조절 */
+        }
             </style>
+            <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+            <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+            <script>
+                function openModal() {
+                    document.getElementById('paymentModal').style.display = 'block';
+                }
+
+                function closeModal() {
+                    document.getElementById('paymentModal').style.display = 'none';
+                }
+                function submitPayment() {
+                    const selectedItems = [];
+                    const selectedItemAmount = [];
+                    const scIdxList = [];
+                    let selectedTotalPrice = 0; // 선택한 상품의 총 합계 초기화
+                    let productName = "";
+                    let isFirstItem = true;
+                    document.querySelectorAll('.item-checkbox:checked').forEach(item => {
+                        const itemId = item.id.split('-')[1]; // 선택된 아이템 ID 추출
+                        const productNo = document.querySelector(`#productNo-`+itemId).value;
+                        const quantity = parseInt(document.querySelector(`#scamount-`+itemId).value); // 해당 아이템 수량 추출 및 숫자로 변환
+                        const price = parseFloat(document.querySelector(`#scamount-`+itemId).closest('.item-details').querySelector('.price').innerText.replace(/[^0-9]/g, '')); // 가격을 숫자로 변환
+
+                        if (isFirstItem) { // 첫 번째 항목일 때만 실행
+                            productName = document.querySelector(`#pName-` + itemId).innerText; // 상품 이름 추출
+                            console.log(`첫 번째 상품 이름: `+productName);
+                            isFirstItem = false; // 첫 번째 항목을 처리했으므로 플래그를 false로 설정
+                        }
+
+                        scIdxList.push({scIdx: itemId});
+                        selectedItems.push({ pIdx: productNo});
+                        selectedItemAmount.push({scamount: quantity});
+                        selectedTotalPrice += price * quantity; // 총 합계 계산
+                    });
+
+                    if (selectedItems.length === 0) {
+                        alert("선택된 상품이 없습니다.");
+                        return;
+                    }
+
+                    // 선택한 상품 목록과 총 합계를 모달에 표시
+                    const selectedItemsContainer = document.getElementById('selectedItemsContainer');
+                    selectedItemsContainer.innerHTML = selectedItems.map((item, index) =>
+                        (`<p>상품 ID: `+item.pIdx+`, 수량: `+selectedItemAmount[index].scamount+`</p>`)
+                    ).join('');
+
+                    document.getElementById('selectedTotalPrice').innerText = selectedTotalPrice;
+
+                    var IMP = window.IMP;
+                    IMP.init("imp33361271");
+                    var merchant_uid = new Date().getTime() + 0; // 고유한 주문번호 생성
+                    console.log("merchant_uid : "+merchant_uid);
+                    // IAMPORT 결제 요청 코드
+                    console.log("결제 요청 데이터:", {
+                        pg: "kakaopay",
+                        pay_method: 'kakaopay',
+                        merchant_uid: merchant_uid,
+                        name: productName + selectedItems.length + '개',
+                        amount: selectedTotalPrice,
+                        buyer_email: '${user.id}',
+                        buyer_name: '${user.name}',
+                        buyer_tel: '${user.phone}',
+                        buyer_addr: '${user.addr}',
+                        buyer_postcode: ''
+                    }); // 결제 요청 데이터 로그
+
+                    // IAMPORT 결제 요청 코드
+                    IMP.request_pay({
+                        pg: "kakaopay",
+                        pay_method: 'kakaopay',
+                        merchant_uid: merchant_uid,
+                        name: productName+' 외 ' + (selectedItems.length-1) + '개',
+                        amount: selectedTotalPrice, // 직접 계산한 총 금액으로 설정
+                        buyer_email: '${ user.id }',
+                        buyer_name: '${ user.name }',
+                        buyer_tel: '${ user.phone }',
+                        buyer_addr: '${ user.addr }',
+                        buyer_postcode: ''
+                    }, function (rsp) { // callback
+                        console.log(rsp);
+                        if (rsp.success) {
+                            alert("결제 완료하였습니다.");
+                            // 결제 성공 시 처리 로직 추가
+                            // 아래 AJAX 요청은 필요한 대로 수정하세요.
+                            jQuery.ajax({
+                                url: "../buyList/cartBuy.do",
+                                method: "POST",
+                                data: {
+                                    imp_uid: rsp.imp_uid,
+                                    orderNumber: rsp.merchant_uid,
+                                    userIdx: "${ user.userIdx }",
+                                    scIdxList: scIdxList.map(scIdxs => scIdxs.scIdx),
+                                    pIdxList: selectedItems.map(item => item.pIdx),
+                                    bamountList: selectedItemAmount.map(amount => amount.scamount),
+                                    buyPrice: rsp.paid_amount
+                                },
+                                dataType: "json",
+                            }).done(function (data) {
+                                // 가맹점 서버 결제 API 성공 시 로직
+                                console.log(data);
+                                closeModal();
+                            });
+                        } else {
+                            closeModal();
+                            alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+                        }
+                    });
+                }
+
+            </script>
             <script>
                 function updateTotalPrice() {
                     let totalPrice = 0;
@@ -229,7 +357,7 @@
                 });
 
                 // 페이지 로드 시 총 금액 초기 계산
-                document.addEventListener('DOMContentLoaded', updateTotalPrice);
+                document.addEventListener('DOMContentLoaded', updateTotalPrice, IMP.init("imp33361271"));
 
                 function cartDelete(scIdx) {
                     if (confirm("장바구니에서 빼시겠습니까?") == false) return;
@@ -285,11 +413,12 @@
                                         alt="상품이미지"> <!-- 상품 이미지 URL -->
                                 </c:if>
                                 <div class="item-details">
-                                    <h2>${cart.getPName()}</h2> <!-- 상품 이름 -->
+                                    <h2 id="pName-${cart.getScIdx()}">${cart.getPName()}</h2> <!-- 상품 이름 -->
                                     <p>상품 가격: <span class="price">${cart.getPrice()}</span></p> <!-- 상품 가격 -->
                                     <label for="quantity-${cart.getPIdx()}">수량:</label>
                                     <input type="number" id="scamount-${cart.getScIdx()}" name="scamount"
                                         value="${cart.getScamount()}" min="1"> <!-- 수량 -->
+                                    <input type="hidden" id="productNo-${cart.getScIdx()}" value="${cart.getPIdx()}"/>
                                 </div>
                                 <button class="remove-btn" onclick="cartDelete('${cart.getScIdx()}')">삭제</button>
                             </label>
@@ -299,9 +428,21 @@
                 </c:if>
 
                 <div class="cart-summary">
-                    <p>총 합계: <span class="total-price">${totalPrice}</span></p> <!-- 총 합계 -->
+                    <p>총 합계: <span class="total-price" id="finalPrice">${totalPrice}</span></p> <!-- 총 합계 -->
+                    <button class="checkout-btn" onclick="submitPayment()">결제하기</button>
                 </div>
             </main>
+
+            <div id="paymentModal">
+                <div class="modal-content">
+                    <span class="close-btn" onclick="closeModal()">&times;</span>
+                    <h2>결제하기</h2>
+                    <p>선택한 상품에 대한 결제를 진행합니다.</p>
+                    <div id="selectedItemsContainer"></div> <!-- 선택한 상품 목록 -->
+                    <p>총 합계: <span id="selectedTotalPrice"></span></p> <!-- 선택한 상품의 총 합계 -->
+                    <button onclick="submitPayment()">결제 진행</button>
+                </div>
+            </div>
         </body>
 
         </html>

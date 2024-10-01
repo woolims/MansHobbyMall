@@ -23,4 +23,6 @@ public interface BuyListMapper {
     // 재고수량 업데이트
     public int updateAmount(BuyListVo vo);
 
+    public int selectOnePrice(int pIdx);
+
 }
