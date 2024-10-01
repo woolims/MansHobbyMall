@@ -372,14 +372,17 @@
                         <h2 style="margin-right: 20px;">후기</h2>
                         <br>
                         <c:if test="${not empty user}">
-                        <c:if test="${purchaseCount > 0}">
-                            <button type="button" class="btn btn-primary btn-sm"
-                                style="padding: 10px 15px; font-size: 15px; border-radius: 4px; background-color: black !important;"
-                                id="openReviewModal">리뷰등록</button>
+                            <c:if test="${purchaseCount > 0}">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    style="padding: 10px 15px; font-size: 15px; border-radius: 4px; background-color: black !important;"
+                                    id="openReviewModal">리뷰등록</button>
+                            </c:if>
+                            <c:if test="${purchaseCount <= 0}">
+                                <span style="color: red; font-size: 14px;">이 상품을 구매한 후 리뷰를 작성할 수 있습니다.</span>
+                            </c:if>
                         </c:if>
-                        <c:if test="${purchaseCount <= 0}">
-                            <span style="color: red; font-size: 14px;">이 상품을 구매한 후 리뷰를 작성할 수 있습니다.</span>
-                        </c:if>
+                        <c:if test="${empty user}">
+                            <span style="color: red; font-size: 14px;">로그인 후 리뷰를 작성할 수 있습니다.</span>
                         </c:if>
                     </div>
                     <br>
