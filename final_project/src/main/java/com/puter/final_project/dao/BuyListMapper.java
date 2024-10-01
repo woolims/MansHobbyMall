@@ -24,5 +24,7 @@ public interface BuyListMapper {
     public int updateAmount(BuyListVo vo);
 
     int purchasedProduct(BuyListVo vo);
+    
+    public int selectOnePrice(int pIdx);
 
 }
