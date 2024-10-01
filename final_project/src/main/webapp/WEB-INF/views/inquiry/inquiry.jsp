@@ -14,27 +14,21 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        // JSP에서 서버측 데이터를 JavaScript 변수로 변환하여 사용
         var search = "${param.search}";
 
-        // 검색 조건이 있으면 선택된 값을 설정
         if (search !== "") {
             $("#search").val(search);
         }
 
-        // 검색 조건이 'all'이면 입력창을 비웁니다.
         if (search === "all") {
             $("#search_text").val("");
         }
     });
 
-
     function find() {
-
         let search = $("#search").val();
         let search_text = $("#search_text").val().trim();
 
-        // 전체검색이 아닌데 검색어가 비어있으면
         if (search != "all" && search_text == "") {
             alert("검색어를 입력하세요");
             $("#search_text").val("");
@@ -42,23 +36,23 @@
             return;
         }
 
-        // 자바스크립트 이용해서 호출
         location.href = "inquiry.do?search=" + search + "&search_text=" + encodeURIComponent(search_text, "utf-8");
-
     }
 
-
     function check_user(inIdx, userIdx) {
-        // JSP에서 자바스크립트로 값을 전달하기 위해 변수로 변환
         var currentUserIdx = "${not empty user ? user.userIdx : -1}";
-        var isAdmin = "${user.adminAt}" == "Y"; // 관리자 확인
+        var isAdmin = "${user.adminAt}" == "Y";
 
-        // 사용자가 관리자이거나 본인인지 확인
         if ((userIdx == currentUserIdx || isAdmin) && currentUserIdx != -1) {
             location.href = "inquirySelect.do?inIdx=" + inIdx;
         } else {
             alert("해당 내용은 관리자와 본인만 확인 가능합니다.");
         }
+    }
+
+    function viewDetail(inIdx) {
+        // 상세 페이지로 이동
+        location.href = "inquirySelect.do?inIdx=" + inIdx;
     }
 </script>
 
@@ -87,7 +81,6 @@
                             <option value="all">전체보기</option>
                             <option value="id">아이디</option>
                             <option value="inType">제목</option>
-                            <!-- <option value="name_content">이름+제목</option> -->
                         </select>
 
                         <input id="search_text" class="form-control" value="${ param.search_text }">
@@ -95,8 +88,7 @@
                     </form>
                 </div>
 
-                <table class="table table-striped" style="margin-top: 20px; table-layout: fixed;
-                        ">
+                <table class="table table-striped" style="margin-top: 20px; table-layout: fixed;">
                     <thead>
                         <tr>
                             <th style="width: 10%; text-align: center;">번호</th>
@@ -107,67 +99,53 @@
                         </tr>
                     </thead>
                     <tbody style="background-color: white; border: 1px solid black;">
-                        <c:if test="${not empty user}">
-                            <!-- 공지사항 먼저 출력 -->
-                            <c:forEach var="vo" items="${list}">
-                                <c:if test="${vo.inAc eq 'Y'}">
-                                    <tr">
-                                        <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">공지사항
-                                        </td>
-                                        <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">관리자</td>
-                                        <td
-                                            style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030; ">
-                                            ${vo.inType}</td>
-                                        <td
-                                            style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030; ">
-                                            ${vo.inDate}</td>
-                                        <td
-                                            style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; ">
-                                        </td>
-                                        </tr>
-                                </c:if>
-                            </c:forEach>
-                            <c:forEach var="vo" items="${list}">
-                                <c:if test="${vo.inAc ne 'Y'}">
-                                    <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
-                                        <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
-                                            ${vo.inIdx}</td>
-                                        <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
-                                            ${vo.id}</td>
-                                        <td
-                                            style="width: 45%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                            ${vo.inType}</td>
-                                        <td
-                                            style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                            ${vo.inDate}
-                                        </td>
-                                        <td
-                                            style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                            <c:choose>
-                                                <c:when test="${answerMap[vo.inIdx] eq true}">답변 완료</c:when>
-                                                <c:otherwise>답변 미완료</c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                    </tr>
-                                </c:if>
-                            </c:forEach>
-                        </c:if>
+                        <!-- 공지사항 먼저 출력 -->
+                        <c:forEach var="vo" items="${list}">
+                            <c:if test="${vo.inAc eq 'Y'}">
+                                <tr onclick="viewDetail('${vo.inIdx}');">
+                                    <td style="text-align: center; background-color: #f1f1f1; color: #303030;">공지사항</td>
+                                    <td style="text-align: center; background-color: #f1f1f1; color: #303030;">관리자</td>
+                                    <td style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030;">
+                                        ${vo.inType}</td>
+                                    <td style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030;">
+                                        ${vo.inDate}</td>
+                                    <td style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030;"></td>
+                                </tr>
+                            </c:if>
+                        </c:forEach>
+
+                        <c:forEach var="vo" items="${list}">
+                            <c:if test="${vo.inAc ne 'Y'}">
+                                <tr onclick="check_user('${vo.inIdx}', '${vo.userIdx}');">
+                                    <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        ${vo.inIdx}</td>
+                                    <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        ${vo.id}</td>
+                                    <td style="width: 45%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        ${vo.inType}</td>
+                                    <td style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        ${vo.inDate}
+                                    </td>
+                                    <td style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        <c:choose>
+                                            <c:when test="${answerMap[vo.inIdx] eq true}">답변 완료</c:when>
+                                            <c:otherwise>답변 미완료</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                </tr>
+                            </c:if>
+                        </c:forEach>
                     </tbody>
                 </table>
-                <c:if test="${empty user}">
-                    <h1 style="text-align: center; margin-top: 50px;">로그인 후에 이용해주세요.</h1>
-                </c:if>
+
+                <!-- 페이지 메뉴 -->
+                <div class="pagination-container" style="text-align: center;">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">${pageMenu}</ul>
+                    </nav>
+                </div>
             </div>
         </div>
-        <c:if test="${not empty user}">
-            <!-- 페이지 메뉴 -->
-            <div class="pagination-container" style="text-align: center;">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">${pageMenu}
-                    </ul>
-                </nav>
-            </div>
-        </c:if>
     </div>
 
 </body>
