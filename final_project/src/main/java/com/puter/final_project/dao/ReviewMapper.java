@@ -51,4 +51,8 @@ public interface ReviewMapper {
 
     // 리뷰 이미지 업로드
     int updateReviewImg(ReviewVo review);
+
+    // 특정 사용자가 특정 상품을 구매했는지 확인
+    int purchasedProduct(int userIdx, int pIdx);
+
 }

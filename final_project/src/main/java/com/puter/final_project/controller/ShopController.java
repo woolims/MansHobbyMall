@@ -349,9 +349,16 @@ public class ShopController {
 
     // 상품 클릭 시 이동하는 상세페이지
     @RequestMapping("/productOne.do")
-    public String productOne(int categoryNo, int pIdx,
+    public String productOne(ReviewVo vo, int categoryNo, int pIdx, String url,
             @RequestParam(value = "couponId", required = false) Integer couponId,
             Model model) {
+
+        UserVo user = (UserVo) session.getAttribute("user");
+
+
+        // 사용자가 해당 상품을 구매했는지 확인
+        int purchaseCount = reviewMapper.purchasedProduct(user.getUserIdx(), vo.getPIdx());
+        model.addAttribute("purchaseCount", purchaseCount);  
 
         // 1. 상품 정보 가져오기
         ShopVo shop = shopMapper.selectProductInfoList(categoryNo, pIdx);
@@ -362,11 +369,13 @@ public class ShopController {
         List<PImageVo> product = shopMapper.selectPImageList(pIdx);
         model.addAttribute("product", product);
 
+ 
+
         // 2. 리뷰 목록 가져오기
         List<ReviewVo> reviewList = reviewMapper.selectReviewsByProduct(pIdx);
 
         // 3. 사용자 쿠폰 목록 가져오기
-        UserVo user = (UserVo) session.getAttribute("user");
+
         if (user != null) {
             List<CouponBoxVo> couponList = couponBoxMapper.selectCouponsByUserId(user.getUserIdx());
             model.addAttribute("couponList", couponList);

@@ -49,4 +49,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update product set amount = amount - #{bamount} where pIdx = #{pIdx}
     </update>
 
+    <!-- 사용자가 해당 상품을 구매했는지 확인하는 쿼리 -->
+    <select id="purchasedProduct" resultType="int" parameterType="buy">
+        SELECT COUNT(*)
+        FROM buyList
+        WHERE userIdx = #{userIdx}
+        AND pIdx = #{pIdx}
+    </select>
+
 </mapper>

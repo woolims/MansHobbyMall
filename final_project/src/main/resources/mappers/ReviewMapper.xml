@@ -90,6 +90,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   <select id="selectMaxRvIdx" resultType="int">
       SELECT MAX(rvIdx) FROM review
   </select>
-
+  <!-- 사용자가 해당 상품을 구매했는지 확인하는 쿼리 -->
+  <select id="purchasedProduct" resultType="int">
+      SELECT COUNT(*)
+      FROM buyList
+      WHERE userIdx = #{userIdx} 
+      AND pIdx = #{pIdx}
+  </select>
 
 </mapper>
