@@ -102,7 +102,7 @@
                         <!-- 공지사항 먼저 출력 -->
                         <c:forEach var="vo" items="${list}">
                             <c:if test="${vo.inAc eq 'Y'}">
-                                <tr">
+                                <tr onclick="viewDetail('${vo.inIdx}');">
                                     <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">공지사항
                                     </td>
                                     <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">관리자</td>
@@ -115,7 +115,7 @@
                                     <td
                                         style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; ">
                                     </td>
-                                    </tr>
+                                </tr>
                             </c:if>
                         </c:forEach>
 
