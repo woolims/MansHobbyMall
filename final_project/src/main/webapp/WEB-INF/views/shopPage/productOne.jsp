@@ -20,92 +20,77 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
+    
         .product-container {
             display: flex;
             flex-wrap: wrap;
             margin: 20px 0;
         }
-
+    
         .product-image {
             flex: 1;
             padding: 20px;
         }
-
+    
         .product-details {
             flex: 1.7;
             padding: 20px;
         }
-
+    
         .product-image img {
             max-width: 100%;
             height: 95%;
         }
-
+    
         .product-details h1 {
             font-size: 2em;
             margin-bottom: 20px;
         }
-
+    
         .product-details p {
             font-size: 1.2em;
             margin-bottom: 20px;
         }
-
+    
         .product-details .price {
             font-size: 1.5em;
             color: black;
         }
-
+    
         .product-details .add-to-cart:hover,
         .share-to-other:hover {
             background-color: #f5f1f1 !important;
             color: #00bcd4 !important;
             transition: background-color 0.3s ease, color 0.3s ease;
             border: 1px solid #f5f1f1;
-
         }
-
+    
         /* 제목과 문의 버튼을 포함한 컨테이너 스타일 정의 */
         .product-title-inquiry {
-            display: flex;
-            /* Flex 레이아웃 사용 */
-            justify-content: space-between;
-            /* 요소를 양쪽 끝에 배치 */
-            align-items: center;
-            /* 수직 가운데 정렬 */
             margin-bottom: 20px;
-            /* 하단에 여백 추가 */
         }
-
-        /* 제품명 스타일 */
-        .product-title-inquiry #product-name {
-            font-size: 2em;
-            margin: 0;
-        }
-
+    
         /* 문의 버튼 스타일 */
         .product-title-inquiry .inquiry-button {
+            float: right;
             font-size: 1em;
             padding: 10px 15px;
             background-color: #00bcd4;
-            /* 버튼 색상 */
             color: white;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
+    
         .product-title-inquiry .inquiry-button:hover {
             background-color: #0097a7;
-            /* 호버 시 색상 변경 */
         }
-
+    
         .quantity-box {
             display: flex;
             align-items: center;
         }
-
+    
         .quantity-field {
             width: 70px;
             text-align: center;
@@ -116,23 +101,21 @@
             height: 40px;
             line-height: 40px;
         }
-
+    
         .button-group {
             display: flex;
             justify-content: space-between;
-            /* 버튼 간격을 동일하게 배치 */
             margin-top: 20px;
         }
-
+    
         .add-to-cart,
         .share-to-other {
             flex: 1;
-            /* 각 버튼이 같은 비율로 차지하도록 설정 */
             margin: 0 10px;
-            /* 버튼 사이에 적당한 간격 */
             text-align: center;
+            border-radius: 5px;
         }
-
+    
         .add-to-cart {
             background-color: black !important;
             color: white;
@@ -140,21 +123,18 @@
             padding: 15px 20px;
             font-size: 1.2em;
             cursor: pointer;
-            border-radius: 5px;
         }
-
+    
         .share-to-other {
             background-color: white;
             color: #333;
             border: 1px solid #333;
-            /* 유효한 border 스타일 */
             padding: 15px 20px;
             font-size: 1.2em;
             cursor: pointer;
-            border-radius: 5px;
             text-align: center;
         }
-
+    
         .description-box {
             background-color: #f0f0f0;
             padding: 20px 30px;
@@ -169,172 +149,15 @@
             justify-content: flex-start;
             margin-top: 20px;
         }
-
-        .container {
-            width: 73%;
-            margin-top: 102.2px;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .product-image {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .product-details {
-            flex: 1.7;
-            padding: 20px;
-        }
-
-        .product-image img {
-            max-width: 100%;
-            height: 95%;
-        }
-
-        .product-details h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        .product-details p {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-
-        .product-details .price {
-            font-size: 1.5em;
-            color: black;
-        }
-
-        .product-details .add-to-cart:hover,
-        .share-to-other:hover {
-            background-color: #f5f1f1 !important;
-            color: #00bcd4 !important;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            border: 1px solid #f5f1f1;
-
-        }
-
-        /* 제목과 문의 버튼을 포함한 컨테이너 스타일 정의 */
-        .product-title-inquiry {
-            display: flex;
-            /* Flex 레이아웃 사용 */
-            justify-content: space-between;
-            /* 요소를 양쪽 끝에 배치 */
-            align-items: center;
-            /* 수직 가운데 정렬 */
-            margin-bottom: 20px;
-            /* 하단에 여백 추가 */
-        }
-
-        /* 제품명 스타일 */
-        .product-title-inquiry #product-name {
-            font-size: 2em;
-            margin: 0;
-        }
-
-        /* 문의 버튼 스타일 */
-        .product-title-inquiry .inquiry-button {
-            font-size: 1em;
-            padding: 10px 15px;
-            background-color: #00bcd4;
-            /* 버튼 색상 */
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .product-title-inquiry .inquiry-button:hover {
-            background-color: #0097a7;
-            /* 호버 시 색상 변경 */
-        }
-
-        .quantity-box {
-            display: flex;
-            align-items: center;
-        }
-
-        .quantity-field {
-            width: 70px;
-            text-align: center;
-            font-size: 1.2em;
-            border: 1px solid #ccc;
-            margin: 0 5px;
-            border-radius: 5px;
-            height: 40px;
-            line-height: 40px;
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-            /* 버튼 간격을 동일하게 배치 */
-            margin-top: 20px;
-        }
-
-        .add-to-cart,
-        .share-to-other {
-            flex: 1;
-            /* 각 버튼이 같은 비율로 차지하도록 설정 */
-            margin: 0 10px;
-            /* 버튼 사이에 적당한 간격 */
-            text-align: center;
-        }
-
-        .add-to-cart {
-            background-color: black !important;
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            font-size: 1.2em;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .share-to-other {
-            background-color: white;
-            color: #333;
-            border: 1px solid #333;
-            /* 유효한 border 스타일 */
-            padding: 15px 20px;
-            font-size: 1.2em;
-            cursor: pointer;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .description-box {
-            background-color: #f0f0f0;
-            padding: 20px 30px;
-            border-radius: 10px;
-            color: #333;
-            font-size: 1.2em;
-            width: 100%;
-            height: 100px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: flex-start;
-            justify-content: flex-start;
-            margin-top: 20px;
-        }
-
+    
         /* 모달을 화면 가운데 정렬 */
         .centered {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            /* 중앙으로 이동 */
         }
     </style>
+    
     <script>
         // 장바구니 추가 함수
         function addToCart() {
@@ -550,19 +373,19 @@
             </c:forEach>
 
             <div class="product-details">
+                <h1 id="product-name">${shop.getPName()}</h1>
+                <p class="price" id="product-price">${shop.getPrice()} 원</p>
+                <hr style="border: 0; height: 2px; background: linear-gradient(to right, #ccc, #333, #ccc);">
+
                 <div class="product-title-inquiry">
-                    <h1 id="product-name">${shop.getPName()}</h1>
+                    <span style="font-size: 1.5em;">수량:</span> <input type="number" id="scamount" name="scamount"
+                        value="1" min="1" class="quantity-field">
+                    <p style="display: inline-block; font-size: 1.5em;"> 재고수량: ${shop.getAmount()}</p>
                     <!-- 문의 버튼 -->
                     <button class="inquiry-button" onclick="openInquiryForm('${shop.getPIdx()}')">
                         문의하기
                     </button>
                 </div>
-                <p class="price" id="product-price">${shop.getPrice()} 원</p>
-                <hr style="border: 0; height: 2px; background: linear-gradient(to right, #ccc, #333, #ccc);">
-
-                <span style="font-size: 1.5em;">수량:</span> <input type="number" id="scamount" name="scamount" value="1"
-                    min="1" class="quantity-field">
-                <p style="display: inline-block; font-size: 1.5em;"> 재고수량: ${shop.getAmount()}</p>
                 <p id="product-description" class="description-box">${shop.getPEx()}</p>
                 <div class="button-group">
                     <button class="add-to-cart" onclick="addToCart()">장바구니에 추가</button>
