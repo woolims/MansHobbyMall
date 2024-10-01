@@ -135,31 +135,14 @@
                         margin-top: 20px;
                     }
 
-
-
-                    /* 리뷰 모달 관련 
-                    #reviewModifyModal {
-                        display: none;
-                        position: fixed;
-                        z-index: 1;
-                        left: 50%;
+                    /* 모달을 화면 가운데 정렬 */
+                    .centered {
                         top: 50%;
-                        transform: translate(-50%, -50%);
-                        width: 100%;
-                        height: 100%;
-                        background-color: rgba(0, 0, 0, 0.4);
-                        justify-content: center;
-                        align-items: center;
+                        left: 50%;
+                        transform: translate(-50%, -50%); /* 중앙으로 이동 */
                     }
 
-                    #reviewModifyModal .modal-content {
-                        background-color: #fff;
-                        padding: 20px;
-                        border: 1px solid #888;
-                        width: 30%;
-                        border-radius: 8px;
-                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-                    } */
+
                 </style>
                 <script>
                     // 장바구니 추가 함수
@@ -462,9 +445,8 @@
 
                     <!-- 리뷰 작성 모달 -->
                     <div id="reviewModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close"
-                                onclick="document.getElementById('reviewModal').style.display='none'">&times;</span>
+                        <div class="modal-content ">
+                            <span class="close" onclick="document.getElementById('reviewModal').style.display='none'">&times;</span>
                             <h2>리뷰 작성</h2>
                             <form>
                                 <input type="hidden" name="url" id="url" value="../home.do" />
@@ -472,8 +454,7 @@
                                 상품번호 : <input type="text" name="pIdx" value="${shop.getPIdx()}" readonly /><br>
                                 <div class="form-group" style="color: black;">
                                     <label for="content" style="color: black;">내용</label>
-                                    <textarea name="rvContent" required
-                                        style="width: 100%; min-height: 200px;"></textarea>
+                                    <textarea name="rvContent" required style="width: 100%; min-height: 200px;"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="reviewImage">리뷰 이미지 업로드</label>
@@ -486,9 +467,8 @@
 
                     <!-- 리뷰 수정 모달 -->
                     <div id="reviewModifyModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close"
-                                onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
+                        <div class="modal-content centered">
+                            <span class="close" onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
                             <h2>리뷰 수정</h2>
                             <form enctype="multipart/form-data">
                                 <input type="hidden" name="url" id="url" value="../home.do" />
@@ -496,8 +476,7 @@
                                 <input type="hidden" name="userIdx" value="${user.userIdx}" />
                                 <div class="form-group" style="color: black;">
                                     <label for="content" style="color: white;">내용</label>
-                                    <textarea id="reviewModifyContent" name="rvContent" required
-                                        style="width: 100%; min-height: 200px;"></textarea>
+                                    <textarea id="reviewModifyContent" name="rvContent" required style="width: 100%; min-height: 200px;"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="reviewImage">리뷰 이미지 업로드</label>
