@@ -61,7 +61,7 @@
             window.history.replaceState({}, '', url.toString()); // 페이지를 새로 로드하지 않고 URL 업데이트
           }
 
-          if (params.get('reason') === 'fail_pwd') {
+          if (params.get('reason') === 'fail_password') {
             loginModal.style.display = 'flex';
             alert('비밀번호가 틀립니다.');
 
