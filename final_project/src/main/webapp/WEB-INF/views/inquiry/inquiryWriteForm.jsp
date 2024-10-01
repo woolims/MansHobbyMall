@@ -90,8 +90,8 @@
             <div class="col-md-12 col-md-offset-0">
                 <h2>게시글 등록</h2>
                 <form>
-                    <input type="text" name="pIdx" value="${vo.getPIdx()}"/>
-                    <input type="text" name="pName" value="${vo.getPName()}"/>
+                    <input type="hidden" name="pIdx" value="${vo.getPIdx()}"/>
+                    <input type="hidden" name="pName" value="${vo.getPName()}"/>
                     <div class="form-group">
                         <label for="title">제목</label>
                         <select class="form-control" id="inType" name="inType" required>

@@ -102,15 +102,20 @@
                         <!-- 공지사항 먼저 출력 -->
                         <c:forEach var="vo" items="${list}">
                             <c:if test="${vo.inAc eq 'Y'}">
-                                <tr onclick="viewDetail('${vo.inIdx}');">
-                                    <td style="text-align: center; background-color: #f1f1f1; color: #303030;">공지사항</td>
-                                    <td style="text-align: center; background-color: #f1f1f1; color: #303030;">관리자</td>
-                                    <td style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030;">
+                                <tr">
+                                    <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">공지사항
+                                    </td>
+                                    <td style="text-align: center; background-color: #f1f1f1; color: #303030; ">관리자</td>
+                                    <td
+                                        style="width: 45%; text-align: center; background-color: #f1f1f1; color: #303030; ">
                                         ${vo.inType}</td>
-                                    <td style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030;">
+                                    <td
+                                        style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030; ">
                                         ${vo.inDate}</td>
-                                    <td style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030;"></td>
-                                </tr>
+                                    <td
+                                        style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; ">
+                                    </td>
+                                    </tr>
                             </c:if>
                         </c:forEach>
 
@@ -121,12 +126,16 @@
                                         ${vo.inIdx}</td>
                                     <td style="text-align: center; background-color: #303030; color: #f1f1f1;">
                                         ${vo.id}</td>
-                                    <td style="width: 45%; text-align: center; background-color: #303030; color: #f1f1f1;">
-                                        ${vo.inType}</td>
-                                    <td style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                    <td
+                                        style="width: 45%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                        <c:if test="${vo.getPIdx() ne null}">(상품)</c:if> ${vo.inType}
+                                    </td>
+                                    <td
+                                        style="width: 25%; text-align: center; background-color: #303030; color: #f1f1f1;">
                                         ${vo.inDate}
                                     </td>
-                                    <td style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
+                                    <td
+                                        style="width: 20%; text-align: center; background-color: #303030; color: #f1f1f1;">
                                         <c:choose>
                                             <c:when test="${answerMap[vo.inIdx] eq true}">답변 완료</c:when>
                                             <c:otherwise>답변 미완료</c:otherwise>

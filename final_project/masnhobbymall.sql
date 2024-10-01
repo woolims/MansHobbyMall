@@ -335,12 +335,13 @@ SELECT
     i.inContent,
     i.inDate,
     i.inPP,
+    i.inAc,
     u.name,
     u.id,
     p.pName
 FROM Inquiry i
 INNER JOIN User u ON i.userIdx = u.userIdx
-INNER JOIN Product p ON i.pIdx = p.pIdx;
+LEFT JOIN Product p ON i.pIdx = p.pIdx;
 
 CREATE OR REPLACE VIEW AnswerView AS
 SELECT
