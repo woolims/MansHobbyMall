@@ -425,8 +425,11 @@
                                 </p>
                                 <hr style="border: 0; height: 1px; background-color: #ddd;">
                                 <p style="font-size: large;">${review.rvContent}</p>
-                                <img src="${pageContext.request.contextPath}/resources/images/review/${review.rvImg}"
-                                    alt="리뷰 이미지" style="width: 300px; height: 300px; object-fit: cover;">
+                                <!-- 이미지가 있을 경우에만 출력 -->
+                                <c:if test="${review.rvImg ne null && review.rvImg ne ''}">
+                                    <img src="${pageContext.request.contextPath}/resources/images/review/${review.rvImg}"
+                                        alt="리뷰 이미지" style="width: 300px; height: 300px; object-fit: cover;">
+                                </c:if>
 
                                 <!-- 좋아요 버튼과 좋아요 수를 이미지 아래에 배치 -->
                                 <div style="margin-top: 10px; display: flex; align-items: center;">
