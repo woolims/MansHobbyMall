@@ -17,5 +17,6 @@ public class BuyListVo {
     long buyPrice;
     int daIdx;
     String daAddr;
+    String subDaAddr;
 
 }
