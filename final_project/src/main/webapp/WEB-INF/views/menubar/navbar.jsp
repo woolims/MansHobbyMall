@@ -20,7 +20,7 @@
         //window.onload = function(){}
 
         function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+          document.getElementById(modalId).style.display = 'none';
         }
 
         $(document).ready(function () {
@@ -30,11 +30,11 @@
 
           // showSignUpModal이 true일 경우 회원가입 모달을 표시합니다.
           if (showSignUpModal) {
-              $('#registerEmailModal').css('display', 'flex');
-              
-              // 쿼리 파라미터에서 showSignUpModal 제거
-              urlParams.delete('showSignUpModal');
-              window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
+            $('#registerEmailModal').css('display', 'flex');
+
+            // 쿼리 파라미터에서 showSignUpModal 제거
+            urlParams.delete('showSignUpModal');
+            window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
           }
 
           // showMessage 함수 호출
@@ -44,7 +44,7 @@
         function showMessage() {
           // 현재 URL 가져오기
           let url = new URL(window.location.href);
-          
+
           // URLSearchParams 객체 생성
           let params = new URLSearchParams(url.search);
 
@@ -171,131 +171,131 @@
 
           // 아이디가 입력되지 않았을 경우
           if (re_id.length == 0) {
-              $("#id_msg").html("");
-              return;
+            $("#id_msg").html("");
+            return;
           }
 
           // 아이디 길이 체크
           if (re_id.length < 4 || re_id.length > 20) {
-              $("#id_msg").html("아이디는 4자리 이상 20자리 이하로 입력하세요.").css("color", "red");
-              return;
+            $("#id_msg").html("아이디는 4자리 이상 20자리 이하로 입력하세요.").css("color", "red");
+            return;
           }
 
           // 정규식 체크
           const re_idText = /^[a-zA-Z0-9]{4,20}$/; // 소문자, 대문자, 숫자 허용
           if (!re_idText.test(re_id)) {
-              $("#id_msg").html("아이디는 영문 대소문자 및 숫자만 포함해야 합니다.").css("color", "red");
-              return;
+            $("#id_msg").html("아이디는 영문 대소문자 및 숫자만 포함해야 합니다.").css("color", "red");
+            return;
           }
 
           //서버에 현재 입력된 ID를 체크요청(jQuery Ajax이용)
           $.ajax({
-              url: "${pageContext.request.contextPath}/user/check_id.do", // MemberCheckIdAction
-              data: { "id": re_id }, //parameter => check_id.do?mem_id=one
-              dataType: "json",
-              success: function (res_data) {
-                  // res_data = {"result": true}  or {"result": false}
-                  if (res_data.result) {
-                      $("#id_msg").html("사용가능한 아이디 입니다").css("color", "blue");
+            url: "${pageContext.request.contextPath}/user/check_id.do", // MemberCheckIdAction
+            data: { "id": re_id }, //parameter => check_id.do?mem_id=one
+            dataType: "json",
+            success: function (res_data) {
+              // res_data = {"result": true}  or {"result": false}
+              if (res_data.result) {
+                $("#id_msg").html("사용가능한 아이디 입니다").css("color", "blue");
 
-                      //가입버튼 활성화
-                      $("#btn_register").prop("disabled", false);
-                  } else {
-                      $("#id_msg").html("이미 사용중인 아이디 입니다").css("color", "red");
-                  }
-              },
-              error: function (err) {
-                  alert(err.responseText);
+                //가입버튼 활성화
+                $("#btn_register").prop("disabled", false);
+              } else {
+                $("#id_msg").html("이미 사용중인 아이디 입니다").css("color", "red");
               }
-            });
-            
+            },
+            error: function (err) {
+              alert(err.responseText);
+            }
+          });
+
         } //end:check_id()
 
-          function registerUser(f) {
-            let re_id = f.re_id.value.trim();
-            let re_password = f.re_password.value.trim();
-            let nickName = f.nickName.value.trim();
-            let name = f.name.value.trim();
-            let phone = f.phone.value.trim();
-            let addr = f.addr.value.trim();
-            let subAddr = f.subAddr.value.trim();
+        function registerUser(f) {
+          let re_id = f.re_id.value.trim();
+          let re_password = f.re_password.value.trim();
+          let nickName = f.nickName.value.trim();
+          let name = f.name.value.trim();
+          let phone = f.phone.value.trim();
+          let addr = f.addr.value.trim();
+          let subAddr = f.subAddr.value.trim();
 
-            const re_idText = /^[a-zA-Z0-9]{4,20}$/; // 소문자, 대문자, 숫자 허용
-            const re_passwordText = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-            const nameText = /^[가-힣]+$/;
-            const nickNameText = /^[가-힣a-zA-Z0-9]{4,20}$/; // 한글, 영문(대소문자), 숫자 허용
-            const phoneText = /^\d{3}-\d{3,4}-\d{4}$/;
+          const re_idText = /^[a-zA-Z0-9]{4,20}$/; // 소문자, 대문자, 숫자 허용
+          const re_passwordText = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+          const nameText = /^[가-힣]+$/;
+          const nickNameText = /^[가-힣a-zA-Z0-9]{4,20}$/; // 한글, 영문(대소문자), 숫자 허용
+          const phoneText = /^\d{3}-\d{3,4}-\d{4}$/;
 
-            if (!re_id) {
-                alert("아이디를 입력하세요.");
-                f.re_id.focus();
-                return;
-            }
-            if (!re_idText.test(re_id)) {
-                alert("아이디는 4~20자의 영문 대소문자 또는 숫자여야 합니다.");
-                f.re_id.focus();
-                return;
-            }
-
-            if (!re_password) {
-                alert("비밀번호를 입력하세요.");
-                f.re_password.focus();
-                return;
-            }
-            if (!re_passwordText.test(re_password)) {
-                alert("비밀번호는 최소 8자 이상, 하나 이상의 대문자, 소문자 및 특수문자를 포함해야 합니다.");
-                f.re_password.focus();
-                return;
-            }
-
-            if (!nickName) {
-                alert("닉네임을 입력하세요.");
-                f.nickName.focus();
-                return;
-            }
-            if (!nickNameText.test(nickName)) {
-                alert("닉네임은 4~20자 한글, 영문(대소문자) 또는 숫자여야 합니다.");
-                f.nickName.focus();
-                return;
-            }
-
-            if (!name) {
-                alert("이름을 입력하세요.");
-                f.name.focus();
-                return;
-            }
-            if (!nameText.test(name)) {
-                alert("이름은 한글로만 입력해야 합니다.");
-                f.name.focus();
-                return;
-            }
-
-            if (!phone) {
-                alert("전화번호를 입력하세요.");
-                f.phone.focus();
-                return;
-            }
-            if (!phoneText.test(phone)) {
-                alert("전화번호 형식이 올바르지 않습니다. 예: 010-1234-5678");
-                f.phone.focus();
-                return;
-            }
-
-            if (!addr) {
-                alert("주소를 입력하세요.");
-                f.addr.focus();
-                return;
-            }
-
-            if (!subAddr) {
-                alert("상세주소를 입력하세요.");
-                f.subAddr.focus();
-                return;
-            }
-
-            f.action = "${pageContext.request.contextPath}/user/insert.do";
-            f.submit();
+          if (!re_id) {
+            alert("아이디를 입력하세요.");
+            f.re_id.focus();
+            return;
           }
+          if (!re_idText.test(re_id)) {
+            alert("아이디는 4~20자의 영문 대소문자 또는 숫자여야 합니다.");
+            f.re_id.focus();
+            return;
+          }
+
+          if (!re_password) {
+            alert("비밀번호를 입력하세요.");
+            f.re_password.focus();
+            return;
+          }
+          if (!re_passwordText.test(re_password)) {
+            alert("비밀번호는 최소 8자 이상, 하나 이상의 대문자, 소문자 및 특수문자를 포함해야 합니다.");
+            f.re_password.focus();
+            return;
+          }
+
+          if (!nickName) {
+            alert("닉네임을 입력하세요.");
+            f.nickName.focus();
+            return;
+          }
+          if (!nickNameText.test(nickName)) {
+            alert("닉네임은 4~20자 한글, 영문(대소문자) 또는 숫자여야 합니다.");
+            f.nickName.focus();
+            return;
+          }
+
+          if (!name) {
+            alert("이름을 입력하세요.");
+            f.name.focus();
+            return;
+          }
+          if (!nameText.test(name)) {
+            alert("이름은 한글로만 입력해야 합니다.");
+            f.name.focus();
+            return;
+          }
+
+          if (!phone) {
+            alert("전화번호를 입력하세요.");
+            f.phone.focus();
+            return;
+          }
+          if (!phoneText.test(phone)) {
+            alert("전화번호 형식이 올바르지 않습니다. 예: 010-1234-5678");
+            f.phone.focus();
+            return;
+          }
+
+          if (!addr) {
+            alert("주소를 입력하세요.");
+            f.addr.focus();
+            return;
+          }
+
+          if (!subAddr) {
+            alert("상세주소를 입력하세요.");
+            f.subAddr.focus();
+            return;
+          }
+
+          f.action = "${pageContext.request.contextPath}/user/insert.do";
+          f.submit();
+        }
 
         function registerEmailUser(f) {
           let em_id = f.em_id.value.trim();
@@ -352,7 +352,7 @@
           f.submit();
         }//end:registerEmailUser()
 
-        function integration(f){
+        function integration(f) {
           let ig_id = f.ig_id.value.trim();
           let ig_password = f.ig_password.value.trim();
 
@@ -374,13 +374,13 @@
         }
 
         // 주소검색 API
-        function find_addr(){
-	   
-            new daum.Postcode({
-                  oncomplete: function(data) {
-                      $("#addr").val(data.address); 	  //선택한 정보의 주소 넣기
-                  }
-              }).open();
+        function find_addr() {
+
+          new daum.Postcode({
+            oncomplete: function (data) {
+              $("#addr").val(data.address); 	  //선택한 정보의 주소 넣기
+            }
+          }).open();
         }//end:find_addr()
 
       </script>
@@ -390,22 +390,25 @@
     <body>
       <!-- 네비게이션 바 -->
       <nav class="navbar">
-        <div class="logo col-sm-2" style="display: inline-block;"><a href="${pageContext.request.contextPath}/home.do">Logo</a></div>
+        <div class="logo col-sm-2" style="display: inline-block;"><a href="${pageContext.request.contextPath}/home.do">
+            <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="Logo" style="max-width: 100%;">
+          </a></div>
         <div class="col-sm-10" style="display: inline-block; margin-top: 10px;">
           <ul class="menu" style="text-align: right !important;">
 
-           <!--쿠폰 추가 부분-->
+            <!--쿠폰 추가 부분-->
             <!-- 유저만 있어야 함 -->
             <c:if test="${ not empty sessionScope.user }">
               <!-- 쿠폰함 -->
               <li id="coupon-box">
-                  <a href="${pageContext.request.contextPath}/coupon/myCoupons.do?useridx=${sessionScope.user.userIdx}">내 쿠폰함</a>
+                <a href="${pageContext.request.contextPath}/coupon/myCoupons.do?useridx=${sessionScope.user.userIdx}">내
+                  쿠폰함</a>
               </li>
-          
+
               <!-- 쿠폰 목록 보기 버튼 -->
               <%--<li>
-                  <a href="${pageContext.request.contextPath}/coupon/list.do" class="btn btn-primary">쿠폰 목록 보기</a>
-              </li>--%>
+                <a href="${pageContext.request.contextPath}/coupon/list.do" class="btn btn-primary">쿠폰 목록 보기</a>
+                </li>--%>
             </c:if>
 
 
@@ -445,7 +448,7 @@
           <span class="close">&times;</span>
           <h2>로그인</h2>
           <form>
-            <input type="hidden" name="url" id="url"/>
+            <input type="hidden" name="url" id="url" />
             <input type="text" name="id" id="id" placeholder="아이디" required />
             <input type="password" name="password" id="password" placeholder="비밀번호" required />
             <input type="button" class="login-btn" value="로그인" onclick="send(this.form);" />
@@ -475,8 +478,8 @@
             <input type="text" id="name" name="name" placeholder="이름" required />
             <input type="text" id="phone" name="phone" placeholder="전화번호(ex.010-1234-1234)" required />
             <input type="text" id="addr" name="addr" placeholder="주소" required />
-            <input type="text" id="subAddr"name="subAddr" placeholder="상세주소">
-						<input class="btn btn-info" type="button" value="주소검색" onclick="find_addr()">
+            <input type="text" id="subAddr" name="subAddr" placeholder="상세주소">
+            <input class="btn btn-info" type="button" value="주소검색" onclick="find_addr()">
             <input type="button" id="btn_register" class="login-btn" value="회원가입" disabled="disabled"
               onclick="registerUser(this.form);" />
             <!-- <input type="button" class="login-btn" value="회원가입" onclick="registerUser(this.form);" /> -->
@@ -497,8 +500,8 @@
             <input type="text" id="em_phone" name="phone" placeholder="전화번호(ex.010-1234-1234)" required />
             <input type="text" id="em_addr" name="addr" placeholder="주소" required />
             <input type="text" id="em_subAddr" name="subAddr" placeholder="상세주소" required />
-            <input type="hidden" id="email" name="email" value="${email}"/>
-            <input type="hidden" id="esite" name="esite" value="${esite}"/>
+            <input type="hidden" id="email" name="email" value="${email}" />
+            <input type="hidden" id="esite" name="esite" value="${esite}" />
 
             <input type="button" id="btn_register_email" class="login-btn" value="회원가입" disabled="disabled"
               onclick="registerEmailUser(this.form);" />
@@ -516,11 +519,11 @@
           <span class="close">&times;</span>
           <h2>로그인 통합</h2>
           <form>
-            <input type="hidden" name="url" id="url"/>
+            <input type="hidden" name="url" id="url" />
             <input type="text" name="id" id="ig_id" placeholder="아이디" required />
             <input type="password" name="password" id="ig_password" placeholder="비밀번호" required />
-            <input type="text" id="email" name="email" value="${email}"/>
-            <input type="text" id="esite" name="esite" value="${esite}"/>
+            <input type="text" id="email" name="email" value="${email}" />
+            <input type="text" id="esite" name="esite" value="${esite}" />
             <input type="button" class="login-btn" value="로그인 통합" onclick="integration(this.form);" />
             <div class="links">
               <a href="#">아이디 · 비밀번호 찾기</a>
@@ -570,7 +573,7 @@
         };
 
         // 모달 열기
-          openRegisterEmailModalBtn.onclick = function () {
+        openRegisterEmailModalBtn.onclick = function () {
           loginModal.style.display = "none";
           registerModal.style.display = "none";
           registerEmailModal.style.display = "flex";

@@ -135,7 +135,21 @@
                         margin-top: 20px;
                     }
 
+                    .carousel-image {
+                        width: 100%;
+                        /* 부모 컨테이너의 전체 너비를 채움 */
+                        height: 400px;
+                        /* 고정된 높이 */
+                        object-fit: cover;
+                        /* 이미지 비율을 유지하면서 컨테이너 크기에 맞게 자름 */
+                    }
 
+                    /* 캐러셀 전체에 대한 추가 스타일링 */
+                    .carousel-inner {
+                        max-height: 400px;
+                        max-width: 400px;
+                        /* 이미지의 최대 높이를 고정 */
+                    }
 
                     /* 리뷰 모달 관련 
                     #reviewModifyModal {
@@ -160,6 +174,35 @@
                         border-radius: 8px;
                         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
                     } */
+
+                    /* 좌우 버튼의 배경색을 투명하게 만들고 그림자 제거 */
+                    .carousel-control.left,
+                    .carousel-control.right {
+                        background: none !important;
+                        box-shadow: none !important;
+                    }
+
+                    /* 아이콘 색상 */
+                    .carousel-control.left span,
+                    .carousel-control.right span {
+                        color: black;
+                    }
+
+                    /* 호버 시에도 배경색 및 그림자 없도록 설정 */
+                    .carousel-control:hover {
+                        background: none !important;
+                        box-shadow: none !important;
+                    }
+
+
+                    .carousel-indicators li {
+                        background-color: white !important;
+                        border-color: black !important;
+                    }
+
+                    .carousel-indicators .active {
+                        background-color: black !important;
+                    }
                 </style>
                 <script>
                     // 장바구니 추가 함수
@@ -341,6 +384,18 @@
                     }
 
 
+
+                    $(document).ready(function () {
+                        // 이미지 개수 확인
+                        const itemCount = $('#productCarousel .carousel-inner .item').length;
+
+                        // 이미지가 1개 이하일 경우 인디케이터와 화살표 숨기기
+                        if (itemCount <= 1) {
+                            $('#productCarousel .carousel-control').hide(); // 화살표 숨기기
+                            $('#productCarousel .carousel-indicators').hide(); // 인디케이터 숨기기
+                        }
+                    });
+
                 </script>
             </head>
 
@@ -350,21 +405,42 @@
                     <br>
                     <div class="container">
                         <div class="product-container">
-                            <c:forEach var="product" items="${product}">
-                                <div class="product-image">
-                                    <c:if test="${product.fileNameLink == 'Y'}">
-                                        <div>
-                                            <img src="${product.fileName}" alt="상품이미지">
+                            <div id="productCarousel" class="carousel slide" data-ride="carousel">
+                                <!-- 인디케이터 -->
+                                <ol class="carousel-indicators">
+                                    <c:forEach var="product" items="${product}" varStatus="status">
+                                        <li data-target="#productCarousel" data-slide-to="${status.index}"
+                                            class="${status.first ? 'active' : ''}"></li>
+                                    </c:forEach>
+                                </ol>
+
+                                <!-- 캐러셀 안의 이미지 -->
+                                <div class="carousel-inner">
+                                    <c:forEach var="product" items="${product}" varStatus="status">
+                                        <div class="item ${status.first ? 'active' : ''}">
+                                            <c:if test="${product.fileNameLink == 'Y'}">
+                                                <img src="${product.fileName}" alt="상품 이미지" class="carousel-image">
+                                            </c:if>
+                                            <c:if test="${product.fileNameLink == 'N'}">
+                                                <img src="${pageContext.request.contextPath}/resources/images/${product.fileName}"
+                                                    alt="상품 이미지" class="carousel-image">
+                                            </c:if>
                                         </div>
-                                    </c:if>
-                                    <c:if test="${product.fileNameLink == 'N'}">
-                                        <div>
-                                            <img src="${ pageContext.request.contextPath }/resources/images/${product.fileName}"
-                                                alt="상품이미지">
-                                        </div>
-                                    </c:if>
+                                    </c:forEach>
                                 </div>
-                            </c:forEach>
+
+                                <!-- 이전/다음 버튼 -->
+                                <a class="left carousel-control" href="#productCarousel" role="button"
+                                    data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                    <span class="sr-only">이전</span>
+                                </a>
+                                <a class="right carousel-control" href="#productCarousel" role="button"
+                                    data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                    <span class="sr-only">다음</span>
+                                </a>
+                            </div>
 
                             <div class="product-details">
                                 <h1 id="product-name">${shop.getPName()}</h1>
@@ -421,7 +497,8 @@
                                 </div>
 
                                 <p><strong>작성자&nbsp;&nbsp;&nbsp;:</strong> ${review.nickName}님</p>
-                                <p><strong>평점&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</strong> ${review.reviewPoint}점
+                                <p><strong>평점&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</strong>
+                                    ${review.reviewPoint}점
                                 </p>
                                 <hr style="border: 0; height: 1px; background-color: #ddd;">
                                 <p style="font-size: large;">${review.rvContent}</p>
@@ -443,7 +520,8 @@
                                         </div>
                                     </button>
                                     <!-- 도움 문구 -->
-                                    <span style="margin-left: 10px; font-size: 1.1em; color: #007bff;">이 리뷰가 도움이 되었다면
+                                    <span style="margin-left: 10px; font-size: 1.1em; color: #007bff;">이 리뷰가 도움이
+                                        되었다면
                                         꾹!</span>
                                 </div>
 
