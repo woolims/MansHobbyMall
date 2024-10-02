@@ -17,13 +17,6 @@
                     background-color: #f8f9fa;
                 }
 
-                header {
-                    background-color: white;
-                    color: #1a1a1a;
-                    padding: 1rem;
-                    text-align: center;
-                    font-size: 1.5rem;
-                }
 
                 main {
                     padding: 2rem;

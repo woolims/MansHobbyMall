@@ -217,8 +217,8 @@
                                 pImgTable.empty();
                                 let pImgTableHtml = `
                         <tr>
-                            <th>상품사진</th>
-                            <td><input type="file" name="photo" id="pImg" multiple></td>
+                            <th border: 1px solid #ddd;>상품사진</th>
+                            <td border: 1px solid #ccc;><input type="file" name="photo" id="pImg" multiple></td>
                         </tr>
                         <tr>
                             <th>현재등록된 상품사진</th>
@@ -231,12 +231,12 @@
                                         console.log(photoList.fileName);
                                         if (photoList.fileNameLink == 'Y') {
                                             pImgTableHtml += `
-                            <td style="display: inline-block; width: 200px; height: 160px;"><img src="\${photoList.fileName}"
+                            <td style="display: inline-block; width: 200px; height: 160px; border: 1px solid #ccc;"><img style="width: 100%; height: 100%;" src="\${photoList.fileName}"
                             onclick="pImageDelete('\${photoList.fileIdx}', '\${photoList.pidx}')">
                             </td>`;
                                         } else if (photoList.fileNameLink == 'N') {
                                             pImgTableHtml += `
-                            <td style="display: inline-block; width: 200px; height: 160px;"><img src="/resources/images/\${photoList.fileName}"
+                            <td style="display: inline-block; width: 200px; height: 160px; border: 1px solid #ccc;"><img style="width: 100%; height: 100%;" src="/resources/images/\${photoList.fileName}"
                             onclick="pImageDelete('\${photoList.fileIdx}', '\${photoList.pidx}')">
                             </td>`;
                                         }
