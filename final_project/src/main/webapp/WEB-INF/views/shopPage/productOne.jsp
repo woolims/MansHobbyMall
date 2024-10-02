@@ -66,6 +66,27 @@
 
                     }
 
+                    /* 제목과 문의 버튼을 포함한 컨테이너 스타일 정의 */
+                    .product-title-inquiry {
+                        margin-bottom: 20px;
+                    }
+                
+                    /* 문의 버튼 스타일 */
+                    .product-title-inquiry .inquiry-button {
+                        float: right;
+                        font-size: 1em;
+                        padding: 10px 15px;
+                        background-color: #00bcd4;
+                        color: white;
+                        border: none;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+                
+                    .product-title-inquiry .inquiry-button:hover {
+                        background-color: #0097a7;
+                    }
+
                     .quantity-box {
                         display: flex;
                         align-items: center;
@@ -96,6 +117,7 @@
                         margin: 0 10px;
                         /* 버튼 사이에 적당한 간격 */
                         text-align: center;
+                        border-radius: 5px;
                     }
 
                     .add-to-cart {
@@ -149,6 +171,13 @@
                         max-height: 400px;
                         max-width: 400px;
                         /* 이미지의 최대 높이를 고정 */
+                    }
+                    
+                    /* 모달을 화면 가운데 정렬 */
+                    .centered {
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
                     }
 
                     /* 리뷰 모달 관련 
@@ -445,12 +474,13 @@
                             <div class="product-details">
                                 <h1 id="product-name">${shop.getPName()}</h1>
                                 <p class="price" id="product-price">${shop.getPrice()} 원</p>
-                                <hr
-                                    style="border: 0; height: 2px; background: linear-gradient(to right, #ccc, #333, #ccc);">
-
-                                <span style="font-size: 1.5em;">수량:</span> <input type="number" id="scamount"
-                                    name="scamount" value="1" min="1" class="quantity-field">
-                                <p style="display: inline-block; font-size: 1.5em;"> 재고수량: ${shop.getAmount()}</p>
+                                <hr style="border: 0; height: 2px; background: linear-gradient(to right, #ccc, #333, #ccc);">
+                                <div class="product-title-inquiry">
+                                    <span style="font-size: 1.5em;">수량:</span> <input type="number" id="scamount" name="scamount" value="1" min="1" class="quantity-field">
+                                    <p style="display: inline-block; font-size: 1.5em;"> 재고수량: ${shop.getAmount()}</p>
+                                    <!-- 문의 버튼 -->
+                                    <button class="inquiry-button" onclick="openInquiryForm('${shop.getPIdx()}')">문의하기</button>
+                                </div>
                                 <p id="product-description" class="description-box">${shop.getPEx()}</p>
                                 <div class="button-group">
                                     <button class="add-to-cart" onclick="addToCart()">장바구니에 추가</button>
@@ -465,10 +495,18 @@
                         <h2 style="margin-right: 20px;">후기</h2>
                         <br>
                         <c:if test="${not empty user}">
-                            <button type="button" class="btn btn-primary btn-sm"
-                                style="padding: 10px 15px; font-size: 15px; border-radius: 4px; background-color: black !important;"
-                                id="openReviewModal">리뷰
-                                등록</button>
+                            <c:if test="${purchaseCount > 0}">
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    style="padding: 10px 15px; font-size: 15px; border-radius: 4px; background-color: black !important;"
+                                    id="openReviewModal">리뷰
+                                    등록</button>
+                            </c:if>
+                            <c:if test="${purchaseCount <= 0}">
+                                <span style="color: red; font-size: 14px;">이 상품을 구매한 후 리뷰를 작성할 수 있습니다.</span>
+                            </c:if>
+                        </c:if>
+                        <c:if test="${empty user}">
+                            <span style="color: red; font-size: 14px;">로그인 후 리뷰를 작성할 수 있습니다.</span>
                         </c:if>
                     </div>
                     <br>
@@ -502,8 +540,10 @@
                                 </p>
                                 <hr style="border: 0; height: 1px; background-color: #ddd;">
                                 <p style="font-size: large;">${review.rvContent}</p>
-                                <img src="${pageContext.request.contextPath}/resources/images/review/${review.rvImg}"
-                                    alt="리뷰 이미지" style="width: 300px; height: 300px; object-fit: cover;">
+                                <c:if test="${review.rvImg ne null && review.rvImg ne ''}">
+                                    <img src="${pageContext.request.contextPath}/resources/images/review/${review.rvImg}"
+                                        alt="리뷰 이미지" style="width: 300px; height: 300px; object-fit: cover;">
+                                </c:if>
 
                                 <!-- 좋아요 버튼과 좋아요 수를 이미지 아래에 배치 -->
                                 <div style="margin-top: 10px; display: flex; align-items: center;">
@@ -561,7 +601,7 @@
 
                     <!-- 리뷰 수정 모달 -->
                     <div id="reviewModifyModal" class="modal">
-                        <div class="modal-content">
+                        <div class="modal-content centered">
                             <span class="close"
                                 onclick="document.getElementById('reviewModifyModal').style.display='none'">&times;</span>
                             <h2>리뷰 수정</h2>
@@ -611,7 +651,12 @@
                             });
                         }
                     </script>
+                    <script>
+                        function openInquiryForm() {
 
+                            location.href = `inquiry/inquiryWriteForm.do?pIdx=${shop.getPIdx()}`;
+                        }
+                    </script>
             </body>
 
             </html>
