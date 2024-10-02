@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             now(),
             #{orderNumber},
             #{buyPrice},
-            null
+            #{daIdx}
         )
     </insert>
 
@@ -40,6 +40,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             INTERVAL 2 DAY)
         )
     </insert>
+
+    <select id="selectDaAddr" parameterType="int" resultType="String">
+        select daAddr from daddress where daIdx=#{daIdx}
+    </select>
 
     <!-- <update>
         update buyList set status = 'canceled' where orderNumber = #{orderNumber}

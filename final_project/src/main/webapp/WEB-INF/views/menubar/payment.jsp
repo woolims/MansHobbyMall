@@ -118,7 +118,7 @@
 
                     let daAddr = $("#address").val();
 
-                    if (daAddr=="배송지를 선택하세요"){
+                    if (daAddr == null){
                         alert("배송지를 선택해주세요!");
                         return;
                     }
@@ -162,7 +162,7 @@
                                     userIdx: "${ user.userIdx }",
                                     pIdx: "${ shop.getPIdx() }",
                                     couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
-                                    daAddr: daAddr,
+                                    daIdx: daAddr,
                                     // 수정 필요
                                     bamount: bamount,
                                     buyPrice: rsp.paid_amount
@@ -200,7 +200,7 @@
                     }
                     daAddr = $("#address").val();
 
-                    if (daAddr=="배송지를 선택하세요"){
+                    if (daAddr==null){
                         alert("배송지를 선택해주세요!");
                         return;
                     }
@@ -238,7 +238,7 @@
                                     pIdx: "${ shop.getPIdx() }",
                                     couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
                                     // 수정 필요
-                                    daAddr: daAddr,
+                                    daIdx: daAddr,
                                     bamount: bamount,
                                     buyPrice: rsp.paid_amount
                                 },
@@ -276,7 +276,7 @@
                         return;
                     }
                     
-                    if (daAddr=="배송지를 선택하세요"){
+                    if (daAddr==null){
                         alert("배송지를 선택해주세요!");
                         return;
                     }
@@ -314,7 +314,7 @@
                                     userIdx: "${ user.userIdx }",
                                     pIdx: "${ shop.getPIdx() }",
                                     couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
-                                    daAddr: daAddr,
+                                    daIdx: daAddr,
                                     // 수정 필요
                                     bamount: bamount,
                                     buyPrice: rsp.paid_amount
@@ -524,7 +524,7 @@
                                 <p>배송지: <span id="address-id"><select name="address" id="address">
                                             <option value="">배송지를 선택하세요</option>
                                             <c:forEach var="ad" items="${daAddrList}">
-                                                <option value="${ad.daAddr}">${ad.daAddr}</option>
+                                                <option value="${ad.daIdx}">${ad.daAddr}</option>
                                             </c:forEach>
                                         </select></span></p>
                             </c:if>

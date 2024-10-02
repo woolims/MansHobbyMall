@@ -15,6 +15,7 @@ public class OrdersVo {
     int bIdx;
     String daStartDate;
     String daEndDate;
+    String daAddr;
 
     int userIdx;
     int pIdx;
