@@ -234,6 +234,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProductSearch" resultType="product" parameterType="int">
         SELECT * FROM productListView where pIdx=#{pIdx}
     </select>
+
+    <select id="selectDaAddrList" resultType="daddress" parameterType="int">
+        SELECT * FROM daddress where userIdx=#{userIdx}
+    </select>
     
 
 

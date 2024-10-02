@@ -52,16 +52,18 @@ public class BuyListController {
         // 디버깅 로그 추가
         System.out.println("BuyListVo: " + vo);
         System.out.println("Received couponid: " + couponid);
+        System.out.println(vo.getDaIdx());
 
         UserActivityVo userActVo = new UserActivityVo();
         userActVo.setUserIdx(vo.getUserIdx());
         userActVo.setTotalPurchaseAmount(vo.getBuyPrice());
 
         System.out.println(vo);
+        String daAddr = buyListMapper.selectDaAddr(vo.getDaIdx());
+        vo.setDaAddr(daAddr);
         int res = buyListMapper.insert(vo);
 
         buyListMapper.updateAmount(vo);
-        
 
         int bIdx = buyListMapper.selectBuyListOne(vo);
 

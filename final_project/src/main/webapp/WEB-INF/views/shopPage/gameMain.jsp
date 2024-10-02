@@ -137,7 +137,7 @@
               display: inline-block;
               position: fixed;
               top: 113px;
-              left: 20px;
+              left: 6px;
               width: 220px;
               background-color: #fff;
               z-index: 1000;
@@ -193,8 +193,18 @@
               border-radius: 5px;
               margin-bottom: 10px;
             }
-          </style>
 
+            #searchResult {
+              margin-top: 20px;
+              text-align: center;
+              font-size: 15px;
+              color: black;
+            }
+
+            b {
+              font-size: 20px;
+            }
+          </style>
           <script>
 
             function product(categoryNo, mcategoryName) {
@@ -229,6 +239,7 @@
                      </div>`
                   });
                   $("#product").html(productHtml);
+                  $("#searchResult").html("현재 보고 계신 상품은 <br> 총 <b>" + res_data.length + "</b>개 입니다");
                 }
               });
             }
@@ -319,6 +330,7 @@
                      </div>`
                   });
                   product.html(productHtml);
+                  $("#searchResult").html("현재 보고 계신 상품은 <br> 총 <b>" + res_data.length + "</b>개 입니다");
                 }
               });
             }
@@ -419,6 +431,7 @@
                   });
                   // HTML을 특정 컨테이너에 삽입
                   $("#product").html(productHtml);
+                  $("#searchResult").html("현재 보고 계신 상품은 <br> 총 <b>" + res_data.length + "</b>개 입니다");
                 },
                 error: function (err) {
                   console.log(err.responseText);
@@ -485,23 +498,6 @@
                   </a>
                 </div>
               </div>
-              <div id="category-box">
-                <h2>Game</h2>
-                <h3>category</h3>
-                <div id="mcategory">
-                  <c:forEach var="shopM" items="${mCategoryNameList}">
-                    <input type="button" id="mcategorySearch" class="btn btn-default" value="${shopM.mcategoryName}"
-                      onclick="mCategoryNoParam(this);" style="display: block; margin: auto;">
-                  </c:forEach>
-                </div>
-                <div id="dcategorySearch">
-                </div>
-                <div>
-                  <input type="text" id="search" placeholder="상품명을 입력하세요">
-                  <input type="button" class="btn btn-success" id="searchBtn" value="검색" onclick="search();">
-                </div>
-              </div>
-
 
               <div id="product" class="row">
                 <c:forEach var="shopP" items="${productList}">
@@ -524,6 +520,24 @@
                     </div>
                   </div>
                 </c:forEach>
+              </div>
+
+              <div id="category-box">
+                <h2>Game</h2>
+                <h3>category</h3>
+                <div id="mcategory">
+                  <c:forEach var="shopM" items="${mCategoryNameList}">
+                    <input type="button" id="mcategorySearch" class="btn btn-default" value="${shopM.mcategoryName}"
+                      onclick="mCategoryNoParam(this);" style="display: block; margin: auto;">
+                  </c:forEach>
+                </div>
+                <div id="dcategorySearch">
+                </div>
+                <div>
+                  <input type="text" id="search" placeholder="상품명을 입력하세요">
+                  <input type="button" class="btn btn-success" id="searchBtn" value="검색" onclick="search();">
+                </div>
+                <p id="searchResult">현재 보고 계신 상품은 <br> 총 <b>${productList.size()}</b>개 입니다</p>
               </div>
             </div>
 
