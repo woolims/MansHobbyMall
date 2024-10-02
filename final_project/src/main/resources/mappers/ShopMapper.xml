@@ -16,6 +16,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from productListView where categoryNo = #{categoryNo} order by pIdx desc
     </select>
 
+    <!-- 게임카테고리 전체조회 -->
+    <select id="selectListGameP" resultType="Long" parameterType="int">
+        select buyPrice from buyList where orderNumber = #{merchantUid}
+    </select>
+
+    <!-- 스포츠카테고리 전체조회 -->
+    <select id="selectListSportsP" resultType="Long" parameterType="int">
+        select buyPrice from buyList where orderNumber = #{merchantUid}
+    </select>
+
     <!-- 관리자페이지 상품 전체조회 -->
     <select id="selectAdminList" resultType="shop">
         select * from shop_list_view order by pIdx desc

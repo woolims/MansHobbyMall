@@ -18,6 +18,10 @@ public interface ShopMapper {
     
     // 스포츠카테고리 전체조회
     List<ProductVo> selectListSports(int categoryNo);
+
+    List<Long> selectListGameP(int merchantUid);
+
+    List<Long> selectListSportsP(int merchantUid);
     
     // 메인카테고리 번호만 조회
     int selectRowTotalSports(int categoryNo);
