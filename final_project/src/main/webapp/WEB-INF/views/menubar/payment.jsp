@@ -119,6 +119,13 @@
                 return;
             }
 
+            let daAddr = $("#address").val();
+
+            if (daAddr == null){
+                alert("배송지를 선택해주세요!");
+                return;
+            }
+
             let amount = "${ shop.getAmount() }";
             let scamount = $("#scamount").val();
             if (amount - scamount < 0) {
@@ -136,7 +143,7 @@
                 buyer_email: '${ user.id }',
                 buyer_name: '${ user.name }',
                 buyer_tel: '${ user.phone }',
-                buyer_addr: '${ user.addr }',
+                buyer_addr: daAddr,
                 buyer_postcode: ''
             }, function (rsp) { // callback
                 //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
@@ -157,6 +164,7 @@
                             userIdx: "${ user.userIdx }",
                             pIdx: "${ shop.getPIdx() }",
                             couponid: document.getElementById('coupon').value, // 선택된 쿠폰 ID
+                            daIdx: daAddr,
                             // 수정 필요
                             bamount: bamount,
                             buyPrice: rsp.paid_amount
@@ -191,6 +199,13 @@
                 alert("재고수량이 부족합니다.");
                 return;
             }
+
+            daAddr = $("#address").val();
+
+            if (daAddr==null){
+                alert("배송지를 선택해주세요!");
+                return;
+            }
         
             // 1. 사전 검증 (IMP.request_pay 호출 전에 실행)
             jQuery.ajax({
@@ -217,7 +232,7 @@
                         buyer_email: '${ user.id }',
                         buyer_name: '${ user.name }',
                         buyer_tel: '${ user.phone }',
-                        buyer_addr: '${ user.addr }',
+                        buyer_addr: daAddr,
                         buyer_postcode: ''
                     }, function (rsp) { // callback
                         //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
@@ -239,6 +254,7 @@
                                     pIdx: "${ shop.getPIdx() }",
                                     couponid: document.getElementById('coupon')
                                         .value, // 선택된 쿠폰 ID
+                                    daIdx: daAddr,
                                     // 수정 필요
                                     bamount: bamount,
                                     buyPrice: rsp.paid_amount
@@ -278,6 +294,13 @@
                     return;
                 }
 
+                let daAddr = $("#address").val();
+
+                if (daAddr==null){
+                    alert("배송지를 선택해주세요!");
+                    return;
+                }
+
                 IMP.request_pay({
                     pg: "kakaopay",
                     pay_method: 'kakaopay',
@@ -288,7 +311,7 @@
                     buyer_email: '${ user.id }',
                     buyer_name: '${ user.name }',
                     buyer_tel: '${ user.phone }',
-                    buyer_addr: '${ user.addr }',
+                    buyer_addr: daAddr,
                     buyer_postcode: ''
                 }, function (rsp) { // callback
                     //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
@@ -311,6 +334,7 @@
                                     pIdx: "${ shop.getPIdx() }",
                                     couponid: document.getElementById('coupon')
                                         .value, // 선택된 쿠폰 ID
+                                    daIdx: daAddr,
                                     // 수정 필요
                                     bamount: bamount,
                                     buyPrice: rsp.paid_amount
@@ -518,12 +542,17 @@
 
                  <!-- 배송지 선택 -->
                  <div class="address">
-                    <p>배송지: <span id="address-id"><select name="address" id="address">
-                                <option value="0">배송지를 선택하세요</option>
-                                <c:forEach var="ad" items="${daAddrList}">
-                                    <option value="${ad.daIdx}">${ad.daAddr}</option>
-                                </c:forEach>
-                            </select></span></p>
+                    <c:if test="${user ne null}">
+                        <p>배송지: <span id="address-id"><select name="address" id="address">
+                                    <option value="">배송지를 선택하세요</option>
+                                    <c:forEach var="ad" items="${daAddrList}">
+                                        <option value="${ad.daIdx}">${ad.daAddr}</option>
+                                    </c:forEach>
+                                </select></span></p>
+                    </c:if>
+                    <c:if test="${user eq null}">
+                        <p>배송지를 입력하려면 로그인하세요</p>
+                    </c:if>
                 </div>
 
                 <!-- 구매 버튼 -->
