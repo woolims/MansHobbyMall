@@ -193,6 +193,17 @@
               border-radius: 5px;
               margin-bottom: 10px;
             }
+
+            #searchResult {
+              margin-top: 20px;
+              text-align: center;
+              font-size: 15px;
+              color: black;
+            }
+
+            b {
+              font-size: 20px;
+            }
           </style>
 
           <script>
@@ -229,6 +240,7 @@
                      </div>`
                   });
                   $("#product").html(productHtml);
+                  $("#searchResult").html("현재 보고 계신 상품은 <br> 총 <b>" + res_data.length + "</b>개 입니다");
                 }
               });
             }
@@ -319,6 +331,7 @@
                      </div>`
                   });
                   product.html(productHtml);
+                  $("#searchResult").html("현재 보고 계신 상품은 <br> 총 <b>" + res_data.length + "</b>개 입니다");
                 }
               });
             }
@@ -419,6 +432,7 @@
                   });
                   // HTML을 특정 컨테이너에 삽입
                   $("#product").html(productHtml);
+                  $("#searchResult").html("현재 보고 계신 상품은 <br> 총 <b>" + res_data.length + "</b>개 입니다");
                 },
                 error: function (err) {
                   console.log(err.responseText);
@@ -500,6 +514,7 @@
                   <input type="text" id="search" placeholder="상품명을 입력하세요">
                   <input type="button" class="btn btn-success" id="searchBtn" value="검색" onclick="search();">
                 </div>
+                <p id="searchResult">현재 보고 계신 상품은 <br> 총 <b>${productList.size()}</b>개 입니다</p>
               </div>
 
 
