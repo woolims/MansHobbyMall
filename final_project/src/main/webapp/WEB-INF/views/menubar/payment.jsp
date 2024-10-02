@@ -121,7 +121,7 @@
 
             let daAddr = $("#address").val();
 
-            if (daAddr == null){
+            if (daAddr == 'none'){
                 alert("배송지를 선택해주세요!");
                 return;
             }
@@ -202,7 +202,7 @@
 
             daAddr = $("#address").val();
 
-            if (daAddr==null){
+            if (daAddr=='none'){
                 alert("배송지를 선택해주세요!");
                 return;
             }
@@ -296,7 +296,7 @@
 
                 let daAddr = $("#address").val();
 
-                if (daAddr==null){
+                if (daAddr=='none'){
                     alert("배송지를 선택해주세요!");
                     return;
                 }
@@ -543,12 +543,14 @@
                  <!-- 배송지 선택 -->
                  <div class="address">
                     <c:if test="${user ne null}">
-                        <p>배송지: <span id="address-id"><select name="address" id="address">
-                                    <option value="">배송지를 선택하세요</option>
-                                    <c:forEach var="ad" items="${daAddrList}">
-                                        <option value="${ad.daIdx}">${ad.daAddr}</option>
-                                    </c:forEach>
-                                </select></span></p>
+                        <p>배송지: <span id="address-id">
+                            <select name="address" id="address">
+                                <option value="none">배송지를 선택하세요</option>
+                                <c:forEach var="ad" items="${daAddrList}">
+                                    <option value="${ad.daIdx}">${ad.daAddr}</option>
+                                </c:forEach>
+                            </select>
+                        </span></p>
                     </c:if>
                     <c:if test="${user eq null}">
                         <p>배송지를 입력하려면 로그인하세요</p>
