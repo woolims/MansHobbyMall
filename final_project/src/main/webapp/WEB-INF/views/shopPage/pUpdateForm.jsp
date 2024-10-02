@@ -328,11 +328,19 @@
                                 </c:if>
                                 <c:if test="${not empty pImageList && pImageList.size() != 0}">
                                     <c:forEach var="vo" items="${pImageList}">
-                                        <td style="display: inline-block; width: 200px; height: 160px;">
-                                            <img style="width: 100%; height: 100%;"
-                                                src="${pageContext.request.contextPath}/resources/images/${vo.fileName}"
-                                                onclick="pImageDelete('${vo.fileIdx}', '${vo.getPIdx()}')">
-                                        </td>
+                                        <c:if test="${vo.fileNameLink == 'Y'}">
+                                            <td style="display: inline-block; width: 200px; height: 160px;">
+                                                <img style="width: 100%; height: 100%;" src="${vo.fileName}"
+                                                    onclick="pImageDelete('${vo.fileIdx}', '${vo.getPIdx()}')">
+                                            </td>
+                                        </c:if>
+                                        <c:if test="${vo.fileNameLink == 'N'}">
+                                            <td style="display: inline-block; width: 200px; height: 160px;">
+                                                <img style="width: 100%; height: 100%;"
+                                                    src="${pageContext.request.contextPath}/resources/images/${vo.fileName}"
+                                                    onclick="pImageDelete('${vo.fileIdx}', '${vo.getPIdx()}')">
+                                            </td>
+                                        </c:if>
                                     </c:forEach>
                                 </c:if>
                             </tr>
