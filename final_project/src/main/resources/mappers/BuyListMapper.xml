@@ -49,6 +49,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select daAddr from daddress where daIdx=#{daIdx}
     </select>
 
+    <select id="selectSubDaAddr" parameterType="int" resultType="String">
+        select subDaAddr from daddress where daIdx=#{daIdx}
+    </select>
+    
+
     <!-- <update>
         update buyList set status = 'canceled' where orderNumber = #{orderNumber}
     </update> -->

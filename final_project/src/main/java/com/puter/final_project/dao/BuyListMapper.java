@@ -22,6 +22,8 @@ public interface BuyListMapper {
 
     public String selectDaAddr(int daIdx);
 
+    public String selectSubDaAddr(int daIdx);
+
     // 재고수량 업데이트
     public int updateAmount(BuyListVo vo);
 

@@ -58,9 +58,11 @@ public class BuyListController {
         userActVo.setUserIdx(vo.getUserIdx());
         userActVo.setTotalPurchaseAmount(vo.getBuyPrice());
 
-        System.out.println(vo);
         String daAddr = buyListMapper.selectDaAddr(vo.getDaIdx());
+        String subDaAddr = buyListMapper.selectSubDaAddr(vo.getDaIdx());
+        vo.setSubDaAddr(subDaAddr);
         vo.setDaAddr(daAddr);
+        System.out.println(vo);
         int res = buyListMapper.insert(vo);
 
         buyListMapper.updateAmount(vo);
