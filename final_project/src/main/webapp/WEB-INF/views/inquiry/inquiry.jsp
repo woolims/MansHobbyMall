@@ -91,9 +91,9 @@
                 <table class="table table-striped" style="margin-top: 20px; table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th style="width: 10%; text-align: center;">번호</th>
+                            <th style="width: 15%; text-align: center;">번호</th>
                             <th style="width: 15%; text-align: center;">아이디</th>
-                            <th style="width: 40%; text-align: center;">제목</th>
+                            <th style="width: 35%; text-align: center;">제목</th>
                             <th style="width: 25%; text-align: center;">작성일</th>
                             <th style="width: 20%; text-align: center;">답변 여부</th>
                         </tr>
@@ -113,7 +113,7 @@
                                         style="width: 25%; text-align: center; background-color: #f1f1f1; color: #303030; ">
                                         ${vo.inDate}</td>
                                     <td
-                                        style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; ">
+                                        style="width: 20%; text-align: center; background-color: #f1f1f1; color: #303030; "> 공지사항
                                     </td>
                                 </tr>
                             </c:if>
