@@ -58,4 +58,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     where 
       userIdx = #{userIdx}
   </update>
+
+  <!--아래부터 비밀번호 찾기 -->
+  <!-- 유저번호조회 -->
+  <select id="selectNameIdUserIdx" parameterType="user" resultType="int">
+		select userIdx from User where name=#{name} and id=#{id}
+  </select>
+  <!-- 유저번호를 토대로 이메일리스트 조회 -->
+  <select id="seleEmailList" parameterType="user" resultType="user">
+		select email from Email where userIdx=#{userIdx}
+  </select>
+  <!-- 이메일로 유저번호 조회 -->
+  <select id="selectEmailUserIdx" parameterType="user" resultType="int">
+		select userIdx from Email where email=#{email}
+  </select>
+  <!-- 유저 아이디 조회 -->
+  <select id="selectId" parameterType="user" resultType="String">
+		select id from UserStatusView where email=#{email} and userIdx=#{userIdx}
+  </select>
+  <!-- 유저 비밀번호 조회 -->
+  <select id="selectPwd" parameterType="user" resultType="String">
+		select password from User where id=#{id}
+  </select>
 </mapper>

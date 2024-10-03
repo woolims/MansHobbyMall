@@ -25,4 +25,18 @@ public interface UserMapper {
 
     int userModify(UserVo vo);
 
+
+    // 아래부터 비밀번호찾기
+
+    int selectNameIdUserIdx(UserVo vo);
+
+    int selectEmailUserIdx(UserVo vo);
+
+    List<UserVo> seleEmailList(int userIdx);
+
+    String selectId(UserVo vo);
+
+    String selectPwd(UserVo vo);
+
+    // 여기까지 비밀번호 찾기
 }
