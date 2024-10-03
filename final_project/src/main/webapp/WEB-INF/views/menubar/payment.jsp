@@ -547,7 +547,7 @@
                                 <select name="address" id="address">
                                     <option value="none">배송지를 선택하세요</option>
                                     <c:forEach var="ad" items="${daAddrList}">
-                                        <option value="${ad.daIdx}">${ad.daAddr}</option>
+                                        <option value="${ad.daIdx}">${ad.daAddr}(${ad.subDaAddr})</option>
                                     </c:forEach>
                                 </select>
                             </span></p>

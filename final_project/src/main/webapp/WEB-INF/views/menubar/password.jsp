@@ -9,6 +9,76 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <title>MansHobby</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <style>
+      body {
+        width: 70%;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 150px auto;
+        padding: 20px;
+      }
+
+      h2 {
+        text-align: center;
+        color: black;
+      }
+
+      form {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      div {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input[type="text"] {
+        margin: auto;
+        margin-top: 20px;
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      input[type="button"] {
+        margin-top: 20px;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+      }
+
+      input[type="button"]:hover {
+        background-color: #45a049;
+      }
+
+      input[type="radio"] {
+        margin-right: 5px;
+      }
+
+      p {
+        margin-top: 10px;
+        margin: 10px 0;
+      }
+    </style>
+
     <script>
       function passwordSearch(f) {
         name = f.name.value.trim();
@@ -27,7 +97,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 
         $.ajax({
           url: "/passwordSearchAjax.do",
-          data: { name: name, id: id },
+          data: { "name": name, "id": id },
           dataType: "json",
           method: "GET",
           success: function (res_data) {
@@ -60,7 +130,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         let email = document.querySelector('input[name="email"]:checked');
         console.log(email);
         if (email) {
-          alert('비밀번호를 전송했습니다');
+          alert("비밀번호를 전송했습니다");
           location.href = "sendEmail.do?email=" + email.value;
         } else {
           alert("이메일을 선택하세요.");
@@ -72,15 +142,14 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   <body>
     <h2>비밀번호 찾기</h2>
 
-    <form action="">
+    <form>
       <div>
-        이름을 입력하세요 <br />
-        <input type="text" id="name" name="name" /><br />
-        아이디를 입력하세요 <br />
-        <input type="text" id="id" name="id" /><br />
+        <input type="text" id="name" name="name" placeholder="이름을 입력해주세요"/><br />
+        <input type="text" id="id" name="id" placeholder="아이디를 입력해주세요"/><br />
         <input type="button" value="검색" onclick="passwordSearch(this.form)" />
       </div>
+      <div id="emailSearch"></div>
     </form>
-    <div id="emailSearch"></div>
+      
   </body>
 </html>
