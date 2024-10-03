@@ -738,7 +738,7 @@
                                                         value="${bVo.getDcategoryName()}">
                                                     <input type="hidden" name="pName" value="${bVo.getPName()}">
                                                     <input type="hidden" name="amount" value="${bVo.getBamount()}">
-                                                    <input type="hidden" name="price" value="${bVo.getPrice()}">
+                                                    <input type="hidden" name="price" value="${bVo.getBuyPrice()}">
                                                     <input type="hidden" name="orderNumber"
                                                         value="${bVo.getOrderNumber()}">
                                                     <input type="button" class="btn btn-danger" value="환불"

@@ -463,6 +463,7 @@ SELECT
     (p.price*bamount) as price,
     u.name,
     b.bIdx,
+    b.buyPrice,
     b.buyDate,
     b.orderNumber
 FROM BuyList b
