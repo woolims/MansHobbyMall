@@ -364,6 +364,7 @@ SELECT
     o.daEndDate,
     b.userIdx,
     b.pIdx,
+    b.buyPrice,
     b.bamount,
     b.buyDate,
     ds.dsContent,
