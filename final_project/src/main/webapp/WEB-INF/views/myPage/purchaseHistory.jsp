@@ -102,7 +102,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
               <td>${buy.getPName()}</td>
               <td>${buy.getPrice()}</td>
               <td>${buy.getBamount()}</td>
-              <td>${buy.getPrice() * buy.getBamount()}</td>
+              <td>${buy.getBuyPrice()}</td>
               <td>${buy.getDaAddr()}(${buy.getSubDaAddr()})</td>
               <td>${buy.getBuyDate().substring(0, 16)}</td>
             </tr>
