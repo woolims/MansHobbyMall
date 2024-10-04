@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS DAddress;
 DROP TABLE IF EXISTS Email;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS Grade;
+Drop PROCEDURE IF EXISTS UpdateUserGrade;
 
 
 -- Grade 테이블
@@ -749,8 +750,6 @@ ON SCHEDULE EVERY 1 MINUTE
 DO
     CALL update_order_status();
 
-Drop PROCEDURE IF EXISTS UpdateUserGrade;
-
 -- 등급 조정 관련 DB 정리
 DELIMITER $$
 
@@ -807,7 +806,6 @@ BEGIN
     END WHILE;
 END $$
 
-select * from buylistview
 
 
 
