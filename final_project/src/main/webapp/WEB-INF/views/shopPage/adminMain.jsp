@@ -723,7 +723,7 @@
                                             <td>${bVo.getDcategoryName()}</td>
                                             <td>${bVo.getPName()}</td>
                                             <td>${bVo.getBamount()}</td>
-                                            <td>${bVo.getPrice()}</td>
+                                            <td>${bVo.getBuyPrice()}</td>
                                             <td>${bVo.getName()}</td>
                                             <td>${bVo.getBuyDate()}</td>
                                             <td>
