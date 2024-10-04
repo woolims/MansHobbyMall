@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +24,6 @@ import com.puter.final_project.vo.ShopVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import net.minidev.json.JSONObject;
 
 @Controller
 public class PaymentControllor {
@@ -134,44 +131,5 @@ public class PaymentControllor {
             return new ResponseEntity<>("서버 오류 발생", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    // @PostMapping(value = "/api/iamport/token", produces = "application/json; charset=UTF-8")
-    // public ResponseEntity<String> getToken() {
-    //     // 포트원 API URL 및 헤더 설정
-    //     String url = "https://api.iamport.kr/users/getToken";
-    //     HttpHeaders headers = new HttpHeaders();
-    //     headers.setContentType(MediaType.APPLICATION_JSON);
-
-    //     // 포트원 REST API Key 및 Secret 설정
-    //     JSONObject request = new JSONObject();
-    //     request.put("imp_key", "3672717442038407");
-    //     request.put("imp_secret", "Z0zCEcoGYox8ODy9Ukpd7UGdNg7D9meXKi9zItAoyhwSE2eeCfu98edzsHRTEpxRmjmju70Ot8pa0oD8");
-
-    //     HttpEntity<String> entity = new HttpEntity<>(request.toString(), headers);
-
-    //     // RestTemplate을 이용해 포트원 서버에 요청
-    //     RestTemplate restTemplate = new RestTemplate();
-    //     ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-
-    //     // 서버 응답 반환
-    //     return ResponseEntity.ok(response.getBody());
-    // }
-
-    // @GetMapping(value = "/api.iamport.kr/payments/{imp_uid}", produces = "application/json; charset=UTF-8")
-    // public ResponseEntity<String> getPayments(@PathVariable String imp_uid) {
-    //     // 포트원 API URL 및 헤더 설정
-    //     String url = "https://api.iamport.kr/payments/" + imp_uid; // imp_uid를 URL에 포함
-    //     HttpHeaders headers = new HttpHeaders();
-    //     headers.setContentType(MediaType.APPLICATION_JSON);
-
-    //     HttpEntity<String> entity = new HttpEntity<>(headers);
-
-    //     // RestTemplate을 이용해 포트원 서버에 요청
-    //     RestTemplate restTemplate = new RestTemplate();
-    //     ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-    //     // 서버 응답 반환
-    //     return ResponseEntity.ok(response.getBody());
-    // }
 
 }
