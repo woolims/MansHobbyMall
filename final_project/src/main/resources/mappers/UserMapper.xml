@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
   <!--아래부터 비밀번호 찾기 -->
   <!-- 유저번호조회 -->
-  <select id="selectNameIdUserIdx" parameterType="user" resultType="int">
+  <select id="selectNameIdUserIdx" parameterType="user" resultType="Integer">
 		select userIdx from User where name=#{name} and id=#{id}
   </select>
   <!-- 유저번호를 토대로 이메일리스트 조회 -->
