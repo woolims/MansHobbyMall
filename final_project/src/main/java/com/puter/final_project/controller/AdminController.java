@@ -418,6 +418,7 @@ public class AdminController {
     @PostMapping(value = "cancel", produces = "application/json; charset=UTF-8")
     public ResponseEntity<String> cancelPay(@RequestBody Map<String, Object> requestData) {
 
+        System.out.println("requestData: " + requestData);
         Long merchantUid = Long.valueOf(requestData.get("merchant_uid").toString());
         Long cancelRequestAmount = Long.valueOf(requestData.get("cancel_request_amount").toString());
         String reason = requestData.get("reason").toString(); // reason에서 환불 사유를 가져옴
