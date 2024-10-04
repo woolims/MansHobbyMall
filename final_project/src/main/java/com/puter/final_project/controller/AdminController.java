@@ -26,15 +26,18 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.puter.final_project.dao.AdminMapper;
+import com.puter.final_project.dao.GradeMapper;
 import com.puter.final_project.dao.InquiryMapper;
 import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.ProductMapper;
 import com.puter.final_project.dao.ShopMapper;
+import com.puter.final_project.dao.UserActivityMapper;
 import com.puter.final_project.vo.BuyListVo;
 import com.puter.final_project.vo.InquiryVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ShopVo;
+import com.puter.final_project.vo.UserActivityVo;
 import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.ServletContext;
@@ -58,6 +61,9 @@ public class AdminController {
 
     @Autowired
     OrdersMapper ordersMapper;
+
+    @Autowired
+    UserActivityMapper userActivityMapper;
 
     @Autowired
     InquiryMapper inquiryMapper;
@@ -477,6 +483,11 @@ public class AdminController {
             cancelRequest.put("amount", cancelRequestAmount); // 환불 요청 금액
             cancelRequest.put("checksum", cancelRequestAmount); // [권장] 환불 가능 금액 입력
 
+            UserVo user = (UserVo) session.getAttribute("user");
+            UserActivityVo userActVo = new UserActivityVo();
+            userActVo.setUserIdx(user.getUserIdx());
+            userActVo.setTotalPurchaseAmount(cancelRequestAmount);
+
             // 환불 요청 헤더 설정
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -497,6 +508,8 @@ public class AdminController {
             if (responseJson.path("code").asInt() == 0) {
                 // 성공 시 주문 삭제
                 ordersMapper.deleteBuyList(bIdx);
+                userActivityMapper.updateTotalBuyPlus(userActVo);
+                userActivityMapper.callUpdateUserGrade(userActVo.getUserIdx());
                 return new ResponseEntity<>(responseJson.toString(), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(responseJson.toString(), HttpStatus.BAD_REQUEST);

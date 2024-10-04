@@ -212,72 +212,73 @@
             }
 
             // 1. 사전 검증 (IMP.request_pay 호출 전에 실행)
-            jQuery.ajax({
-                url: "https://api.iamport.kr/payments/prepare",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: JSON.stringify({
-                    merchant_uid: merchant_uid, // 가맹점 주문번호
-                    amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g,
-                        '') // 결제 예정 금액
-                }),
-                success: function (preparationResponse) {
-                    console.log("사전 검증 성공:", preparationResponse);
+            // jQuery.ajax({
+            //     url: "https://api.iamport.kr/payments/prepare",
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     },
+            //     data: JSON.stringify({
+            //         merchant_uid: merchant_uid, // 가맹점 주문번호
+            //         amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g,
+            //             '') // 결제 예정 금액
+            //     }),
+            //     success: function (preparationResponse) {
+            //         console.log("사전 검증 성공:", preparationResponse);
 
                     IMP.request_pay({
                         pg: "tosspay",
                         pay_method: 'tosspay',
                         merchant_uid: merchant_uid,
-                        name: '${ shop.getPName() }',
-                        amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g,
-                            ''), // 쿠폰 할인 적용된 최종 금액
-                        buyer_email: '${ user.id }',
-                        buyer_name: '${ user.name }',
-                        buyer_tel: '${ user.phone }',
-                        buyer_addr: daAddr,
-                        buyer_postcode: ''
-                    }, function (rsp) { // callback
-                        //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
-                        console.log(rsp);
-                        if (rsp.success) {
-                            alert("결제 완료하였습니다.");
-                            // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-                            // jQuery로 HTTP 요청
-                            jQuery.ajax({
-                                url: "../buyList/buy.do",
-                                method: "GET",
-                                // headers: {
-                                //     "Content-Type": "application/json"
-                                // },
-                                data: {
-                                    imp_uid: rsp.imp_uid, // 결제 고유번호
-                                    merchant_uid: rsp.merchant_uid, // 주문번호
-                                    userIdx: "${ user.userIdx }",
-                                    pIdx: "${ shop.getPIdx() }",
-                                    couponid: document.getElementById('coupon')
-                                        .value, // 선택된 쿠폰 ID
-                                    daIdx: daAddr,
-                                    // 수정 필요
-                                    bamount: bamount,
-                                    buyPrice: rsp.paid_amount
-                                },
-                                dataType: "json",
+                name: '${ shop.getPName() }',
+                amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g,
+                    ''), // 쿠폰 할인 적용된 최종 금액
+                buyer_email: '${ user.id }',
+                buyer_name: '${ user.name }',
+                buyer_tel: '${ user.phone }',
+                buyer_addr: daAddr,
+                buyer_postcode: ''
+            }, function (rsp) { // callback
+                //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+                console.log(rsp)
 
-                            }).done(function (data) {
-                                // 가맹점 서버 결제 API 성공시 로직
-                            })
-                        } else {
-                            alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
-                        }
+                if (rsp.success) {
+                    alert("결제 완료하였습니다.");
+                    // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+                    // jQuery로 HTTP 요청
+                    jQuery.ajax({
+                            url: "../buyList/buy.do",
+                            method: "POST",
+                            // headers: {
+                            //     "Content-Type": "application/json"
+                            // },
+                            data: {
+                                imp_uid: rsp.imp_uid, // 결제 고유번호
+                                orderNumber: rsp.merchant_uid, // 주문번호
+                                userIdx: "${ user.userIdx }",
+                                pIdx: "${ shop.getPIdx() }",
+                                couponid: document.getElementById('coupon')
+                                    .value, // 선택된 쿠폰 ID
+                                daIdx: daAddr,
+                                // 수정 필요
+                                bamount: bamount,
+                                buyPrice: rsp.paid_amount
+                            },
+                            dataType: "json",
 
-                    });
+                        })
+                        .done(function (data) {
+                            // 가맹점 서버 결제 API 성공시 로직
 
-
+                        })
+                } else {
+                    alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
                 }
-            }); //end:tossPay()
-        }
+            });
+
+        } //end:tossPay()
+        //     }); 
+        // }
 
         function kakaoPay() {
 
