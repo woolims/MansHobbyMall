@@ -225,6 +225,24 @@
                     background-color: #2980b9;
                 }
             </style>
+            <script>
+                // 주소검색 API
+                function find_addr3() {
+                    new daum.Postcode({
+                        oncomplete: function (data) {
+                            $("#newDaAddr").val(data.address); 	  //선택한 정보의 주소 넣기
+                        }
+                    }).open();
+                }//end:find_addr()
+
+                function find_addr4() {
+                    new daum.Postcode({
+                        oncomplete: function (data) {
+                            $("#daAddr").val(data.address); 	  //선택한 정보의 주소 넣기
+                        }
+                    }).open();
+                }//end:find_addr()
+            </script>
         </head>
 
         <body>
@@ -261,9 +279,10 @@
                     <form id="editAddressForm" onsubmit="submitEdit(event)">
                         <input type="hidden" id="daIdx" name="daIdx">
                         <label for="daAddr">주소:</label>
-                        <input type="text" id="daAddr" name="daAddr" required>
+                        <input type="text" id="daAddr" name="daAddr" value="${address.daAddr}" required>
                         <label for="subDaAddr">상세주소:</label>
                         <input type="text" id="subDaAddr" name="subDaAddr" required>
+                        <input type="button" value="주소검색" onclick="find_addr4()">
                         <input type="submit" value="수정">
                     </form>
                 </div>
@@ -276,9 +295,10 @@
                     <h2>새 주소 추가</h2>
                     <form id="addAddressForm" onsubmit="submitAdd(event)">
                         <label for="newDaAddr">주소:</label>
-                        <input type="text" id="newDaAddr" name="daAddr" required>
+                        <input type="text" id="newDaAddr" name="daAddr" value="${address.daAddr}" required>
                         <label for="newSubDaAddr">상세주소:</label>
                         <input type="text" id="newSubDaAddr" name="subDaAddr" required>
+                        <input type="button" value="주소검색" onclick="find_addr3()">
                         <input type="submit" value="추가">
                     </form>
                 </div>
