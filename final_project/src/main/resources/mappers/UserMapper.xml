@@ -80,4 +80,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   <select id="selectPwd" parameterType="user" resultType="String">
 		select password from User where id=#{id}
   </select>
+
+  <insert id="insertUserActivity" parameterType="int">
+    INSERT INTO UserActivity (userIdx, totalPurchaseAmount, totalReviewCount)
+    VALUES (#{userIdx}, 0, 0)
+  </insert>
 </mapper>

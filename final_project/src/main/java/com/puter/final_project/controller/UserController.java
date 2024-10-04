@@ -161,13 +161,13 @@ public class UserController {
 	public String insert(UserVo vo) {
 
 		int res = userMapper.insert(vo);
-
+		
 		// 사용자 정보 가져오기 (mk)
 		UserVo user = userMapper.selectOneFromId(vo.getId());
 
 		// 쿠폰 발급 처리 (회원가입 축하 쿠폰)(mk)
 		issueWelcomeCoupon(user.getUserIdx());
-
+		userMapper.insertUserActivity(user.getUserIdx());
 		return "redirect:../home.do";
 	}
 
