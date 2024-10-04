@@ -31,6 +31,7 @@ public class OrdersVo {
 
     String pName;
     int price;
+    int categoryNo;
     String categoryName;
     String mcategoryName;
     String dcategoryName;

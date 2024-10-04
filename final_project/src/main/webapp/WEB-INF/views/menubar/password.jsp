@@ -120,7 +120,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               $.each(res_data, function (index, vo) {
                 html += `
                     <input type="radio" name="email" value="\${vo.email}" id="emailRadio">
-                    <label for="emailRadio">\${vo.email}</label>`;
+                    <label for="emailRadio">\${vo.email}</label><br>`;
               });
 
               html += `

@@ -98,7 +98,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
         </thead>
         <tbody>
           <c:forEach var="buy" items="${buyList}">
-            <tr>
+            <tr onclick="location.href='../productOne.do?categoryNo=' + '${buy.getCategoryNo()}' + '&pIdx=' + '${buy.getPIdx()}'">
               <td>${buy.getPName()}</td>
               <td>${buy.getPrice()}</td>
               <td>${buy.getBamount()}</td>

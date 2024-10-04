@@ -513,7 +513,7 @@
                 });
             });
         </script>
-
+        
     </head>
 
     <body>
@@ -688,14 +688,13 @@
                         <h2 class="title-center">주문 관리</h2>
                     </div>
                     <div style="text-align: left; margin-top: 5px; margin-bottom: 16px; margin-left: 200px;">
-                        <form id="searchs">
+                        <!-- <form id="searchs">
                             <input type="text" name="searchParam" id="searchParam" style="height: 35px;"
                                 placeholder="구매자명을 입력하세요" autofocus>
-                            <input type="button" class="btn btn-default" name="searchBtn" id="searchBtn" value="검색"
-                                onclick="">
-                        </form>
+                            <input type="button" class="btn btn-default" name="searchBtn" id="searchBtn" value="검색">
+                        </form> -->
                     </div>
-
+                
                     <c:choose>
                         <c:when test="${empty buyList}">
                             <h1 style="text-align: center;">주문 받은 내역이 없습니다.</h1>
@@ -714,7 +713,7 @@
                                             <th>구매금액</th>
                                             <th>구매자</th>
                                             <th>구매일자</th>
-                                            <th>처리</th> <!-- 환불과 교환 버튼을 위한 컬럼 추가 -->
+                                            <th>처리</th>
                                         </tr>
                                         <tr>
                                             <td>${bVo.getPIdx()}</td>
@@ -730,19 +729,14 @@
                                                 <form style="display: inline;">
                                                     <input type="hidden" name="pIdx" value="${bVo.getPIdx()}">
                                                     <input type="hidden" name="bIdx" value="${bVo.getBIdx()}">
-                                                    <input type="hidden" name="categoryName"
-                                                        value="${bVo.getCategoryName()}">
-                                                    <input type="hidden" name="mcategoryName"
-                                                        value="${bVo.getMcategoryName()}">
-                                                    <input type="hidden" name="dcategoryName"
-                                                        value="${bVo.getDcategoryName()}">
+                                                    <input type="hidden" name="categoryName" value="${bVo.getCategoryName()}">
+                                                    <input type="hidden" name="mcategoryName" value="${bVo.getMcategoryName()}">
+                                                    <input type="hidden" name="dcategoryName" value="${bVo.getDcategoryName()}">
                                                     <input type="hidden" name="pName" value="${bVo.getPName()}">
                                                     <input type="hidden" name="amount" value="${bVo.getBamount()}">
                                                     <input type="hidden" name="price" value="${bVo.getBuyPrice()}">
-                                                    <input type="hidden" name="orderNumber"
-                                                        value="${bVo.getOrderNumber()}">
-                                                    <input type="button" class="btn btn-danger" value="환불"
-                                                        onclick="cancelPay(this.form)">
+                                                    <input type="hidden" name="orderNumber" value="${bVo.getOrderNumber()}">
+                                                    <input type="button" class="btn btn-danger" value="환불" onclick="cancelPay(this.form)">
                                                 </form>
                                                 <form style="display: inline; margin-left: 5px;">
                                                     <input type="hidden" name="pIdx" value="">
@@ -757,7 +751,89 @@
                             </div>
                         </c:otherwise>
                     </c:choose>
+                
+                    <script>
+                        document.getElementById("searchBtn").onclick = function() {
+                            var searchParam = document.getElementById("searchParam").value;
+                            console.log(searchParam);
+                
+                            // AJAX 요청
+                            fetch('searchOrder.do', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ searchParam: searchParam })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // 결과 업데이트
+                                updateOrderList(data);
+                            })
+                            .catch(error => console.error('Error:', error));
+                        };
+                
+                        function updateOrderList(buyList) {
+                            var buyListDiv = document.getElementById("buyList");
+                            buyListDiv.innerHTML = ''; // 기존 내용 제거
+                
+                            if (buyList.length === 0) {
+                                buyListDiv.innerHTML = '<h1 style="text-align: center;">주문 받은 내역이 없습니다.</h1>';
+                            } else {
+                                // 주문 내역을 동적으로 생성
+                                buyList.forEach(function(bVo) {
+                                    var table = `
+                                        <table class="table-common">
+                                            <tr id="b_th">
+                                                <th>상품번호</th>
+                                                <th>대분류</th>
+                                                <th>중분류</th>
+                                                <th>소분류</th>
+                                                <th>상품이름</th>
+                                                <th>구매갯수</th>
+                                                <th>구매금액</th>
+                                                <th>구매자</th>
+                                                <th>구매일자</th>
+                                                <th>처리</th>
+                                            </tr>
+                                            <tr>
+                                                <td>${bVo.getPIdx()}</td>
+                                                <td>${bVo.getCategoryName()}</td>
+                                                <td>${bVo.getMcategoryName()}</td>
+                                                <td>${bVo.getDcategoryName()}</td>
+                                                <td>${bVo.getPName()}</td>
+                                                <td>${bVo.getBamount()}</td>
+                                                <td>${bVo.getBuyPrice()}</td>
+                                                <td>${bVo.getName()}</td>
+                                                <td>${bVo.getBuyDate()}</td>
+                                                <td>
+                                                    <form style="display: inline;">
+                                                        <input type="hidden" name="pIdx" value="${bVo.getPIdx()}">
+                                                        <input type="hidden" name="bIdx" value="${bVo.getBIdx()}">
+                                                        <input type="hidden" name="categoryName" value="${bVo.getCategoryName()}">
+                                                        <input type="hidden" name="mcategoryName" value="${bVo.getMcategoryName()}">
+                                                        <input type="hidden" name="dcategoryName" value="${bVo.getDcategoryName()}">
+                                                        <input type="hidden" name="pName" value="${bVo.getPName()}">
+                                                        <input type="hidden" name="amount" value="${bVo.getBamount()}">
+                                                        <input type="hidden" name="price" value="${bVo.getBuyPrice()}">
+                                                        <input type="hidden" name="orderNumber" value="${bVo.getOrderNumber()}">
+                                                        <input type="button" class="btn btn-danger" value="환불" onclick="cancelPay(this.form)">
+                                                    </form>
+                                                    <form style="display: inline; margin-left: 5px;">
+                                                        <input type="hidden" name="pIdx" value="">
+                                                        <input type="button" class="btn btn-warning" value="교환" onclick="">
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </table><br><br>
+                                    `;
+                                    buyListDiv.innerHTML += table;
+                                });
+                            }
+                        }
+                    </script>
                 </div>
+                
 
                 <!-- 공지사항 관리 탭 -->
                 <div id="menu4" class="tab-pane">

@@ -30,6 +30,7 @@ import com.puter.final_project.dao.InquiryMapper;
 import com.puter.final_project.dao.OrdersMapper;
 import com.puter.final_project.dao.ProductMapper;
 import com.puter.final_project.dao.ShopMapper;
+import com.puter.final_project.vo.BuyListVo;
 import com.puter.final_project.vo.InquiryVo;
 import com.puter.final_project.vo.OrdersVo;
 import com.puter.final_project.vo.PImageVo;
@@ -515,4 +516,12 @@ public class AdminController {
         }
         throw new IllegalArgumentException("잘못된 환불 사유 형식입니다.");
     }
+
+    @PostMapping("searchOrder.do")
+    @ResponseBody
+    public List<OrdersVo> searchOrder(@RequestBody Map<String, String> request) {
+        String searchParam = request.get("searchParam");
+        return ordersMapper.searchOrdersByUserName(searchParam); // 서비스에서 검색 수행
+    }
+
 }
