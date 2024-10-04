@@ -28,7 +28,7 @@ public interface UserMapper {
 
     // 아래부터 비밀번호찾기
 
-    int selectNameIdUserIdx(UserVo vo);
+    Integer selectNameIdUserIdx(UserVo vo);
 
     int selectEmailUserIdx(UserVo vo);
 

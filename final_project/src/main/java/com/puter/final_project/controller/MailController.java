@@ -44,7 +44,10 @@ public class MailController {
     @ResponseBody
     public List<UserVo> passwordSearch(UserVo vo) {
         
-        int userIdx = userMapper.selectNameIdUserIdx(vo);
+        Integer userIdx = userMapper.selectNameIdUserIdx(vo);
+        if(userIdx == null) {
+            userIdx=0;
+        }
         
         List<UserVo> emailList = userMapper.seleEmailList(userIdx);
         return emailList;
