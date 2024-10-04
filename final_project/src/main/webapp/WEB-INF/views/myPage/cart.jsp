@@ -432,7 +432,7 @@
                     <h2>결제하기</h2>
                     <p>선택한 상품에 대한 결제를 진행합니다.</p>
                     <div id="selectedItemsContainer"></div> <!-- 선택한 상품 목록 -->
-                    <p>총 합계: <span id="selectedTotalPrice"></span></p> <!-- 선택한 상품의 총 합계 -->
+                    <p>총 합계: <span id="selectedTotalPrice"></span></p><!-- 선택한 상품의 총 합계 -->
                     <button onclick="submitPayment()">결제 진행</button>
                 </div>
             </div>

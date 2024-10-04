@@ -239,11 +239,14 @@
                         if ("${empty user}" == "true") {
                             alert("장바구니는 로그인 후 이용가능합니다");
                             return;
-                        } else {
+                        } else if("${shop.getAmount()}" <= 0){
+                            alert("재고가 부족하여 장바구니에 담을 수 없습니다.");
+                            return;
+                        }else {
                             alert('장바구니에 추가되었습니다!');
                             const scAmount = document.getElementById("scamount").value;
                             console.log(scAmount);
-                            location.href = `${pageContext.request.contextPath}/cartInsert.do?pIdx=${shop.getPIdx()}&scamount=` + scAmount;
+                            location.href = `${pageContext.request.contextPath}/cartInsert.do?pIdx=${shop.getPIdx()}&scamount=` + scAmount+`&categoryNo=${shop.getCategoryNo()}&pIdx=${shop.getPIdx()}`;
                         }
                     }
 

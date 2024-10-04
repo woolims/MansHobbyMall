@@ -406,14 +406,14 @@ public class ShopController {
     }
 
     @RequestMapping("/cartInsert.do")
-    public String cartInsert(CartVo vo) {
+    public String cartInsert(CartVo vo, int categoryNo, int pIdx) {
 
         UserVo user = (UserVo) session.getAttribute("user");
         vo.setUserIdx(user.getUserIdx());
 
         int res = cartMapper.cartInsert(vo);
 
-        return "redirect:home.do";
+        return "redirect:productOne.do?categoryNo="+categoryNo+"&pIdx="+pIdx;
     }
 
     // 게임카테고리 전체조회

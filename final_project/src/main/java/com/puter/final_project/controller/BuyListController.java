@@ -121,6 +121,7 @@ public class BuyListController {
             vo.setPIdx(pIdxList.get(i));
             vo.setBamount(bamountList.get(i));
             vo.setBuyPrice(buyListMapper.selectOnePrice(pIdxList.get(i)) * vo.getBamount());
+            vo.setDaIdx(1);
             res = buyListMapper.insert(vo);
             buyListMapper.updateAmount(vo);
             bIdx = buyListMapper.selectBuyListOne(vo);
