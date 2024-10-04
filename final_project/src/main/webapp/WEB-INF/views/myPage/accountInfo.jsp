@@ -108,6 +108,13 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="subAddr">상세주소</label>
+                        <div class="inline-address">
+                            <input type="text" id="subAddr" name="subAddr" value="${user.subAddr}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="gradeName">등급</label>
                         <input type="text" id="gradeName" name="gradeName" value="${user.gradeName}" readonly />
                     </div>
