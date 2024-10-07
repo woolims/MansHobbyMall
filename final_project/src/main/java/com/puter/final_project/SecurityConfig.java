@@ -24,7 +24,7 @@ public class SecurityConfig {
             .oauth2Login(oauth2 -> 
                 oauth2
                     .userInfoEndpoint(e -> e.userService(customOAuth2UserService)) // 사용자 정의 OAuth2UserService 설정
-                    .defaultSuccessUrl("http://localhost:8080/easyLogin.do", true)
+                    .defaultSuccessUrl("http://192.168.219.55:8080/easyLogin.do", true)
                     .failureUrl("/login-error")
             )
             .logout(logout ->
@@ -43,6 +43,7 @@ public class SecurityConfig {
                     .ignoringRequestMatchers("/review/**") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .ignoringRequestMatchers("/buyList/**") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .ignoringRequestMatchers("/inquiry/**") // 파일 업로드 요청을 CSRF 보호에서 제외
+                    .ignoringRequestMatchers("/payments/**") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .ignoringRequestMatchers("/api/iamport/**") // 파일 업로드 요청을 CSRF 보호에서 제외
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             );

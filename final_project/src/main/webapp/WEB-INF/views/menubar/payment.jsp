@@ -200,6 +200,7 @@
                 return;
             }
 
+<<<<<<< Updated upstream
             daAddr = $("#address").val();
 
             if (daAddr=='none'){
@@ -207,9 +208,11 @@
                 return;
             }
         
+=======
+>>>>>>> Stashed changes
             // 1. 사전 검증 (IMP.request_pay 호출 전에 실행)
             jQuery.ajax({
-                url: "https://api.iamport.kr/payments/prepare",
+                url: "/payments/prepare",
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -217,7 +220,7 @@
                 data: JSON.stringify({
                     merchant_uid: merchant_uid, // 가맹점 주문번호
                     amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g,
-                        '') // 결제 예정 금액
+                    ''), // 쿠폰 할인 적용된 최종 금액
                 }),
                 success: function (preparationResponse) {
                     console.log("사전 검증 성공:", preparationResponse);
@@ -266,26 +269,29 @@
                             })
                         } else {
                             alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+                            
                         }
 
                     });
 
-                
-                } 
-            });//end:tossPay()
-        }
-        
-            function kakaoPay() {
-
-                // 로그인이 안되었으면
-                if ("${ empty user }" == "true") {
-                    if (confirm("로그인 후 충전이 가능합니다.\n로그인 하시겠습니까?") == true) {
-                        // 로그인 모달창을 띄웁니다.
-                        loginModal.style.display = "flex";
-
-                    }
-                    return;
+                },
+                error: function (err) {
+                    console.error("사전 검증 실패:", err.responseText);
+                    alert("결제 사전 검증에 실패하였습니다. 다시 시도해 주세요.");
                 }
+            }); //end:tossPay()
+        }
+
+        function kakaoPay() {
+
+            // 로그인이 안되었으면
+            if ("${ empty user }" == "true") {
+                if (confirm("로그인 후 충전이 가능합니다.\n로그인 하시겠습니까?") == true) {
+                    // 로그인 모달창을 띄웁니다.
+                    loginModal.style.display = "flex";
+
+                }
+<<<<<<< Updated upstream
 
                 let amount = "${ shop.getAmount() }";
                 let scamount = $("#scamount").val();
@@ -427,33 +433,170 @@
                 document.getElementById('finalPrice').textContent = finalPrice.toLocaleString();
                 document.getElementById('price').textContent = price.toLocaleString();
 
+=======
+                return;
+>>>>>>> Stashed changes
             }
 
-            document.querySelectorAll('input[type="number"]').forEach(input => {
-                input.addEventListener('change', function () {
-                    const itemId = this.id.split('-')[1]; // ID에서 상품 ID 추출
-                    const newQuantity = this.value;
+            let amount = "${ shop.getAmount() }";
+            let scamount = $("#scamount").val();
+            if (amount - scamount < 0) {
+                alert("재고수량이 부족합니다.");
+                return;
+            }
 
-                    // AJAX 요청 보내기
-                    fetch(`/user/updateQuantity1`, {
-                            method: 'POST'
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                return response.json(); // 서버에서 JSON 응답을 받음
+            IMP.request_pay({
+                pg: "kakaopay",
+                pay_method: 'kakaopay',
+                merchant_uid: merchant_uid,
+                name: '${ shop.getPName() }',
+                amount: document.getElementById('finalPrice').textContent.replace(/[^0-9]/g,
+                    ''), // 쿠폰 할인 적용된 최종 금액
+                buyer_email: '${ user.id }',
+                buyer_name: '${ user.name }',
+                buyer_tel: '${ user.phone }',
+                buyer_addr: '${ user.addr }',
+                buyer_postcode: ''
+            }, function (rsp) { // callback
+                //rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+                console.log(rsp)
+
+                if (rsp.success) {
+                    alert("결제 완료하였습니다.");
+                    // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+                    // jQuery로 HTTP 요청
+                    jQuery.ajax({
+                            url: "../buyList/buy.do",
+                            method: "POST",
+                            // headers: {
+                            //     "Content-Type": "application/json"
+                            // },
+                            data: {
+                                imp_uid: rsp.imp_uid, // 결제 고유번호
+                                orderNumber: rsp.merchant_uid, // 주문번호
+                                userIdx: "${ user.userIdx }",
+                                pIdx: "${ shop.getPIdx() }",
+                                couponid: document.getElementById('coupon')
+                                    .value, // 선택된 쿠폰 ID
+                                // 수정 필요
+                                bamount: bamount,
+                                buyPrice: rsp.paid_amount
+                            },
+                            dataType: "json",
+
+                        }),
+                        // 액세스 토큰 발급 요청
+                        jQuery.ajax({
+                            url: "http://localhost:8080/api/iamport/token",
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            data: JSON.stringify({
+                                imp_key: "3672717442038407", // REST API 키
+                                imp_secret: "Z0zCEcoGYox8ODy9Ukpd7UGdNg7D9meXKi9zItAoyhwSE2eeCfu98edzsHRTEpxRmjmju70Ot8pa0oD8" // REST API Secret
+                            }),
+                            dataType: "json",
+                            success: function (tokenResponse) {
+
+                                console.log("토큰 발급:", tokenResponse);
+
+                                // response 필드의 access_token 추출
+                                var access_token = tokenResponse && tokenResponse
+                                    .response ?
+                                    tokenResponse.response.access_token : null;
+
+                                if (access_token) {
+                                    console.log("발급된 토큰:", access_token);
+                                    // 이후 로직 진행
+                                } else {
+                                    console.error("response 객체가 없습니다. 응답 확인 필요:",
+                                        tokenResponse);
+                                }
+
+                                // imp_uid로 포트원 서버에서 결제 정보 조회
+                                jQuery.ajax({
+                                    url: "http://localhost:8080/api.iamport.kr/payments/" +
+                                        rsp
+                                        .imp_uid,
+                                    method: "GET",
+                                    headers: {
+                                        "Authorization": access_token
+                                    },
+                                    success: function (paymentResponse) {
+                                        var paymentData = paymentResponse
+                                            .response; // 결제 정보
+                                        console.log("결제 정보:", paymentData);
+                                        // 결제 정보 확인 후 처리 로직 추가
+                                    },
+                                    error: function (err) {
+                                        console.error("결제 정보 조회 실패:", err
+                                            .responseText);
+                                    }
+                                });
+                            },
+                            error: function (err) {
+                                console.error("토큰 발급 실패:", err.responseText);
                             }
-                            throw new Error('네트워크 오류 발생');
                         })
-                        .then(data => {
-                            console.log(data.message);
-                            // 총 금액 업데이트
-                            updateTotalPrice();
+                        .done(function (data) {
+                            // 가맹점 서버 결제 API 성공시 로직
+
                         })
-                        .catch(error => {
-                            console.error('오류:', error);
-                        });
-                });
+                } else {
+                    alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+                }
             });
+
+        } //end:kakaoPay()
+
+        function updateTotalPrice() {
+            document.querySelectorAll('.product-container').forEach(item => {
+                price = parseFloat(item.querySelector('.price').innerText);
+                const quantity = parseInt(item.querySelector('input[type="number"]').value);
+                applyCoupon();
+                console.log("finalPrice를 계산하기 전의 price : " + price + " / quantity : " +
+                    quantity +
+                    " / couponDiscount : " + couponDiscount);
+                finalPrice = price * quantity - couponDiscount;
+                price = originalPrice * quantity;
+                bamount = quantity;
+
+                console.log("updateTotalPrice를 진행한 후 finalPrice : " + finalPrice);
+                console.log("updateTotalPrice를 진행한 후 quantity : " + quantity);
+                console.log("updateTotalPrice를 진행한 후 couponDiscount : " + couponDiscount);
+
+            });
+            document.getElementById('finalPrice').textContent = finalPrice.toLocaleString();
+            document.getElementById('price').textContent = price.toLocaleString();
+
+        }
+
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('change', function () {
+                const itemId = this.id.split('-')[1]; // ID에서 상품 ID 추출
+                const newQuantity = this.value;
+
+                // AJAX 요청 보내기
+                fetch(`/user/updateQuantity1`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); // 서버에서 JSON 응답을 받음
+                        }
+                        throw new Error('네트워크 오류 발생');
+                    })
+                    .then(data => {
+                        console.log(data.message);
+                        // 총 금액 업데이트
+                        updateTotalPrice();
+                    })
+                    .catch(error => {
+                        console.error('오류:', error);
+                    });
+            });
+        });
     </script>
 </head>
 
@@ -540,14 +683,21 @@
                     <p>최종 결제 금액: <span id="finalPrice">${shop.getPrice()}</span>원</p>
                 </div>
 
+<<<<<<< Updated upstream
                  <!-- 배송지 선택 -->
                  <div class="address">
                     <c:if test="${user ne null}">
                         <p>배송지: <span id="address-id">
                             <select name="address" id="address">
                                 <option value="none">배송지를 선택하세요</option>
+=======
+                <!-- 배송지 선택 -->
+                <div class="address">
+                    <p>배송지: <span id="address-id"><select name="address" id="address">
+                                <option value="0">배송지를 선택하세요</option>
+>>>>>>> Stashed changes
                                 <c:forEach var="ad" items="${daAddrList}">
-                                    <option value="${ad.daIdx}">${ad.daAddr}</option>
+                                    <option value="${ad.daIdx}">${ad.daAddr}(${ad.subDaAddr})</option>
                                 </c:forEach>
                             </select>
                         </span></p>
