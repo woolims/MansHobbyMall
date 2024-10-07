@@ -135,43 +135,43 @@ public class PaymentControllor {
         }
     }
 
-    @PostMapping(value = "/api/iamport/token", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<String> getToken() {
-        // 포트원 API URL 및 헤더 설정
-        String url = "https://api.iamport.kr/users/getToken";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    // @PostMapping(value = "/api/iamport/token", produces = "application/json; charset=UTF-8")
+    // public ResponseEntity<String> getToken() {
+    //     // 포트원 API URL 및 헤더 설정
+    //     String url = "https://api.iamport.kr/users/getToken";
+    //     HttpHeaders headers = new HttpHeaders();
+    //     headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // 포트원 REST API Key 및 Secret 설정
-        JSONObject request = new JSONObject();
-        request.put("imp_key", "3672717442038407");
-        request.put("imp_secret", "Z0zCEcoGYox8ODy9Ukpd7UGdNg7D9meXKi9zItAoyhwSE2eeCfu98edzsHRTEpxRmjmju70Ot8pa0oD8");
+    //     // 포트원 REST API Key 및 Secret 설정
+    //     JSONObject request = new JSONObject();
+    //     request.put("imp_key", "3672717442038407");
+    //     request.put("imp_secret", "Z0zCEcoGYox8ODy9Ukpd7UGdNg7D9meXKi9zItAoyhwSE2eeCfu98edzsHRTEpxRmjmju70Ot8pa0oD8");
 
-        HttpEntity<String> entity = new HttpEntity<>(request.toString(), headers);
+    //     HttpEntity<String> entity = new HttpEntity<>(request.toString(), headers);
 
-        // RestTemplate을 이용해 포트원 서버에 요청
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+    //     // RestTemplate을 이용해 포트원 서버에 요청
+    //     RestTemplate restTemplate = new RestTemplate();
+    //     ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 
-        // 서버 응답 반환
-        return ResponseEntity.ok(response.getBody());
-    }
+    //     // 서버 응답 반환
+    //     return ResponseEntity.ok(response.getBody());
+    // }
 
-    @GetMapping(value = "/api.iamport.kr/payments/{imp_uid}", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<String> getPayments(@PathVariable String imp_uid) {
-        // 포트원 API URL 및 헤더 설정
-        String url = "https://api.iamport.kr/payments/" + imp_uid; // imp_uid를 URL에 포함
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    // @GetMapping(value = "/api.iamport.kr/payments/{imp_uid}", produces = "application/json; charset=UTF-8")
+    // public ResponseEntity<String> getPayments(@PathVariable String imp_uid) {
+    //     // 포트원 API URL 및 헤더 설정
+    //     String url = "https://api.iamport.kr/payments/" + imp_uid; // imp_uid를 URL에 포함
+    //     HttpHeaders headers = new HttpHeaders();
+    //     headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+    //     HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        // RestTemplate을 이용해 포트원 서버에 요청
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+    //     // RestTemplate을 이용해 포트원 서버에 요청
+    //     RestTemplate restTemplate = new RestTemplate();
+    //     ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
-        // 서버 응답 반환
-        return ResponseEntity.ok(response.getBody());
-    }
+    //     // 서버 응답 반환
+    //     return ResponseEntity.ok(response.getBody());
+    // }
 
 }

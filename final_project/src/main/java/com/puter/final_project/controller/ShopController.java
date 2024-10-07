@@ -244,7 +244,6 @@ public class ShopController {
                 for (int i = 0; i < productMCategoryList.size(); i++) {
                     int pIdx = productMCategoryList.get(i).getPIdx();
                     ProductVo fileName = shopMapper.selectFile(pIdx);
-                    // duplicate 중복제거
                     HashSet<String> duplicate = new HashSet<>();
                     if (duplicate.contains(productMCategoryList.get(i).getFileName())) {
                         productMCategoryList.add(fileName);
@@ -255,13 +254,10 @@ public class ShopController {
                 shop.setDcategoryName(dcategoryName);
                 int dcategoryNo = shopMapper.selectDcategoryNo(shop);
                 shop.setDcategoryNo(dcategoryNo);
-                // System.out.println(shop.getDcategoryName() + " " + shop.getDcategoryNo() + "
-                // " + shop.getMcategoryNo());
                 List<ProductVo> productDCategoryList = shopMapper.selectProductDCategoryList(dcategoryNo);
                 for (int i = 0; i < productDCategoryList.size(); i++) {
                     int pIdx = productDCategoryList.get(i).getPIdx();
                     ProductVo fileName = shopMapper.selectFile(pIdx);
-                    // duplicate 중복제거
                     HashSet<String> duplicate = new HashSet<>();
                     if (duplicate.contains(productDCategoryList.get(i).getFileName())) {
                         productDCategoryList.add(fileName);
@@ -302,19 +298,13 @@ public class ShopController {
         if (mcategoryName.equals("emptyMcategoryName")) {
             List<ShopVo> categorySearchList = shopMapper.selectCategorySearchList(shop);
             List<ProductVo> productSearchList = new ArrayList<ProductVo>();
-            // if(categorySearchList.size()==0){
-            // return productSearchList;
-            // }
-            // int[] pIdx = new int[categorySearchList.size()];
             HashSet<String> duplicate = new HashSet<>();
             for (int i = 0; i < categorySearchList.size(); i++) {
-                // pIdx[i] += categorySearchList.get(i).getPIdx();
                 if (!duplicate.contains(categorySearchList.get(i).getPName())) {
                     product = shopMapper.selectProductSearch(categorySearchList.get(i).getPIdx());
                     productSearchList.add(product);
                 }
             }
-            // shop뷰의 정보로 for문을 이용해 이미지를 찾고 상품뷰를 리턴
             return productSearchList;
         }
 

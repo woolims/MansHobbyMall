@@ -430,7 +430,7 @@
             </c:if>
             <!-- 로그인이 안 된 경우 -->
             <c:if test="${ empty user }">
-              <li><input type="button" id="openLoginModal" value="로그인" />
+              <li><input type="button" id="openLoginModal" value="로그인"/>
               </li>
             </c:if>
             <!-- 로그인이 된 경우 -->
@@ -455,7 +455,7 @@
             <div class="links">
               <input type="button" class="register-btn" id="openRegisterModal" value="회원가입" />
               <input type="hidden" class="register-btn" id="openRegisterEmailModal" value="회원가입" />
-              <a href="#">아이디 · 비밀번호 찾기</a>
+              <a href="password.do">아이디 · 비밀번호 찾기</a>
             </div>
             <div class="divider">또는</div>
             <a href="/oauth2/authorization/naver" class="social-btn naver-btn">네이버로 시작하기</a>

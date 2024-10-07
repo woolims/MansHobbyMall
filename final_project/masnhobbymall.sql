@@ -76,6 +76,7 @@ CREATE TABLE GCondition (
     FOREIGN KEY (gIdx) REFERENCES Grade (gIdx) ON DELETE CASCADE
 );
 
+
 -- Coupon 테이블
 CREATE TABLE coupon (
     cIdx int PRIMARY KEY AUTO_INCREMENT,
@@ -132,7 +133,7 @@ CREATE TABLE Product (
 );
 
 CREATE TABLE ProductImage (
-    fileIdx	int PRIMARY KEY AUTO_INCREMENT,
+	fileIdx	int PRIMARY KEY AUTO_INCREMENT,
     pIdx int NOT NULL,
     fileName LONGTEXT,
     fileNameLink char(1) default 'Y',
@@ -169,7 +170,7 @@ CREATE TABLE Orders (
     daStartDate DATETIME NOT NULL DEFAULT now(),
     daEndDate DATETIME NOT NULL DEFAULT now(),
     FOREIGN KEY (dsIdx) REFERENCES DStatus (dsIdx) ON DELETE CASCADE,
-    FOREIGN KEY (bIdx) REFERENCES BuyList (bIdx) ON DELETE CASCADE
+	FOREIGN KEY (bIdx) REFERENCES BuyList (bIdx) ON DELETE CASCADE
 );
 
 -- SCart 테이블
@@ -247,6 +248,7 @@ CREATE TABLE UserActivity (
     FOREIGN KEY (userIdx) REFERENCES User (userIdx) ON DELETE CASCADE
 );
 
+
 -- Chat_logs 테이블
 CREATE TABLE Chat_logs (
     chatIdx int PRIMARY KEY AUTO_INCREMENT,
@@ -260,9 +262,6 @@ CREATE TABLE Chat_logs (
 );
 
 CREATE OR REPLACE
-    ALGORITHM = UNDEFINED 
-    DEFINER = `final`@`localhost` 
-    SQL SECURITY DEFINER
 VIEW `shop_list_view` AS
     SELECT 
         `p`.`pIdx` AS `pIdx`,
@@ -272,7 +271,7 @@ VIEW `shop_list_view` AS
         `p`.`pName` AS `pName`,
         `p`.`pEx` AS `pEx`,
         `p`.`price` AS `price`,
-        `p`.`amount` As `amount`,
+		`p`.`amount` As `amount`,
         `c`.`categoryName` AS `categoryName`,
         `m`.`mcategoryName` AS `mcategoryName`,
         `d`.`dcategoryName` AS `dcategoryName`
@@ -366,15 +365,20 @@ SELECT
     b.pIdx,
     b.bamount,
     b.buyDate,
+    b.buyPrice,
     ds.dsContent,
     u.name,
     p.pName,
-    p.price
+    p.price,
+    da.daIdx,
+    da.daAddr,
+    da.subDaAddr
 FROM Orders o
 INNER JOIN Buylist b ON o.bIdx = b.bIdx
 INNER JOIN DStatus ds ON o.dsIdx = ds.dsIdx
 INNER JOIN User u ON b.userIdx = u.userIdx
-INNER JOIN Product p ON b.pIdx = p.pIdx;
+INNER JOIN Product p ON b.pIdx = p.pIdx
+INNER JOIN daddress da ON b.daIdx = da.daIdx;
 
 CREATE OR REPLACE VIEW ReviewView AS
 SELECT
@@ -446,7 +450,7 @@ SELECT DISTINCT
     p.pEx,
     p.amount,
     p.price,
-    i.pIdx,
+	i.pIdx,
     i.fileIdx,
     i.fileName
 FROM Product p
@@ -462,8 +466,9 @@ SELECT
     b.bamount,
     (p.price*bamount) as price,
     u.name,
-    b.bIdx,
     b.buyDate,
+    b.buyPrice,
+    b.bIdx,
     b.orderNumber
 FROM BuyList b
 INNER JOIN Product p ON b.pIdx = p.pIdx
@@ -471,6 +476,18 @@ INNER JOIN User u ON b.userIdx = u.userIdx
 INNER JOIN Category c ON p.categoryNo = c.categoryNo
 INNER JOIN MCategory m ON p.mcategoryNo = m.mcategoryNo
 INNER JOIN DCategory d ON p.dcategoryNo = d.dcategoryNo;
+
+CREATE OR REPLACE VIEW gradeAllView AS
+SELECT
+    ua.userIdx,
+    ua.totalPurchaseAmount,
+    ua.totalReviewCount,
+    g.gIdx,
+    g.gradeName,
+    g.discount
+FROM userActivity ua
+INNER JOIN User u ON ua.userIdx = u.userIdx
+INNER JOIN grade g ON u.gIdx = g.gIdx;
 
 -- Grade 테이블에 샘플 데이터 삽입
 INSERT INTO Grade(gradeName, authority, discount)
@@ -790,9 +807,7 @@ BEGIN
     END WHILE;
 END $$
 
-DELIMITER ;
-
-select * from shop_list_view where pIdx = 627
+select * from buylistview
 
 
 

@@ -21,6 +21,7 @@ public class OrdersVo {
     int userIdx;
     int pIdx;
     int bamount;
+    Long buyPrice;
     String buyDate;
     Long orderNumber;
 
