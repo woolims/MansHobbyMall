@@ -348,7 +348,7 @@ public class AdminController {
             }
         }
 
-        int pIdx = shopMapper.selectMaxPIdx();
+        int pIdx = shop.getPIdx();
 
         PImageVo pImageVo = new PImageVo();
 
@@ -357,6 +357,7 @@ public class AdminController {
             pImageVo.setPIdx(pIdx);
             pImageVo.setFileName(filename);
             pImageVo.setFileNameLink("N");
+            System.out.println("pIdx: " + pIdx);
             shopMapper.insertPImage(pImageVo);
         }
 

@@ -64,7 +64,6 @@ public class ShopController {
 
     // DB에 데이터삽입
     @RequestMapping("DBData.do")
-    @ResponseBody
     public void DBData() {
         ShopVo shop = new ShopVo();
         // 1=게임 2=스포츠
