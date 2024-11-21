@@ -7,7 +7,7 @@
 
             <head>
                 <meta charset="UTF-8">
-                <title>상품수정</title>
+                <title>상품등록</title>
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -143,7 +143,7 @@
                     function mcategoryNameSearch(val) {
                         let categoryName = val;
                         $.ajax({
-                            url: "/admin/adminAjax.do",
+                            url: "/admin/adminCategoryAjax.do",
                             data: { "categoryName": categoryName },
                             dataType: "json",
                             method: 'GET',
@@ -169,7 +169,7 @@
                         if ($("#mcategorySearch").val() == '중분류 선택') {
                             let mcategoryName = val;
                             $.ajax({
-                                url: "/admin/adminAjax.do",
+                                url: "/admin/adminCategoryAjax.do",
                                 data: { "mcategoryName": mcategoryName, "categoryName": categoryName },
                                 dataType: "json",
                                 method: 'GET',
@@ -187,7 +187,7 @@
 
                         let mcategoryName = val;
                         $.ajax({
-                            url: "/admin/adminAjax.do",
+                            url: "/admin/adminCategoryAjax.do",
                             data: { "mcategoryName": mcategoryName, "categoryName": categoryName },
                             dataType: "json",
                             method: 'GET',

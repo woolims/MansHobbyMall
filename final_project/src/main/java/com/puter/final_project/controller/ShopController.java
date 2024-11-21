@@ -23,20 +23,17 @@ import com.puter.final_project.dao.ReviewMapper;
 import com.puter.final_project.dao.ShopMapper;
 import com.puter.final_project.dao.UserMapper;
 import com.puter.final_project.service.NaverSearchService;
-import com.puter.final_project.vo.BuyListVo;
 import com.puter.final_project.vo.CartVo;
+import com.puter.final_project.vo.CouponBoxVo;
+import com.puter.final_project.vo.DaddressVo;
 import com.puter.final_project.vo.PImageVo;
 import com.puter.final_project.vo.ProductVo;
-import com.puter.final_project.vo.CouponBoxVo;
-import com.puter.final_project.vo.CouponVo;
-import com.puter.final_project.vo.DaddressVo;
 import com.puter.final_project.vo.ReviewVo;
 import com.puter.final_project.vo.ShopVo;
 import com.puter.final_project.vo.UserVo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class ShopController {
@@ -172,39 +169,6 @@ public class ShopController {
         shop.setCategoryName(shopMapper.selectCategoryName(categoryNo));
         shop.setMcategoryNo(mcategoryNo);
         shop.setDcategoryName(dcategoryNameParam);
-        // if (!mcategoryName.equals("emptyMcategoryName")) {
-        // shop.setMcategoryName(mcategoryName);
-        // int mCategoryNo = shopMapper.selectMCategoryNo(shop);
-        // List<ShopVo> dCategoryName = shopMapper.selectdCategoryNameList(mCategoryNo);
-        // List<ProductVo> productMCategoryList =
-        // shopMapper.selectProductMCategoryList(mCategoryNo);
-        // for (int i = 0; i < productMCategoryList.size(); i++) {
-        // int pIdx = productMCategoryList.get(i).getPIdx();
-        // ProductVo fileName = shopMapper.selectFileName(pIdx);
-        // // duplicate 중복제거
-        // HashSet<String> duplicate = new HashSet<>();
-        // if (duplicate.contains(productMCategoryList.get(i).getFileName())) {
-        // productMCategoryList.add(fileName);
-        // }
-        // }
-        // model.addAttribute("dCategoryName", dCategoryName);
-        // model.addAttribute("productList", productMCategoryList);
-        // if (!dcategoryNameParam.equals("emptyDcategoryName")) {
-        // int dCategoryNo = shopMapper.selectDcategoryNo(shop);
-        // List<ProductVo> productDCategoryList =
-        // shopMapper.selectProductDCategoryList(dCategoryNo);
-        // for (int i = 0; i < productDCategoryList.size(); i++) {
-        // int pIdx = productMCategoryList.get(i).getPIdx();
-        // ProductVo fileName = shopMapper.selectFileName(pIdx);
-        // // duplicate 중복제거
-        // HashSet<String> duplicate = new HashSet<>();
-        // if (duplicate.contains(productDCategoryList.get(i).getFileName())) {
-        // productDCategoryList.add(fileName);
-        // }
-        // }
-        // model.addAttribute("productList", productDCategoryList);
-        // }
-        // }
         List<ProductVo> productList = shopMapper.selectListSports(shop.getCategoryNo());
         model.addAttribute("productList", productList);
         model.addAttribute("shop", shop);
@@ -215,7 +179,7 @@ public class ShopController {
 
     @RequestMapping("/categoryAjax.do")
     @ResponseBody
-    public List<ShopVo> sportsAjax(int categoryNo, String mcategoryName) {
+    public List<ShopVo> categoryAjax(int categoryNo, String mcategoryName) {
 
         ShopVo shop = new ShopVo();
         shop.setCategoryNo(categoryNo);
@@ -272,7 +236,7 @@ public class ShopController {
 
     @RequestMapping("/shopAjaxProductList.do")
     @ResponseBody
-    public List<ProductVo> shopAjaxProductList(String categoryName,
+    public List<ProductVo> searchProductAjax(String categoryName,
             @RequestParam(defaultValue = "emptyMcategoryName") String mcategoryName,
             @RequestParam(defaultValue = "emptyDcategoryName") String dcategoryName, String searchParam) {
 

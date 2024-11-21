@@ -103,9 +103,9 @@ public class AdminController {
         return "shopPage/adminMain";
     }
 
-    @RequestMapping("adminAjax.do")
+    @RequestMapping("adminCategoryAjax.do")
     @ResponseBody
-    public List<ShopVo> adminAjax(String categoryName, String mcategoryName) {
+    public List<ShopVo> adminCategoryAjax(String categoryName, String mcategoryName) {
         ShopVo shop = new ShopVo();
         int categoryNo = shopMapper.selectCategoryNo(categoryName);
 
@@ -126,9 +126,9 @@ public class AdminController {
         return Collections.emptyList();
     }
 
-    @RequestMapping("adminAjaxPList.do")
+    @RequestMapping("adminPListAjax.do")
     @ResponseBody
-    public List<ShopVo> adminAjaxPList(@RequestParam(defaultValue = "") String searchParam,
+    public List<ShopVo> adminPListAjax(@RequestParam(defaultValue = "") String searchParam,
             @RequestParam(defaultValue = "") String categoryName,
             @RequestParam(defaultValue = "") String mcategoryName,
             @RequestParam(defaultValue = "") String dcategoryName) {
@@ -450,7 +450,6 @@ public class AdminController {
             // 토큰 발급을 위한 헤더 설정
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-
             // 엔터티 설정
             HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
 

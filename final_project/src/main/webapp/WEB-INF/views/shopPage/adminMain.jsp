@@ -213,7 +213,7 @@
                 if ($("#categorySearch").val() == '전체보기') {
                     let categoryName = val;
                     $.ajax({
-                        url: "/admin/adminAjaxPList.do",
+                        url: "/admin/adminPListAjax.do",
                         data: {
                             "categoryName": categoryName
                         },
@@ -239,7 +239,7 @@
                 // 대분류가 전체보기가 아닐 때
                 let categoryName = val;
                 $.ajax({
-                    url: "/admin/adminAjax.do",
+                    url: "/admin/adminCategoryAjax.do",
                     data: {
                         "categoryName": categoryName
                     },
@@ -272,7 +272,7 @@
                 if (val == '선택 안 함') {
                     let mcategoryName = val;
                     $.ajax({
-                        url: "/admin/adminAjax.do",
+                        url: "/admin/adminCategoryAjax.do",
                         data: {
                             "mcategoryName": mcategoryName, "categoryName": categoryName
                         },
@@ -291,7 +291,7 @@
                 }
                 let mcategoryName = val;
                 $.ajax({
-                    url: "/admin/adminAjax.do",
+                    url: "/admin/adminCategoryAjax.do",
                     data: {
                         "mcategoryName": mcategoryName, "categoryName": categoryName
                     },
@@ -332,7 +332,7 @@
 
                 if (categoryName == "전체보기" && searchParam == "") {
                     $.ajax({
-                        url: "/admin/adminAjaxPList.do",
+                        url: "/admin/adminPListAjax.do",
                         dataType: "json",
                         method: 'GET',
                         success: function (res_data) {
@@ -399,7 +399,7 @@
                 }
 
                 $.ajax({
-                    url: "/admin/adminAjaxPList.do",
+                    url: "/admin/adminPListAjax.do",
                     data: {
                         "searchParam": searchParam,
                         "categoryName": categoryName,
