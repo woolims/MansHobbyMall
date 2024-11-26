@@ -65,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select userIdx from User where name=#{name} and id=#{id}
   </select>
   <!-- 유저번호를 토대로 이메일리스트 조회 -->
-  <select id="seleEmailList" parameterType="user" resultType="user">
+  <select id="selectEmailList" parameterType="user" resultType="user">
 		select email from Email where userIdx=#{userIdx}
   </select>
   <!-- 이메일로 유저번호 조회 -->

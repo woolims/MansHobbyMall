@@ -32,7 +32,7 @@ public interface UserMapper {
 
     int selectEmailUserIdx(UserVo vo);
 
-    List<UserVo> seleEmailList(int userIdx);
+    List<UserVo> selectEmailList(int userIdx);
 
     String selectId(UserVo vo);
 

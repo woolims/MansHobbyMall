@@ -49,7 +49,7 @@ public class MailController {
             userIdx=0;
         }
         
-        List<UserVo> emailList = userMapper.seleEmailList(userIdx);
+        List<UserVo> emailList = userMapper.selectEmailList(userIdx);
         return emailList;
     }
 }
