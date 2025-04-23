@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.puter.final_project.vo.BuyListVo;
 import com.puter.final_project.vo.OrdersVo;
 
 @Mapper
@@ -14,5 +15,7 @@ public interface OrdersMapper {
     List<OrdersVo> selectBuyList();
 
     void deleteBuyList(int bIdx);
+
+    List<OrdersVo> searchOrdersByUserName(String searchParam);
     
 }

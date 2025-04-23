@@ -15,7 +15,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   </delete>
 
   <select id="selectBuyList" resultType="orders">
-       select * from BuyListView order by buyDate
+       select * from BuyListView order by buyDate desc
+  </select>
+
+  <select id="searchOrdersByUserName" parameterType="String" resultType="orders">
+     select * from BuyListView
+     where 
+            u.name LIKE CONCAT('%', #{searchParam}, '%')
+     order by buyDate
   </select>
 
 </mapper>

@@ -239,11 +239,14 @@
                         if ("${empty user}" == "true") {
                             alert("장바구니는 로그인 후 이용가능합니다");
                             return;
-                        } else {
+                        } else if("${shop.getAmount()}" <= 0){
+                            alert("재고가 부족하여 장바구니에 담을 수 없습니다.");
+                            return;
+                        }else {
                             alert('장바구니에 추가되었습니다!');
                             const scAmount = document.getElementById("scamount").value;
                             console.log(scAmount);
-                            location.href = `${pageContext.request.contextPath}/cartInsert.do?pIdx=${shop.getPIdx()}&scamount=` + scAmount;
+                            location.href = `${pageContext.request.contextPath}/cartInsert.do?pIdx=${shop.getPIdx()}&scamount=` + scAmount+`&categoryNo=${shop.getCategoryNo()}&pIdx=${shop.getPIdx()}`;
                         }
                     }
 
@@ -313,23 +316,26 @@
 
                     function send1(f) {
 
-                        let url = new URL(window.location.href);
-                        if ("${empty user}" == "true") {
-                            alert('로그아웃되었습니다.\n로그인하세요.');
-                            return;
-                        }
+                    let url = new URL(window.location.href);
+                    if ("${empty user}" == "true") {
+                        alert('로그아웃되었습니다.\n로그인하세요.');
+                        return;
+                    }
 
-                        let rvContent = f.rvContent.value;
+                    let rvContent = f.rvContent.value;
 
-                        if (rvContent.trim() === '') {
-                            alert("내용을 입력하세요");
-                            f.rvContent.focus();
-                            return;
-                        }
+                    if (rvContent.trim() === '') {
+                        alert("내용을 입력하세요");
+                        f.rvContent.focus();
+                        return;
+                    }
 
-                        if (f.rvImg.files.length === 0) {
-                            if (!confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?")) return;
-                        } else if (!confirm("등록하시겠습니까?")) return;
+                    // 엔터를 <br>로 변환
+                    f.rvContent.value = rvContent.replace(/\n/g, '<br>');
+
+                    if (f.rvImg.files.length === 0) {
+                        if (!confirm("사진을 선택하지 않았습니다. 등록하시겠습니까?")) return;
+                    } else if (!confirm("등록하시겠습니까?")) return;
 
                         f.url.value = url.href;
                         f.method = "POST";
@@ -339,21 +345,24 @@
                     }
 
                     function send2(f) {
-                        let url = new URL(window.location.href);
-                        if ("${ empty user }" == "true") {
-                            alert('로그아웃되었습니다.\n로그인하세요.');
-                            return;
-                        }
+                    let url = new URL(window.location.href);
+                    if ("${ empty user }" == "true") {
+                        alert('로그아웃되었습니다.\n로그인하세요.');
+                        return;
+                    }
 
-                        let rvContent = f.rvContent.value;
+                    let rvContent = f.rvContent.value;
 
-                        if (rvContent.trim() == '') {
-                            alert("내용을 입력하세요");
-                            f.rvContent.focus();
-                            return;
-                        }
+                    if (rvContent.trim() == '') {
+                        alert("내용을 입력하세요");
+                        f.rvContent.focus();
+                        return;
+                    }
+
+                        // 엔터를 <br>로 변환
+                        f.rvContent.value = rvContent.replace(/\n/g, '<br>');
+
                         f.url.value = url.href;
-
                         f.action = "${pageContext.request.contextPath}/review/reviewModify.do"; // 리뷰 수정 전송
                         f.submit();
                     }

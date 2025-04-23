@@ -38,5 +38,7 @@ public interface UserMapper {
 
     String selectPwd(UserVo vo);
 
+    void insertUserActivity(int userIdx);
+
     // 여기까지 비밀번호 찾기
 }
